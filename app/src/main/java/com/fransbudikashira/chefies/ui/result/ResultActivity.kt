@@ -1,4 +1,4 @@
-package com.fransbudikashira.chefies.ui.Result
+package com.fransbudikashira.chefies.ui.result
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -13,7 +13,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding

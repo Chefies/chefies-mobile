@@ -1,4 +1,4 @@
-package com.fransbudikashira.chefies.ui.Result
+package com.fransbudikashira.chefies.ui.result
 
 import androidx.lifecycle.ViewModel
 
