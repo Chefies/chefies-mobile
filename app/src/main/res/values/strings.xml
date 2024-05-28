@@ -3,4 +3,6 @@
     <string name="tagLine">Your Chef In Emergency Situation</string>
     <string name="fill_the_title">Fill the title</string>
     <string name="save">Save</string>
+    <string name="result_image">Result Image</string>
+    <string name="recommendation">Recommendation:</string>
 </resources>
