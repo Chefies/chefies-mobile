@@ -5,6 +5,9 @@
     <color name="primary">#281C9D</color>
     <color name="primaryVariant">#5655B9</color>
     <color name="softBlue">#F2F1F9</color>
+    <color name="littleBlue">#A8A3D7</color>
     <color name="gray">#989898</color>
     <color name="softGray">#E0E0E0</color>
+
+    <color name="lightRipple">#1FF2F1F9</color>
 </resources>

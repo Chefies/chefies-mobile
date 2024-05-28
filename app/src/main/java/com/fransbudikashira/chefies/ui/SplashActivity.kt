@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.fransbudikashira.chefies.R
+import com.fransbudikashira.chefies.ui.Result.ResultActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -25,13 +26,13 @@ class SplashActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            delay(3000L)
+            delay(100L)
             goToMainActivity()
         }
     }
 
     private fun goToMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, ResultActivity::class.java)
         startActivity(intent)
         finish()
     }

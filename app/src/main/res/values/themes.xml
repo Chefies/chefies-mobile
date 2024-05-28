@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primaryVariant</item>
         <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/softBlue</item>
         <item name="fontFamily">@font/poppins</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
