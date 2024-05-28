@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Chefies</string>
+    <string name="home_text">Home</string>
+    <string name="history_text">History</string>
+    <string name="action_to_show_option_take_image_text">action to show option take image</string>
 </resources>
