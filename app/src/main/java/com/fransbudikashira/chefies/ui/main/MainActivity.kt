@@ -1,7 +1,6 @@
-package com.fransbudikashira.chefies.ui
+package com.fransbudikashira.chefies.ui.main
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat

@@ -10,6 +10,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.ui.result.ResultActivity
+import com.fransbudikashira.chefies.ui.signIn.SignInActivity
+import com.fransbudikashira.chefies.ui.signUp.SignUpActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -32,7 +34,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun goToMainActivity() {
-        val intent = Intent(this, ResultActivity::class.java)
+        val intent = Intent(this, SignUpActivity::class.java)
         startActivity(intent)
         finish()
     }

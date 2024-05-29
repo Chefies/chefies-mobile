@@ -57,10 +57,15 @@
 
     <style name="Theme.Chefies" parent="Base.Theme.Chefies" />
 
+    <!-- Custom TextAppearance with bold text -->
+    <style name="TextAppearance.Toolbar.Title.Bold" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:textColor">@color/softBlue</item>
+    </style>
+    <!-- Custom Bottom App Bar -->
     <style name="ShapeAppearance.BottomAppBar" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">16dp</item>
         <item name="cornerSizeTopRight">16dp</item>
     </style>
-
 </resources>

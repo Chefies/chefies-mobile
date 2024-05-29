@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
-    tools:context=".ui.signUp.SignUpActivity">
+    tools:context=".ui.signIn.SignInActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="36dp"
-            app:title="@string/sign_up"
+            app:title="@string/sign_in"
             app:titleTextAppearance="@style/TextAppearance.Toolbar.Title.Bold"
             tools:ignore="RtlSymmetry" />
 
@@ -49,7 +49,7 @@
                 android:id="@+id/intoTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_up_intro_title"
+                android:text="@string/sign_in_intro_title"
                 android:layout_marginTop="24dp"
                 android:textColor="@color/primary"
                 android:textSize="24sp"
@@ -65,7 +65,7 @@
                 android:id="@+id/introSubTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_up_intro_sub_title"
+                android:text="@string/sign_in_intro_sub_title"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginTop="4dp"
@@ -83,35 +83,11 @@
                 android:layout_height="160dp"
                 android:layout_marginTop="32dp"
                 android:contentDescription="@string/illustration"
-                android:src="@drawable/il_sign_up"
+                android:src="@drawable/il_sign_in"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/introSubTitle"
-                app:layout_constraintBottom_toTopOf="@+id/edtNameLayout"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/edtNameLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:hint="@string/name"
-                app:boxStrokeWidth="1.5dp"
-                app:endIconMode="clear_text"
-                app:boxCornerRadiusBottomEnd="15dp"
-                app:boxCornerRadiusBottomStart="15dp"
-                app:boxCornerRadiusTopEnd="15dp"
-                app:boxCornerRadiusTopStart="15dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/illustration">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                app:layout_constraintBottom_toTopOf="@+id/edtEmailLayout"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -128,13 +104,12 @@
                 app:boxCornerRadiusTopStart="15dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtNameLayout">
+                app:layout_constraintTop_toBottomOf="@+id/illustration">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtEmail"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"/>
+                    android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -157,8 +132,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"/>
+                    android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -166,9 +140,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="24dp"
-                android:text="@string/sign_up"
+                android:text="@string/sign_in"
                 android:textSize="16sp"
-                android:enabled="false"
+                android:enabled="true"
                 app:cornerRadius="15dp"
                 app:fontFamily="@font/poppins_semibold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -179,7 +153,7 @@
                 android:id="@+id/bottomText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/have_an_account"
+                android:text="@string/dont_have_an_account"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginTop="24dp"
@@ -196,7 +170,7 @@
                 android:id="@+id/moveToSignIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_in"
+                android:text="@string/sign_up"
                 android:textColor="@color/primary"
                 android:textSize="14sp"
                 android:textAllCaps="false"

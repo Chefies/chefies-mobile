@@ -1,53 +1,60 @@
-package com.fransbudikashira.chefies.ui.signUp
+package com.fransbudikashira.chefies.ui.signIn
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.fransbudikashira.chefies.R
-import com.fransbudikashira.chefies.databinding.ActivitySignUpBinding
-import com.fransbudikashira.chefies.ui.signIn.SignInActivity
+import com.fransbudikashira.chefies.databinding.ActivitySignInBinding
+import com.fransbudikashira.chefies.ui.main.MainActivity
+import com.fransbudikashira.chefies.ui.signUp.SignUpActivity
+import com.fransbudikashira.chefies.ui.signUp.SignUpViewModel
 import com.fransbudikashira.chefies.util.isValidEmail
 
-class SignUpActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySignUpBinding
+class SignInActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySignInBinding
 
-    private lateinit var name: String
     private lateinit var email: String
     private lateinit var password: String
-    private var checkName:Boolean = false
     private var checkEmail:Boolean = false
     private var checkPassword:Boolean = false
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val viewModel = SignUpViewModel()
+        val viewModel = SignInViewModel()
 
         // Set the status bar and navigation bar colors
         window.statusBarColor = getColor(R.color.primary)
         window.navigationBarColor = getColor(R.color.white)
 
-        binding.moveToSignIn.setOnClickListener{
-            val intent = Intent(this@SignUpActivity, SignInActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        with(binding) {
+            moveToSignIn.setOnClickListener{
+                val intent = Intent(this@SignInActivity, SignUpActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
+            button.setOnClickListener{
+                val intent = Intent(this@SignInActivity, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                startActivity(intent)
+            }
         }
         // Handle Enabled Button
         viewModel.isEnableButton.observe(this) {
@@ -67,27 +74,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupEditText(viewModel: SignUpViewModel) {
-        // Name
-        binding.edtName.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.toString().length <= 3) {
-                    binding.edtNameLayout.error = getString(R.string.invalid_name)
-
-                    checkName = false
-                    isEnabledButton(viewModel)
-                } else {
-                    binding.edtNameLayout.error = null
-                    binding.edtNameLayout.isErrorEnabled = false
-
-                    name = s.toString()
-                    checkName = true
-                    isEnabledButton(viewModel)
-                }
-            }
-            override fun afterTextChanged(s: Editable?) {}
-        })
+    private fun setupEditText(viewModel: SignInViewModel) {
         // Email
         binding.edtEmail.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -130,8 +117,8 @@ class SignUpActivity : AppCompatActivity() {
         })
     }
 
-    private fun isEnabledButton(viewModel: SignUpViewModel) {
-        if (checkName && checkEmail && checkPassword)
+    private fun isEnabledButton(viewModel: SignInViewModel) {
+        if (checkEmail && checkPassword)
             viewModel.setEnabledButton(true)
         else
             viewModel.setEnabledButton(false)

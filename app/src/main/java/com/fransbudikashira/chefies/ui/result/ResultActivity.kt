@@ -1,11 +1,7 @@
 package com.fransbudikashira.chefies.ui.result
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -17,7 +13,6 @@ import com.fransbudikashira.chefies.databinding.ActivityResultBinding
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
@@ -31,16 +26,32 @@ class ResultActivity : AppCompatActivity() {
         window.statusBarColor = getColor(R.color.primary)
         window.navigationBarColor = getColor(R.color.white)
 
-        binding.main.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                val focusedView = currentFocus
-                if (focusedView is EditText) {
-                    focusedView.clearFocus()
-                    hideKeyboard(focusedView)
-                }
-            }
-            false
-        }
+        val steps = arrayOf(
+            "Wash the rice throughly and rinse it clean",
+            "In pot, add the rice and water in a 1:2 ratio (1 cup rice; 2 cups water)",
+            "While the rice is cooking, chop the tomatoes in to small cubes",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
+            "Serve the tomato rice hot and enjoy!"
+        )
+        // Prepend numbers to each step
+        val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
+        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+            this, android.R.layout.simple_list_item_1, numberedSteps
+        )
+
+        binding.stepsValue.adapter = arrayAdapter
+
     }
 
     private fun enableEdgeToEdge() {
@@ -50,10 +61,5 @@ class ResultActivity : AppCompatActivity() {
             isAppearanceLightStatusBars = false  // Change to false if you want light content (white icons) on the status bar
             isAppearanceLightNavigationBars = false  // Change to false if you want light content (white icons) on the navigation bar
         }
-    }
-
-    private fun hideKeyboard(view: View) {
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
