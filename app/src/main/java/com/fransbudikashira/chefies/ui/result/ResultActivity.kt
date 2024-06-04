@@ -1,6 +1,10 @@
 package com.fransbudikashira.chefies.ui.result
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,6 +29,8 @@ class ResultActivity : AppCompatActivity() {
         }
         window.statusBarColor = getColor(R.color.primary)
         window.navigationBarColor = getColor(R.color.white)
+
+        playAnimation()
 
         val steps = arrayOf(
             "Wash the rice throughly and rinse it clean",
@@ -51,7 +57,48 @@ class ResultActivity : AppCompatActivity() {
         )
 
         binding.stepsValue.adapter = arrayAdapter
+    }
 
+    private fun playAnimation() {
+        val image = ObjectAnimator.ofFloat(binding.cardView, View.ALPHA, 1f).apply {
+            duration = 200
+            startDelay = 300
+        }
+        val title = ObjectAnimator.ofFloat(binding.title, View.ALPHA, 1f).setDuration(200)
+        val ingredientsKey = ObjectAnimator.ofFloat(binding.ingredientsKey, View.ALPHA, 1f).setDuration(200)
+        val ingredientsValue = ObjectAnimator.ofFloat(binding.ingredientsValue, View.ALPHA, 1f).setDuration(200)
+        val stepsKey = ObjectAnimator.ofFloat(binding.stepsKey, View.ALPHA, 1f).setDuration(200)
+        val stepsValue = ObjectAnimator.ofFloat(binding.stepsValue, View.ALPHA, 1f).setDuration(200)
+
+        val previousButton = ObjectAnimator.ofFloat(binding.previousButton, View.ALPHA, 1f).apply {
+            duration = 500
+            startDelay= 300
+        }
+        val verticalLineLeftOfRetry = ObjectAnimator.ofFloat(binding.verticalLineLeftOfRetry, View.ALPHA, 1f).apply {
+            duration = 500
+            startDelay= 300
+        }
+        val retryButton = ObjectAnimator.ofFloat(binding.retryButton, View.ALPHA, 1f).apply {
+            duration = 500
+            startDelay= 300
+        }
+        val verticalLineRightOfRetry = ObjectAnimator.ofFloat(binding.verticalLineRightOfRetry, View.ALPHA, 1f).apply {
+            duration = 500
+            startDelay= 300
+        }
+        val nextButton = ObjectAnimator.ofFloat(binding.nextButton, View.ALPHA, 1f).apply {
+            duration = 500
+            startDelay= 300
+        }
+
+        val bottomAction = AnimatorSet().apply {
+            playTogether(image, previousButton, verticalLineLeftOfRetry, retryButton, verticalLineRightOfRetry, nextButton)
+        }
+
+        AnimatorSet().apply {
+            playSequentially(bottomAction, title, ingredientsKey, ingredientsValue, stepsKey, stepsValue)
+            start()
+        }
     }
 
     private fun enableEdgeToEdge() {
