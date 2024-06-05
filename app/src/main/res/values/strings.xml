@@ -28,4 +28,18 @@
     <string name="invalid_name">Name must be more than 3 letters</string>
     <string name="invalid_email">The email format you entered is incorrect</string>
     <string name="invalid_password">Password must be more than 8 letters</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="setting_text">Setting</string>
+    <string name="username">Mr. Chefies</string>
+    <string name="confirm_logout_title">CONFIRM LOGOUT</string>
+    <string name="yes_text">Yes</string>
+    <string name="no_text">No</string>
+    <string name="confirm_logout_message">Are you sure want to logout ?</string>
+    <string name="change_password_text">Change Password</string>
+    <string name="language_text">Language</string>
+    <string name="dark_mode_text">Dark Mode</string>
+    <string name="logout_text">Log Out</string>
+    <string name="password_icon_text">password icon</string>
+    <string name="welcome_text">Hai Chef, \nWhat ingredients do you \nhave today?</string>
 </resources>

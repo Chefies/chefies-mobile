@@ -63,6 +63,11 @@ dependencies {
     implementation(libs.logging.interceptor)
     //load Image from internet
     implementation(libs.glide)
+    //circle image view
+    implementation(libs.circleimageview)
+    //navigation components
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     //tensorFlow lite
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
