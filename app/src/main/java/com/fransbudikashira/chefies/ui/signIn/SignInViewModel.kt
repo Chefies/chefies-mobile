@@ -3,7 +3,7 @@ package com.fransbudikashira.chefies.ui.signIn
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.fransbudikashira.chefies.util.Event
+import com.fransbudikashira.chefies.helper.Event
 
 class SignInViewModel: ViewModel() {
     private val _isEnableButton = MutableLiveData<Event<Boolean>>()

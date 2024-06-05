@@ -14,6 +14,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField("String", "BASE_URL", "\"https://gdfsg\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -39,6 +41,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        mlModelBinding = true
     }
 }
 
@@ -54,8 +57,15 @@ dependencies {
     //coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
-    // Easiest way to handle Json Converter and API Service
+    //easiest way to handle Json Converter and API Service
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
+    //load Image from internet
+    implementation(libs.glide)
+    //tensorFlow lite
+    implementation(libs.tensorflow.lite.support)
+    implementation(libs.tensorflow.lite.metadata)
+    implementation(libs.tensorflow.lite.task.vision)
+    implementation(libs.tensorflow.lite.gpu)
 }
