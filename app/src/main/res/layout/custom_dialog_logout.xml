@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/softBlue"
+    app:cardCornerRadius="15dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="40dp"
+        android:paddingVertical="15dp">
+
+        <TextView
+            android:id="@+id/tv_confirm_title"
+            style="@style/ConfirmLogoutTitle"
+            android:text="@string/confirm_logout_title"
+            app:drawableBottomCompat="@drawable/ic_exit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_confirm_message"
+            style="@style/ConfirmLogoutMessage"
+            android:layout_marginTop="5dp"
+            android:text="@string/confirm_logout_message"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_confirm_title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_no"
+            style="@style/NoButton"
+            android:text="@string/no_text"
+            app:backgroundTint="@color/softBlue"
+            app:cornerRadius="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_confirm_message"
+            app:layout_constraintTop_toBottomOf="@id/tv_confirm_message"
+            app:strokeColor="@color/primaryVariant"
+            app:strokeWidth="3dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_yes"
+            style="@style/YesButton"
+            android:text="@string/yes_text"
+            app:backgroundTint="@color/primaryVariant"
+            app:cornerRadius="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_confirm_message"
+            app:layout_constraintTop_toBottomOf="@id/tv_confirm_message" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

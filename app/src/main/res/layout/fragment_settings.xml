@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_primary"
+    tools:context=".ui.settings.SettingsFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content_layout"
+            android:background="@drawable/bg_activity"
+            android:backgroundTint="@color/md_theme_surfaceContainerLowest"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="60dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="60dp"
+                    android:textStyle="bold"
+                    android:text="@string/username"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppins"
+                    android:includeFontPadding="false"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <RelativeLayout
+                    android:id="@+id/change_password_setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_username">
+
+                        <ImageView
+                            android:id="@+id/iv_password_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_round_password"
+                            android:contentDescription="@string/password_icon_text"
+                            android:src="@drawable/ic_password"
+                            android:padding="12dp"/>
+
+                        <TextView
+                            android:layout_marginStart="20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/iv_password_icon"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="@string/change_password_text"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/softGray"
+                    app:layout_constraintTop_toBottomOf="@id/change_password_setting"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <RelativeLayout
+                    android:id="@+id/language_setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/change_password_setting">
+
+                        <ImageView
+                            android:id="@+id/iv_language_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_round_language"
+                            android:src="@drawable/ic_language"
+                            android:padding="12dp"/>
+
+                        <TextView
+                            android:layout_marginStart="20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/iv_language_icon"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="@string/language_text"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/softGray"
+                    app:layout_constraintTop_toBottomOf="@id/language_setting"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <RelativeLayout
+                    android:id="@+id/dark_mode_setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/language_setting">
+
+                        <ImageView
+                            android:id="@+id/iv_dark_mode"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_round_dark_mode"
+                            android:src="@drawable/ic_dark_mode"
+                            android:padding="12dp"/>
+
+                        <TextView
+                            android:layout_marginStart="20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/iv_dark_mode"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="@string/dark_mode_text"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:switchMinWidth="50dp"
+                            android:theme="@style/darkModeSwitch"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/softGray"
+                    app:layout_constraintTop_toBottomOf="@id/dark_mode_setting"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <RelativeLayout
+                    android:id="@+id/btn_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dark_mode_setting">
+
+                        <ImageView
+                            android:id="@+id/iv_logout_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_round_logout"
+                            android:src="@drawable/ic_logout"
+                            android:padding="12dp"/>
+
+                        <TextView
+                            android:layout_marginStart="20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@id/iv_logout_icon"
+                            android:fontFamily="@font/poppins_medium"
+                            android:text="@string/logout_text"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_right"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toTopOf="@+id/content_layout"
+            app:layout_constraintBottom_toTopOf="@+id/content_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/content_layout"
+            android:src="@drawable/empty_image" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
