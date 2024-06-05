@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.glide)
     //circle image view
     implementation(libs.circleimageview)
+    //circle image view
+    implementation(libs.circleimageview)
     //navigation components
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
