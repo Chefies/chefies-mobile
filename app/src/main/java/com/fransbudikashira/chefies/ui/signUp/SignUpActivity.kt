@@ -1,10 +1,14 @@
 package com.fransbudikashira.chefies.ui.signUp
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -57,6 +61,36 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         setupEditText(viewModel)
+        playAnimation()
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.illustration, View.TRANSLATION_Y, -20f, 20f).apply {
+            duration = 3000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+            interpolator = DecelerateInterpolator()
+        }.start()
+
+        val title = ObjectAnimator.ofFloat(binding.introTitle, View.ALPHA, 1f).apply {
+            duration = 200
+            startDelay = 300
+        }
+        val subTitle = ObjectAnimator.ofFloat(binding.introSubTitle, View.ALPHA, 1f).setDuration(200)
+        val illustration = ObjectAnimator.ofFloat(binding.illustration, View.ALPHA, 1f).setDuration(200)
+        val edtName = ObjectAnimator.ofFloat(binding.edtNameLayout, View.ALPHA, 1f).setDuration(200)
+        val edtEmail = ObjectAnimator.ofFloat(binding.edtEmailLayout, View.ALPHA, 1f).setDuration(200)
+        val edtPassword = ObjectAnimator.ofFloat(binding.edtPasswordLayout, View.ALPHA, 1f).setDuration(200)
+        val button = ObjectAnimator.ofFloat(binding.button, View.ALPHA, 1f).setDuration(200)
+        val bottomText = ObjectAnimator.ofFloat(binding.bottomText, View.ALPHA, 1f).setDuration(200)
+        val bottomAction = ObjectAnimator.ofFloat(binding.moveToSignIn, View.ALPHA, 1f).setDuration(200)
+
+        val bottom = AnimatorSet().apply { playTogether(bottomText, bottomAction) }
+
+        AnimatorSet().apply {
+            playSequentially(title, subTitle, illustration, edtName, edtEmail, edtPassword, button, bottom)
+            start()
+        }
     }
 
     private fun enableEdgeToEdge() {

@@ -14,6 +14,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField("String", "BASE_URL", "\"https://gdfsg\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -28,7 +30,6 @@ android {
     }
     buildFeatures {
         viewBinding = true
-        mlModelBinding = true
         buildConfig = true
     }
     compileOptions {
@@ -37,6 +38,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding = true
+        mlModelBinding = true
     }
 }
 
@@ -49,17 +54,25 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    // navigation components
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-
-    // setting & update image
-    implementation(libs.circleimageview)
-    implementation(libs.glide)
-    implementation(libs.ucrop)
-
     //coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+    //easiest way to handle Json Converter and API Service
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    //load Image from internet
+    implementation(libs.glide)
+    //circle image view
+    implementation(libs.circleimageview)
+    //crop image
+    implementation(libs.ucrop)
+    //navigation components
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    //tensorFlow lite
+    implementation(libs.tensorflow.lite.support)
+    implementation(libs.tensorflow.lite.metadata)
+    implementation(libs.tensorflow.lite.task.vision)
+    implementation(libs.tensorflow.lite.gpu)
 }

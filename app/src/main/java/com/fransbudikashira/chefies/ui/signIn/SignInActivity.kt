@@ -1,21 +1,29 @@
 package com.fransbudikashira.chefies.ui.signIn
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.databinding.ActivitySignInBinding
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.signUp.SignUpActivity
 import com.fransbudikashira.chefies.ui.signUp.SignUpViewModel
 import com.fransbudikashira.chefies.util.isValidEmail
+import kotlinx.coroutines.delay
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
@@ -64,6 +72,35 @@ class SignInActivity : AppCompatActivity() {
         }
 
         setupEditText(viewModel)
+        playAnimation()
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.illustration, View.TRANSLATION_Y, -20f, 20f).apply {
+            duration = 3000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+            interpolator = DecelerateInterpolator()
+        }.start()
+
+        val title = ObjectAnimator.ofFloat(binding.introTitle, View.ALPHA, 1f).apply {
+            duration = 200
+            startDelay = 300
+        }
+        val subTitle = ObjectAnimator.ofFloat(binding.introSubTitle, View.ALPHA, 1f).setDuration(200)
+        val illustration = ObjectAnimator.ofFloat(binding.illustration, View.ALPHA, 1f).setDuration(200)
+        val edtEmail = ObjectAnimator.ofFloat(binding.edtEmailLayout, View.ALPHA, 1f).setDuration(200)
+        val edtPassword = ObjectAnimator.ofFloat(binding.edtPasswordLayout, View.ALPHA, 1f).setDuration(200)
+        val button = ObjectAnimator.ofFloat(binding.button, View.ALPHA, 1f).setDuration(200)
+        val bottomText = ObjectAnimator.ofFloat(binding.bottomText, View.ALPHA, 1f).setDuration(200)
+        val bottomAction = ObjectAnimator.ofFloat(binding.moveToSignIn, View.ALPHA, 1f).setDuration(200)
+
+        val bottom = AnimatorSet().apply { playTogether(bottomText, bottomAction) }
+
+        AnimatorSet().apply {
+            playSequentially(title, subTitle, illustration, edtEmail, edtPassword, button, bottom)
+            start()
+        }
     }
 
     private fun enableEdgeToEdge() {

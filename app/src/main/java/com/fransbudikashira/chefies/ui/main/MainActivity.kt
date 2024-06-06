@@ -74,8 +74,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        window.statusBarColor = getColor(R.color.primary)
-        window.navigationBarColor = getColor(R.color.white)
+        window.statusBarColor = getColor(R.color.md_theme_primary)
+        window.navigationBarColor = getColor(R.color.md_theme_primary)
 
         binding.bottomNavigation.background = null // ensure bottomNav background doesn't appear
         binding.bottomNavigation.menu.getItem(1).isEnabled = false // & hide item menu index 1 (space for FAB)
@@ -206,10 +206,8 @@ class MainActivity : AppCompatActivity() {
         // Enable edge-to-edge mode and make system bars transparent
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, window.decorView).apply {
-            isAppearanceLightStatusBars =
-                false  // Change to false if you want light content (white icons) on the status bar
-            isAppearanceLightNavigationBars =
-                false  // Change to false if you want light content (white icons) on the navigation bar
+            isAppearanceLightStatusBars = false  // Change to false if you want light content (white icons) on the status bar
+            isAppearanceLightNavigationBars = true  // Change to false if you want light content (white icons) on the navigation bar
         }
     }
 }
