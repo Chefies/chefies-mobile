@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardBackgroundColor="@color/white"
-    app:cardElevation="2dp"
-    app:cardCornerRadius="15dp">
+    app:cardCornerRadius="15dp"
+    app:cardElevation="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -15,20 +15,20 @@
 
         <com.google.android.material.textview.MaterialTextView
             style="@style/MaterialAlertDialog.Material3.Title.Text"
-            android:singleLine="false"
-            android:maxLines="2"
-            android:lineHeight="24sp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
-            android:text="How to create sandwhiches with salted egg"
+            android:maxLines="2"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:singleLine="false"
+            android:text="@string/example_text"
             android:textSize="36sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lineHeight="44dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

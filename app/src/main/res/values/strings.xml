@@ -42,4 +42,5 @@
     <string name="logout_text">Log Out</string>
     <string name="password_icon_text">password icon</string>
     <string name="welcome_text">Hai Chef, \nWhat ingredients do you \nhave today?</string>
+    <string name="example_text">How to create sandwhiches with salted egg</string>
 </resources>

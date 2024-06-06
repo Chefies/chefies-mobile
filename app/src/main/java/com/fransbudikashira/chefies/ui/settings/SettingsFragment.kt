@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.RelativeLayout
 import android.widget.Toast
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
@@ -43,7 +42,7 @@ class SettingsFragment : Fragment() {
         }
     }
 
-
+    // Dialog box warn logout
     private fun showCustomDialogBox() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -59,6 +58,8 @@ class SettingsFragment : Fragment() {
         }
 
         btnNo.setOnClickListener { dialog.dismiss() }
+
+        dialog.setCanceledOnTouchOutside(true)
         dialog.show()
     }
 

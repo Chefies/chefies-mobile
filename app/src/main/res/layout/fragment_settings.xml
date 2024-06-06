@@ -13,7 +13,7 @@
             android:backgroundTint="@color/md_theme_surfaceContainerLowest"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="50dp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -21,7 +21,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            app:title="Chefies"
+            app:title="@string/app_name"
             app:titleTextColor="@color/md_theme_onPrimary"
             app:titleMarginStart="50dp"
             android:layout_width="match_parent"

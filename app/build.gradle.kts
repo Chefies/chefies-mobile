@@ -28,6 +28,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        mlModelBinding = true
         buildConfig = true
     }
     compileOptions {
@@ -36,9 +37,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    buildFeatures {
-        viewBinding = true
     }
 }
 
@@ -59,6 +57,7 @@ dependencies {
     // setting & update image
     implementation(libs.circleimageview)
     implementation(libs.glide)
+    implementation(libs.ucrop)
 
     //coroutines
     implementation(libs.kotlinx.coroutines.core)

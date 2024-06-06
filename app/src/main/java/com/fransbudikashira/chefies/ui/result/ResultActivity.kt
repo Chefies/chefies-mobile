@@ -54,6 +54,11 @@ class ResultActivity : AppCompatActivity() {
 
     }
 
+    companion object {
+        const val EXTRA_IMAGE_URI = "extra_image_uri"
+        const val EXTRA_RESULT = "extra_result"
+    }
+
     private fun enableEdgeToEdge() {
         // Enable edge-to-edge mode and make system bars transparent
         WindowCompat.setDecorFitsSystemWindows(window, false)
