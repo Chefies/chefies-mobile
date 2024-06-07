@@ -30,6 +30,11 @@ class ResultActivity : AppCompatActivity() {
         window.statusBarColor = getColor(R.color.primary)
         window.navigationBarColor = getColor(R.color.white)
 
+        // BackButton
+        binding.toAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
         playAnimation()
 
         val steps = arrayOf(

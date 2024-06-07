@@ -1,6 +1,7 @@
 package com.fransbudikashira.chefies.ui.settings
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.view.Window
 import android.widget.Toast
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
+import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.google.android.material.button.MaterialButton
 
 class SettingsFragment : Fragment() {
@@ -55,6 +57,7 @@ class SettingsFragment : Fragment() {
 
         btnYes.setOnClickListener {
             Toast.makeText(requireContext(), "Click on Yes", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(requireContext(), SignInActivity::class.java))
         }
 
         btnNo.setOnClickListener { dialog.dismiss() }
