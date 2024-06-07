@@ -17,12 +17,13 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.databinding.ActivityMainBinding
+import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
+import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
 import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
 import org.tensorflow.lite.task.vision.detector.Detection
-//import org.tensorflow.lite.task.gms.vision.detector.Detection
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
 
@@ -37,27 +38,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        objectDetectorHelper = ObjectDetectorHelper(
-            context = this,
-            detectorListener = object : ObjectDetectorHelper.DetectorListener {
-                override fun onError(error: String) {
-                    runOnUiThread() {
-                        Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
-                        Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onResult(results: List<Detection>?) {
-                    runOnUiThread() {
-                        results?.let {
-                            if (it.isNotEmpty() && it[0].categories.isNotEmpty()) {
-                                Log.d(TAG, it.toString())
-                            }
-                        }
-                    }
-                }
-            }
-        )
+        objectDetectorHelper = ObjectDetectorHelper(baseContext, MODEL_PATH, LABELS_PATH, this)
+        objectDetectorHelper.setupObjectDetector()
 
         window.statusBarColor = getColor(R.color.md_theme_primary)
         window.navigationBarColor = getColor(R.color.md_theme_primary)
@@ -107,6 +89,29 @@ class MainActivity : AppCompatActivity() {
 
     private fun analyzeImage(uri: Uri) {
         objectDetectorHelper.detectObject(uri)
+    }
+
+    override fun onError(error: String) {
+        runOnUiThread{
+            Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onResult(results: List<String>?) {
+        runOnUiThread {
+            results?.let {
+                if (it.isNotEmpty()) {
+                    Log.d(TAG, it.toString())
+                } else {
+                    Log.d(TAG, "No result")
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        objectDetectorHelper.clear()
     }
 
     private fun enableEdgeToEdge() {
