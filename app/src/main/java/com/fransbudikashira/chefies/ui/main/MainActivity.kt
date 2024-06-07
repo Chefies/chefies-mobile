@@ -13,35 +13,34 @@ import android.view.Window
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.fransbudikashira.chefies.R
+import com.fransbudikashira.chefies.data.local.entity.MLResultEntity
 import com.fransbudikashira.chefies.databinding.ActivityMainBinding
-import com.fransbudikashira.chefies.ui.home.HomeFragment
 import com.fransbudikashira.chefies.ui.result.ResultActivity
-import com.fransbudikashira.chefies.ui.settings.SettingsFragment
 import com.fransbudikashira.chefies.util.getImageUri
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
 import com.yalantis.ucrop.UCrop
+import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
+import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
+import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
+
     private lateinit var binding: ActivityMainBinding
+    private lateinit var objectDetectorHelper: ObjectDetectorHelper
+
     private var currentImageUri: Uri? = null
+
     private var requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -52,6 +51,7 @@ class MainActivity : AppCompatActivity() {
                 showToast("Permission request denied")
             }
         }
+
     private fun allPermissionsGranted() =
         ContextCompat.checkSelfPermission(
             this,
@@ -73,6 +73,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        objectDetectorHelper = ObjectDetectorHelper(baseContext, MODEL_PATH, LABELS_PATH, this)
+        objectDetectorHelper.setupObjectDetector()
 
         window.statusBarColor = getColor(R.color.md_theme_primary)
         window.navigationBarColor = getColor(R.color.md_theme_primary)
@@ -100,7 +103,6 @@ class MainActivity : AppCompatActivity() {
 
     // Dialog Box get image options
     private fun showCustomDialogBox() {
-
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -132,22 +134,23 @@ class MainActivity : AppCompatActivity() {
             showToast("Failed to get image URI")
         }
     }
+
+    private fun startGallery() {
+        launcherGallery.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+        )
+    }
+
     private val launcherIntentCamera = registerForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { isSuccess ->
         if (isSuccess) {
             currentImageUri?.let {
                 cropImage(it)
-                // analyzeImage()   penemaptan nya disini ? atau di onActivityResult()?
-                // moveToResult()   penemaptan nya disini ? atau di onActivityResult()?
             }
         } else {
             showToast("Failed to take picture")
         }
-    }
-
-    private fun startGallery() {
-        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     private val launcherGallery = registerForActivityResult(
@@ -155,8 +158,6 @@ class MainActivity : AppCompatActivity() {
     ) { uri: Uri? ->
         if (uri != null) {
             cropImage(uri)
-            // analyzeImage()   penemaptan nya disini ? atau di onActivityResult()?
-            // moveToResult()   penemaptan nya disini ? atau di onActivityResult()?
         } else {
             Log.d("Photo Picker", "No media selected")
         }
@@ -166,14 +167,16 @@ class MainActivity : AppCompatActivity() {
         UCrop.of(uri, Uri.fromFile(cacheDir.resolve("${System.currentTimeMillis()}.jpg")))
             .start(this)
     }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG, "onActivityResult")
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             currentImageUri = UCrop.getOutput(data!!)
-            // analyzeImage()
-            moveToResult()
+            currentImageUri?.let {
+                analyzeImage(it)
+            }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             val errorMessage = UCrop.getError(data!!)?.message.toString()
             showToast(errorMessage)
@@ -181,11 +184,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun moveToResult() {
+    private fun moveToResult(ingredients: List<String>) {
         val intent = Intent(this, ResultActivity::class.java)
         if (currentImageUri != null) {
-            intent.putExtra(ResultActivity.EXTRA_IMAGE_URI, currentImageUri.toString())
-            // intent.putExtra(ResultActivity.EXTRA_RESULT, result)
+            val result = MLResultEntity(
+                photoUrl = currentImageUri!!,
+                ingredients = ingredients
+            )
+            intent.putExtra(ResultActivity.EXTRA_RESULT, result)
             startActivity(intent)
         } else {
             showToast("No Image Selected")
@@ -196,11 +202,33 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    companion object {
-        private const val TAG = "MainActivity"
-        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+    private fun analyzeImage(uri: Uri) {
+        objectDetectorHelper.detectObject(uri)
     }
 
+    override fun onError(error: String) {
+        runOnUiThread{
+            Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onResult(results: List<String>?) {
+        runOnUiThread {
+            results?.let {
+                if (it.isNotEmpty()) {
+                    Log.d(TAG, it.toString())
+                    moveToResult(it)
+                } else {
+                    Log.d(TAG, "No result")
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        objectDetectorHelper.clear()
+    }
 
     private fun enableEdgeToEdge() {
         // Enable edge-to-edge mode and make system bars transparent
@@ -209,5 +237,10 @@ class MainActivity : AppCompatActivity() {
             isAppearanceLightStatusBars = false  // Change to false if you want light content (white icons) on the status bar
             isAppearanceLightNavigationBars = true  // Change to false if you want light content (white icons) on the navigation bar
         }
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
+        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
 }

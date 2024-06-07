@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    // Activate Parcelize Feature
+    id("kotlin-parcelize")
 }
 
 android {
@@ -71,8 +73,8 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     //tensorFlow lite
-    implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
+    implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.task.vision)
     implementation(libs.tensorflow.lite.gpu)
 }

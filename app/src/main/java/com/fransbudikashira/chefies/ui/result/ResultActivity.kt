@@ -12,6 +12,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.fransbudikashira.chefies.R
+import com.fransbudikashira.chefies.data.local.entity.MLResultEntity
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
 
 class ResultActivity : AppCompatActivity() {
@@ -35,6 +36,8 @@ class ResultActivity : AppCompatActivity() {
             finish()
         }
 
+        val result: MLResultEntity? = intent.getParcelableExtra(EXTRA_RESULT)
+        setupView(result)
         playAnimation()
 
         val steps = arrayOf(
@@ -62,6 +65,13 @@ class ResultActivity : AppCompatActivity() {
         )
 
         binding.stepsValue.adapter = arrayAdapter
+    }
+
+    private fun setupView(result: MLResultEntity?) {
+        binding.apply {
+            imageView.setImageURI(result?.photoUrl)
+            ingredientsValue.text = result?.ingredients.toString()
+        }
     }
 
     private fun playAnimation() {
@@ -106,11 +116,6 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        const val EXTRA_IMAGE_URI = "extra_image_uri"
-        const val EXTRA_RESULT = "extra_result"
-    }
-
     private fun enableEdgeToEdge() {
         // Enable edge-to-edge mode and make system bars transparent
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -118,5 +123,9 @@ class ResultActivity : AppCompatActivity() {
             isAppearanceLightStatusBars = false  // Change to false if you want light content (white icons) on the status bar
             isAppearanceLightNavigationBars = false  // Change to false if you want light content (white icons) on the navigation bar
         }
+    }
+
+    companion object {
+        const val EXTRA_RESULT = "extra_result"
     }
 }
