@@ -1,3 +1,6 @@
 **/*.tflite filter=lfs diff=lfs merge=lfs -text
 *.tflite filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 .tflite filter=lfs diff=lfs merge=lfs -text
+=======
+>>>>>>> 971760c22dc5c2edcaf0ab355499063ab2fde56c
