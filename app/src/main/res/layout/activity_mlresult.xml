@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/primary"
+    tools:context=".ui.mlResult.MLResultActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            app:title="Your Photo Result"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:titleTextAppearance="@style/TextAppearance.Toolbar.Title.Bold"
+            tools:ignore="RtlSymmetry" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_activity"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="24dp">
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/please_add_or_update_your_ingredients"
+            android:layout_marginTop="24dp"
+            android:textSize="13sp"
+            android:includeFontPadding="false"
+            app:fontFamily="@font/poppins_semibold"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/edtIngredientLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/type_your_ingredients"
+            app:boxStrokeWidth="1.5dp"
+            app:endIconMode="clear_text"
+            app:boxCornerRadiusBottomEnd="15dp"
+            app:boxCornerRadiusBottomStart="15dp"
+            app:boxCornerRadiusTopEnd="15dp"
+            app:boxCornerRadiusTopStart="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnAddIngredient"
+            app:layout_constraintTop_toBottomOf="@+id/label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtIngredient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:lines="1"
+                android:singleLine="true"
+                android:ems="10"
+                android:imeOptions="actionDone"
+                android:textSize="14sp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.Icon"
+            android:id="@+id/btnAddIngredient"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16sp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:insetTop="0dp"
+            app:iconPadding="0dp"
+            app:iconSize="24dp"
+            app:iconTint="@null"
+            app:icon="@drawable/ic_arrow_right"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/edtIngredientLayout"
+            app:layout_constraintTop_toTopOf="@+id/edtIngredientLayout"
+            app:layout_constraintBottom_toBottomOf="@+id/edtIngredientLayout"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcIngredient"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="-15dp"
+            android:paddingTop="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnGetSuggestions"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtIngredientLayout"
+            app:layout_constraintVertical_bias="0.0"
+            tools:listitem="@layout/item_ingredient" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGetSuggestions"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="@string/get_suggestions"
+            android:textSize="16sp"
+            android:enabled="true"
+            android:layout_marginBottom="18dp"
+            app:cornerRadius="15dp"
+            app:fontFamily="@font/poppins_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:visibility="gone"
+            android:indeterminateTint="@color/white"
+            android:progressTint="@color/white"
+            app:layout_constraintStart_toStartOf="@+id/btnGetSuggestions"
+            app:layout_constraintEnd_toEndOf="@+id/btnGetSuggestions"
+            app:layout_constraintBottom_toBottomOf="@+id/btnGetSuggestions"
+            app:layout_constraintTop_toTopOf="@+id/btnGetSuggestions"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

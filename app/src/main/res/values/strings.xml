@@ -43,4 +43,26 @@
     <string name="password_icon_text">password icon</string>
     <string name="welcome_text">Hai Chef, \nWhat ingredients do you \nhave today?</string>
     <string name="example_text">How to create sandwhiches with salted egg</string>
+    <string name="are_you_sure_want_to_leave">Are you sure want to leave?</string>
+    <string name="this_result_will_not_be_saved">This result will not be saved!</string>
+    <string name="open_camera">Open Camera</string>
+    <string name="open_gallery">Open Gallery</string>
+    <string name="icon_gallery">Icon Gallery</string>
+    <string name="icon_camera">Icon Camera</string>
+    <string name="icon_edit">Icon Edit</string>
+    <string name="icon_delete">Icon Delete</string>
+    <string name="get_suggestions">Get Suggestions</string>
+    <string name="type_your_ingredients">Type your ingredients</string>
+    <string name="please_add_or_update_your_ingredients">Please add or update your ingredients</string>
+    <string name="invalid_min3_characters">Please input at least 3 characters</string>
+    <string name="delete_title">Delete!</string>
+    <string name="delete_message">Are you sure want to delete this item?</string>
+    <string name="update_ingredient">Update Ingredient</string>
+    <string name="edit_your_ingredient">Edit your ingredient</string>
+    <!-- Ingredients -->
+    <string name="banana">Banana</string>
+    <string name="shallot">Shallot</string>
+    <string name="tomato">Tomato</string>
+    <string name="garlic">Garlic</string>
+    <string name="egg">Egg</string>
 </resources>
