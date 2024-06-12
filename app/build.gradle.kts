@@ -72,6 +72,8 @@ dependencies {
     //navigation components
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    //fragment
+//    implementation(libs.fr.tvbarthel.blurdialogfragment)
     //tensorFlow lite
     implementation(libs.tensorflow.lite.metadata)
     implementation(libs.tensorflow.lite.support)

@@ -10,6 +10,7 @@ espressoCore = "3.5.1"
 appcompat = "1.7.0"
 kotlinxCoroutinesAndroid = "1.8.0"
 kotlinxCoroutinesCore = "1.7.3"
+blurDialogFragment = "2.2.0"
 loggingInterceptor = "4.12.0"
 material = "1.12.0"
 activity = "1.9.0"
@@ -30,7 +31,6 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-
 #coroutines
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
@@ -44,11 +44,16 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleimageview" }
 #ucrop
 ucrop = { group = "com.github.yalantis", name = "ucrop", version.ref = "ucrop" }
+#fragment
+#fr-tvbarthel-blurdialogfragment = { module = "fr.tvbarthel.blurdialogfragment:lib", version.ref = "blurDialogFragment" }
 #tensorFlow lite
 tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLiteGpu" }
 tensorflow-lite-metadata = { group = "org.tensorflow", name = "tensorflow-lite-metadata", version.ref = "tensorflowLiteMetadata" }
+<<<<<<< HEAD
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteMetadata" }
 tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteMetadata" }
+=======
+>>>>>>> origin/frans
 #navigation components
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
