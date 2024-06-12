@@ -36,7 +36,6 @@ import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
 
 class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
 
