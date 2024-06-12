@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.fransbudikashira.chefies.ui.home.HomeFragment"
+        android:name="com.fransbudikashira.chefies.ui.main.home.HomeFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.fransbudikashira.chefies.ui.settings.SettingsFragment"
+        android:name="com.fransbudikashira.chefies.ui.main.settings.SettingsFragment"
         android:label="@string/setting_text"
         tools:layout="@layout/fragment_settings" />
 </navigation>

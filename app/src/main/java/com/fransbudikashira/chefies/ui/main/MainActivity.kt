@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -27,15 +28,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.local.entity.MLResultEntity
 import com.fransbudikashira.chefies.databinding.ActivityMainBinding
-import com.fransbudikashira.chefies.ui.result.ResultActivity
 import com.fransbudikashira.chefies.util.getImageUri
 import com.yalantis.ucrop.UCrop
 import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
 import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
 import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
+import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
 
 class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
 
@@ -104,10 +104,12 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
     // Dialog Box get image options
     private fun showCustomDialogBox() {
         val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.custom_dialog_get_image)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setDimAmount(0.5f)
 
         val btnCamera: ConstraintLayout = dialog.findViewById(R.id.btn_open_cam)
         val btnGalery: ConstraintLayout = dialog.findViewById(R.id.btn_open_galery)
@@ -116,7 +118,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             startCamera()
             dialog.dismiss()
         }
-
         btnGalery.setOnClickListener {
             startGallery()
             dialog.dismiss()
@@ -184,20 +185,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         }
     }
 
-    private fun moveToResult(ingredients: List<String>) {
-        val intent = Intent(this, ResultActivity::class.java)
-        if (currentImageUri != null) {
-            val result = MLResultEntity(
-                photoUrl = currentImageUri!!,
-                ingredients = ingredients
-            )
-            intent.putExtra(ResultActivity.EXTRA_RESULT, result)
-            startActivity(intent)
-        } else {
-            showToast("No Image Selected")
-        }
-    }
-
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -217,9 +204,10 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             results?.let {
                 if (it.isNotEmpty()) {
                     Log.d(TAG, it.toString())
-                    moveToResult(it)
+                    moveToMLResult(it.distinct())
                 } else {
                     Log.d(TAG, "No result")
+                    showToast("No result")
                 }
             }
         }
@@ -228,6 +216,20 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
     override fun onDestroy() {
         super.onDestroy()
         objectDetectorHelper.clear()
+    }
+
+    private fun moveToMLResult(ingredients: List<String>) {
+        val intent = Intent(this, MLResultActivity::class.java)
+        if (currentImageUri != null) {
+            val result = MLResultEntity(
+                photoUrl = currentImageUri!!,
+                ingredients = ingredients
+            )
+            intent.putExtra(MLResultActivity.EXTRA_RESULT, result)
+            startActivity(intent)
+        } else {
+            showToast("No Image Selected")
+        }
     }
 
     private fun enableEdgeToEdge() {
