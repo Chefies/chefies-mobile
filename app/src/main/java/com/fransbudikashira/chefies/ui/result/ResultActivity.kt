@@ -2,18 +2,24 @@ package com.fransbudikashira.chefies.ui.result
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.animation.DecelerateInterpolator
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.bumptech.glide.Glide
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.local.entity.MLResultEntity
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
+import com.google.android.material.button.MaterialButton
 
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
@@ -32,9 +38,7 @@ class ResultActivity : AppCompatActivity() {
         window.navigationBarColor = getColor(R.color.white)
 
         // BackButton
-        binding.toAppBar.setNavigationOnClickListener {
-            finish()
-        }
+        binding.toAppBar.setNavigationOnClickListener { backButtonDialog() }
 
         val result: MLResultEntity? = intent.getParcelableExtra(EXTRA_RESULT)
         setupView(result)
@@ -67,10 +71,31 @@ class ResultActivity : AppCompatActivity() {
         binding.stepsValue.adapter = arrayAdapter
     }
 
+    private fun backButtonDialog() {
+        val dialog = Dialog(this@ResultActivity)
+        dialog.setContentView(R.layout.custom_dialog_save_result)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setDimAmount(0.5f)
+
+        val btnYes: MaterialButton = dialog.findViewById(R.id.btn_yes)
+        val btnNo: MaterialButton = dialog.findViewById(R.id.btn_no)
+        btnYes.setOnClickListener {
+            dialog.dismiss()
+            finish()
+        }
+        btnNo.setOnClickListener { dialog.dismiss() }
+
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+    }
+
     private fun setupView(result: MLResultEntity?) {
         binding.apply {
-            imageView.setImageURI(result?.photoUrl)
-            ingredientsValue.text = result?.ingredients.toString()
+            Glide.with(this@ResultActivity)
+                .load(result?.photoUrl)
+                .into(imageView)
+            ingredientsValue.text = result?.ingredients?.joinToString(", ")
         }
     }
 

@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Have Permission to Access Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -20,6 +22,9 @@
         android:theme="@style/Theme.Chefies"
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.mlResult.MLResultActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.signIn.SignInActivity"
             android:exported="false" />

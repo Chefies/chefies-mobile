@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginHorizontal="40dp"
+    android:elevation="10dp"
     app:cardCornerRadius="15dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/md_theme_surfaceContainerHigh">
+        android:background="@color/white">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btn_open_cam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/md_theme_surfaceContainerHigh"
             android:paddingStart="20dp"
             android:paddingTop="15dp"
             android:paddingEnd="20dp"
@@ -27,7 +28,7 @@
                 android:id="@+id/iv_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="button open camera"
+                android:contentDescription="@string/icon_camera"
                 android:src="@drawable/ic_camera"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -37,11 +38,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="20dp"
-                android:fontFamily="@font/poppins_semibold"
                 android:includeFontPadding="false"
-                android:text="Open Camera"
+                android:text="@string/open_camera"
                 android:textColor="@color/md_theme_onSurface"
-                android:textSize="16dp"
+                android:textSize="16sp"
+                app:fontFamily="@font/poppins_semibold"
                 app:layout_constraintBottom_toBottomOf="@id/iv_camera"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_camera"
@@ -50,7 +51,7 @@
 
         <View
             android:id="@+id/horizontal_line"
-            android:layout_width="210dp"
+            android:layout_width="0dp"
             android:layout_height="2dp"
             android:background="@color/md_theme_outlineVariant"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +62,6 @@
             android:id="@+id/btn_open_galery"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/md_theme_surfaceContainerHigh"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
             android:paddingEnd="20dp"
@@ -75,7 +75,7 @@
                 android:id="@+id/iv_gallery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="button open gallery"
+                android:contentDescription="@string/icon_gallery"
                 android:src="@drawable/ic_gallery"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -85,11 +85,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="20dp"
-                android:fontFamily="@font/poppins_semibold"
                 android:includeFontPadding="false"
-                android:text="Open Gallery"
+                android:text="@string/open_gallery"
                 android:textColor="@color/md_theme_onSurface"
-                android:textSize="16dp"
+                android:textSize="16sp"
+                app:fontFamily="@font/poppins_semibold"
                 app:layout_constraintBottom_toBottomOf="@id/iv_gallery"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_gallery"
