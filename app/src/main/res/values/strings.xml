@@ -65,4 +65,11 @@
     <string name="tomato">Tomato</string>
     <string name="garlic">Garlic</string>
     <string name="egg">Egg</string>
+    <string name="try_again">Try again</string>
+    <string name="icon_error">Icon Error</string>
+    <string name="something_wrong">Something Wrong!</string>
+    <string name="icon_success">Icon Success</string>
+    <string name="success">Success</string>
+    <string name="success_registered">You have successfully registered</string>
+    <string name="success_login">You have successfully login</string>
 </resources>

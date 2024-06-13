@@ -1,32 +1,36 @@
 package com.fransbudikashira.chefies.ui.signIn
 
-import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.OvershootInterpolator
-import androidx.activity.enableEdgeToEdge
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
+import androidx.lifecycle.ViewModelProvider
 import com.fransbudikashira.chefies.R
+import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.ActivitySignInBinding
+import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.signUp.SignUpActivity
-import com.fransbudikashira.chefies.ui.signUp.SignUpViewModel
 import com.fransbudikashira.chefies.util.isValidEmail
-import kotlinx.coroutines.delay
+import com.google.android.material.button.MaterialButton
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
+    private lateinit var viewModel: SignInViewModel
 
     private lateinit var email: String
     private lateinit var password: String
@@ -43,36 +47,104 @@ class SignInActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val viewModel = SignInViewModel()
-
         // Set the status bar and navigation bar colors
         window.statusBarColor = getColor(R.color.primary)
         window.navigationBarColor = getColor(R.color.white)
 
+        // set ViewModel
+        viewModel = obtainViewModel(this@SignInActivity)
+
         with(binding) {
-            moveToSignIn.setOnClickListener{
-                val intent = Intent(this@SignInActivity, SignUpActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                startActivity(intent)
+            moveToSignUp.setOnClickListener{
+                moveTo(SignUpActivity::class.java)
             }
-            button.setOnClickListener{
-                val intent = Intent(this@SignInActivity, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            btnLogin.setOnClickListener{
+                viewModel.userLogin(email, password).observe(this@SignInActivity) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is Result.Loading -> {
+                                showLoading(true)
+                            }
+                            is Result.Success -> {
+                                showLoading(false)
+                                successDialog(getString(R.string.success_login))
+                            }
+                            is Result.Error -> {
+                                showLoading(false)
+                                edtPassword.text?.clear()
+                                errorDialog(result.error)
+                            }
+                        }
+                    }
                 }
-                startActivity(intent)
             }
         }
         // Handle Enabled Button
         viewModel.isEnableButton.observe(this) {
             it.getContentIfNotHandled()?.let { isEnabled ->
-                binding.button.isEnabled = isEnabled
+                binding.btnLogin.isEnabled = isEnabled
             }
         }
 
         setupEditText(viewModel)
         playAnimation()
+    }
+
+    private fun <T> moveTo(activity: Class<T>){
+        val intent = Intent(this@SignInActivity, activity).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+    }
+
+    private fun errorDialog(message: String) {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.custom_dialog_error_auth)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setDimAmount(0.5f)
+
+        val tvMessage: TextView = dialog.findViewById(R.id.message)
+        tvMessage.text = message
+
+        val btnTryAgain: MaterialButton = dialog.findViewById(R.id.btnTryAgain)
+        btnTryAgain.setOnClickListener { dialog.dismiss() }
+
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+    }
+
+    private fun successDialog(message: String) {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.custom_dialog_success_auth)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setDimAmount(0.5f)
+
+        val tvMessage: TextView = dialog.findViewById(R.id.message)
+        tvMessage.text = message
+
+        val btnAction: MaterialButton = dialog.findViewById(R.id.btnAction)
+        btnAction.text = getString(R.string.next)
+        btnAction.setOnClickListener {
+            dialog.dismiss()
+            moveTo(MainActivity::class.java)
+        }
+
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.apply {
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            btnLogin.text = if (isLoading) "" else getString(R.string.sign_up)
+        }
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): SignInViewModel {
+        val factory: AuthViewModelFactory = AuthViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[SignInViewModel::class.java]
     }
 
     private fun playAnimation() {
@@ -91,9 +163,9 @@ class SignInActivity : AppCompatActivity() {
         val illustration = ObjectAnimator.ofFloat(binding.illustration, View.ALPHA, 1f).setDuration(200)
         val edtEmail = ObjectAnimator.ofFloat(binding.edtEmailLayout, View.ALPHA, 1f).setDuration(200)
         val edtPassword = ObjectAnimator.ofFloat(binding.edtPasswordLayout, View.ALPHA, 1f).setDuration(200)
-        val button = ObjectAnimator.ofFloat(binding.button, View.ALPHA, 1f).setDuration(200)
+        val button = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(200)
         val bottomText = ObjectAnimator.ofFloat(binding.bottomText, View.ALPHA, 1f).setDuration(200)
-        val bottomAction = ObjectAnimator.ofFloat(binding.moveToSignIn, View.ALPHA, 1f).setDuration(200)
+        val bottomAction = ObjectAnimator.ofFloat(binding.moveToSignUp, View.ALPHA, 1f).setDuration(200)
 
         val bottom = AnimatorSet().apply { playTogether(bottomText, bottomAction) }
 

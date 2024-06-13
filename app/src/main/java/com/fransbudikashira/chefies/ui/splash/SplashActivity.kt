@@ -1,20 +1,18 @@
-package com.fransbudikashira.chefies.ui
+package com.fransbudikashira.chefies.ui.splash
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.fransbudikashira.chefies.R
-import com.fransbudikashira.chefies.data.local.entity.MLResultEntity
+import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.ui.main.MainActivity
-import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
-import com.fransbudikashira.chefies.ui.result.ResultActivity
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
-import com.fransbudikashira.chefies.ui.signUp.SignUpActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -30,14 +28,23 @@ class SplashActivity : AppCompatActivity() {
             insets
         }
 
+        val factory: AuthViewModelFactory = AuthViewModelFactory.getInstance(this)
+        val viewModel: SplashViewModel by viewModels { factory }
+
         lifecycleScope.launch {
-            delay(100L)
-            goToMainActivity()
+            delay(1000L)
+            viewModel.getToken().observe(this@SplashActivity) { token ->
+                if (!token.isNullOrEmpty()) {
+                    moveActivityTo(MainActivity::class.java)
+                } else {
+                    moveActivityTo(SignInActivity::class.java)
+                }
+            }
         }
     }
 
-    private fun goToMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
+    private fun <T> moveActivityTo(activity: Class<T>) {
+        val intent = Intent(this, activity)
         startActivity(intent)
         finish()
     }
