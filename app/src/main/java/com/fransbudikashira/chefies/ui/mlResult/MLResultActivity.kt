@@ -64,7 +64,7 @@ class MLResultActivity : AppCompatActivity() {
                     delay(2000)
                     isLoading(false)
 
-                    moveToResult(result?.copy(ingredients = ingredients))
+                    moveToResult(result.copy(ingredients = ingredients))
                 }
             }
         }
@@ -169,7 +169,6 @@ class MLResultActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val TAG = "MLResultActivity"
         const val EXTRA_RESULT = "EXTRA_RESULT"
     }
 

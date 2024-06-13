@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    //activate KSP plugin
+    alias(libs.plugins.google.devtools.ksp)
     // Activate Parcelize Feature
     id("kotlin-parcelize")
 }
@@ -16,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField("String", "BASE_URL", "\"https://gdfsg\"")
+        buildConfigField("String", "BASE_URL", "\"https://chefies.app/api/\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -65,6 +67,14 @@ dependencies {
     implementation(libs.logging.interceptor)
     //load Image from internet
     implementation(libs.glide)
+    //datastore
+    implementation(libs.androidx.datastore.preferences)
+    // - - -
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    //room
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
     //circle image view
     implementation(libs.circleimageview)
     //crop image

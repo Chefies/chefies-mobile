@@ -11,14 +11,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.fransbudikashira.chefies.R
+import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
+import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.google.android.material.button.MaterialButton
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,9 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // set ViewModel
+        viewModel = obtainViewModel(requireActivity() as AppCompatActivity)
+
         binding.btnLogout.setOnClickListener {
             showCustomDialogBox()
         }
@@ -57,14 +66,26 @@ class SettingsFragment : Fragment() {
         val btnNo: MaterialButton = dialog.findViewById(R.id.btn_no)
 
         btnYes.setOnClickListener {
-            Toast.makeText(requireContext(), "Click on Yes", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(requireContext(), SignInActivity::class.java))
+            viewModel.deleteToken()
+            moveToSignIn()
         }
 
         btnNo.setOnClickListener { dialog.dismiss() }
 
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
+    }
+
+    private fun  moveToSignIn(){
+        val intent = Intent(requireContext(), SignInActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+    }
+
+    private fun obtainViewModel(activity: AppCompatActivity): MainViewModel {
+        val factory: AuthViewModelFactory = AuthViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[MainViewModel::class.java]
     }
 
     override fun onDestroyView() {
