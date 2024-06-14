@@ -7,11 +7,15 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -37,7 +41,7 @@ class ResultActivity : AppCompatActivity() {
         RecipeViewModelFactory((application as MyApplication).recipeRepository)
     }
 
-    private var historyData: HistoryEntity? = null
+    private var historyData = HistoryEntity(title = "")
     private val recipesBahasa = mutableListOf<RecipeBahasaEntity>()
     private val recipesEnglish = mutableListOf<RecipeEnglishEntity>()
 
@@ -57,46 +61,70 @@ class ResultActivity : AppCompatActivity() {
 
 
         // BackButton
-        binding.toAppBar.setNavigationOnClickListener { backButtonDialog() }
+        binding.toAppBar.setNavigationOnClickListener {
+            if (historyData.id == null) backButtonDialog()
+            else finish()
+        }
 
         val result: MLResultModel? = intent.getParcelableExtra(EXTRA_RESULT)
         setupView(result)
         playAnimation()
 
-        Log.d(TAG, "HistoryEntity: $historyData")
-        Log.d(TAG, "RecipeBahasa: $recipesBahasa")
-        Log.d(TAG, "RecipeEnglish: $recipesEnglish")
-
         binding.apply {
             // Handle Save Action
-            binding.saveButton.setOnClickListener {
+            saveButton.setOnClickListener {
                 val title = editText.text.trim().toString()
                 if (title.isEmpty() || title.length < 3) {
                     showSnackbar(getString(R.string.invalid_min3_characters))
                     return@setOnClickListener
                 }
-                historyData = HistoryEntity(title = title)
-                Log.d(TAG, "HistoryEntity: $historyData")
+                historyData = historyData.copy(title = title)
 
-                if (historyData?.id == null) {
-                    viewModel.addHistory(historyData!!) { historyId ->
-                        historyData = historyData?.copy(id = historyId)
-                        Log.d(TAG, "HistoryEntity: $historyData")
+                if (historyData.id == null) {
+                    viewModel.addHistory(historyData) { historyId ->
+                        // Save temporary data history id
+                        historyData = historyData.copy(id = historyId)
 
+                        // Insert new recipes (bahasa)
                         recipesBahasa.addAll(generateDummyRecipesBahasa(historyId))
                         viewModel.addRecipeBahasa(recipesBahasa)
 
+                        // Insert new recipes (english)
                         recipesEnglish.addAll(generateDummyRecipesEnglish(historyId))
                         viewModel.addRecipeEnglish(recipesEnglish)
                     }
                 } else {
-                    viewModel.updateHistory(historyData!!)
+                    // Update title History
+                    viewModel.updateHistory(historyData)
                 }
 
                 // Activate Button Save
                 saveButton.setImageDrawable(getDrawable(R.drawable.ic_save_success))
                 showToast("Saved")
             }
+
+            // Handle Retry Button
+            retryButton.setOnClickListener {
+
+            }
+            // Handle Next Button
+            nextButton.setOnClickListener {
+
+            }
+            // Handle Previous Button
+            previousButton.setOnClickListener {
+
+            }
+
+            // Check if Title is Changed, than change icon save Button
+            editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (s.toString() != historyData.title)
+                        saveButton.setImageDrawable(getDrawable(R.drawable.ic_save))
+                }
+                override fun afterTextChanged(s: Editable?) {}
+            })
         }
 
         val steps = arrayOf(

@@ -1,5 +1,6 @@
 package com.fransbudikashira.chefies.ui.result
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
@@ -35,17 +36,21 @@ class ResultViewModel(private val recipeRepository: RecipeRepository): ViewModel
         }
     }
 
-    fun updateRecipeBahasa(recipes: List<RecipeBahasaEntity>) {
-        viewModelScope.launch {
-            recipeRepository.updateRecipeBahasa(recipes)
-        }
-    }
-
-    fun updateRecipeEnglish(recipes: List<RecipeEnglishEntity>) {
-        viewModelScope.launch {
-            recipeRepository.updateRecipeEnglish(recipes)
-        }
-    }
+//    fun updateRecipeBahasa(recipes: List<RecipeBahasaEntity>) {
+//        viewModelScope.launch {
+//            recipeRepository.updateRecipeBahasa(recipes)
+//        }
+//    }
+//
+//    fun updateRecipeEnglish(recipes: List<RecipeEnglishEntity>) {
+//        viewModelScope.launch {
+//            recipeRepository.updateRecipeEnglish(recipes)
+//        }
+//    }
 
     fun getHistoryById(id: Long) = recipeRepository.getHistoryById(id)
+
+    companion object {
+        const val TAG = "ResultViewModel"
+    }
 }

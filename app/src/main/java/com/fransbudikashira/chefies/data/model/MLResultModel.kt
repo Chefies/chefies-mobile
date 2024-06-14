@@ -9,5 +9,4 @@ import kotlinx.parcelize.Parcelize
 data class MLResultModel(
     val photoUrl: Uri,
     val ingredients: List<String>,
-
 ): Parcelable

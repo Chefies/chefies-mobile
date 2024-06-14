@@ -28,13 +28,13 @@ class RecipeRepository(
         historyDao.updateHistory(history)
     }
 
-    suspend fun updateRecipeEnglish(recipes: List<RecipeEnglishEntity>) {
-        recipeDao.updateRecipeEnglish(recipes)
-    }
-
-    suspend fun updateRecipeBahasa(recipes: List<RecipeBahasaEntity>) {
-        recipeDao.updateRecipeBahasa(recipes)
-    }
+//    suspend fun updateRecipeEnglish(recipes: List<RecipeEnglishEntity>) {
+//        recipeDao.updateRecipeEnglish(recipes)
+//    }
+//
+//    suspend fun updateRecipeBahasa(recipes: List<RecipeBahasaEntity>) {
+//        recipeDao.updateRecipeBahasa(recipes)
+//    }
 
     suspend fun addRecipeEnglish(recipes: List<RecipeEnglishEntity>) {
         recipeDao.insertRecipeEnglish(recipes)
