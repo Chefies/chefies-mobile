@@ -9,8 +9,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MLResultModel(
-    val photoUrl: Uri,
     val recipeBahasaEntity: RecipeBahasaEntity,
-    val recipeEnglishEntity: RecipeEnglishEntity,
-    val historyEntity: HistoryEntity? = null
+    val recipeEnglishEntity: RecipeEnglishEntity
 ) : Parcelable

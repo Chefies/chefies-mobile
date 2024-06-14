@@ -193,14 +193,14 @@ class ResultActivity : AppCompatActivity() {
     }
 
     private fun setupView(result: MLResultModel?) {
-        binding.apply {
-            Glide.with(this@ResultActivity)
-                .load(result?.photoUrl)
-                .into(imageView)
+//        binding.apply {
+//            Glide.with(this@ResultActivity)
+//                .load(result?.photoUrl)
+//                .into(imageView)
 //            ingredientsValue.text = result?.ingredients?.joinToString(", ")
 
 
-        }
+//        }
     }
 
     private fun playAnimation() {

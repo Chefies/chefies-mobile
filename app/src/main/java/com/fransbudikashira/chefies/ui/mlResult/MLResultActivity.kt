@@ -103,7 +103,7 @@ class MLResultActivity : AppCompatActivity() {
         checkEnabledButton()
     }
 
-    // handle success result get reciptes from API
+    // handle success result when get reciptes from API
     private fun handleSuccess(data: RecipeResponse) {
         isLoading(false)
         showToast("Success Get Recipes")
@@ -128,7 +128,7 @@ class MLResultActivity : AppCompatActivity() {
             historyId = null
         )
 
-        moveToResult(MLResultModel(photoUrl, recipeBahasaEntity, recipeEnglishEntity, null))
+        moveToResult(MLResultModel(recipeBahasaEntity, recipeEnglishEntity))
     }
 
     // handle error result get reciptes from API
