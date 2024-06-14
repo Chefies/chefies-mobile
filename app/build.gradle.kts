@@ -42,6 +42,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
     buildFeatures {
         viewBinding = true
@@ -74,6 +75,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     //room
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     //circle image view
     implementation(libs.circleimageview)

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,8 +15,12 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fransbudikashira.chefies.R
-import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
+import com.fransbudikashira.chefies.data.factory.MainViewModelFactory
+import com.fransbudikashira.chefies.data.local.entity.RecipeBahasaEntity
+import com.fransbudikashira.chefies.data.local.entity.RecipeEnglishEntity
+import com.fransbudikashira.chefies.data.model.MLResultIngredients
 import com.fransbudikashira.chefies.data.model.MLResultModel
+import com.fransbudikashira.chefies.data.remote.response.RecipeResponse
 import com.fransbudikashira.chefies.databinding.ActivityMlresultBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.adapter.IngredientItemAdapter
@@ -26,12 +31,12 @@ import kotlinx.coroutines.launch
 class MLResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMlresultBinding
 
-    private lateinit var result: MLResultModel
+    private lateinit var result: MLResultIngredients
     private lateinit var adapter: IngredientItemAdapter
     private val ingredients = mutableListOf<String>()
 
     private val viewModel: MLResultViewModel by viewModels {
-        AuthViewModelFactory.getInstance(this)
+        MainViewModelFactory.getInstance(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +57,7 @@ class MLResultActivity : AppCompatActivity() {
             toAppBar.setNavigationOnClickListener { finish() }
 
             // Handle Add Ingredient Button
-            btnAddIngredient.setOnClickListener{
+            btnAddIngredient.setOnClickListener {
                 inputAddIngredient()
             }
             // Handle Add Ingredient when Enter Key Pressed
@@ -60,7 +65,9 @@ class MLResultActivity : AppCompatActivity() {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     inputAddIngredient()
                     true
-                } else { false }
+                } else {
+                    false
+                }
             }
             // Handle Get Suggestions Button
             btnGetSuggestions.setOnClickListener {
@@ -78,7 +85,7 @@ class MLResultActivity : AppCompatActivity() {
         binding.rcIngredient.layoutManager = layoutManager
         // Get Intent Data
         result = intent.getParcelableExtra(EXTRA_RESULT)!!
-        val resultIngredients = result.ingredients
+        val resultIngredients = result.listIngredient
         resultIngredients.let {
             for (ingredient in it) {
                 ingredients.add(ingredient.prettierIngredientResult(this))
@@ -96,20 +103,48 @@ class MLResultActivity : AppCompatActivity() {
         checkEnabledButton()
     }
 
+    // handle success result get reciptes from API
+    private fun handleSuccess(data: RecipeResponse) {
+        isLoading(false)
+        showToast("Success Get Recipes")
+        val recipeBahasa = data.recipes[0]
+        val recipeEnglish = data.recipes[1]
+        val photoUrl = result.photoUrl
+
+        val recipeBahasaEntity = RecipeBahasaEntity(
+            id = null,
+            title = recipeBahasa.name,
+            photoUrl = photoUrl,
+            ingredients = recipeBahasa.ingredients,
+            steps = recipeBahasa.steps,
+            historyId = null
+        )
+        val recipeEnglishEntity = RecipeEnglishEntity(
+            id = null,
+            title = recipeEnglish.name,
+            photoUrl = photoUrl,
+            ingredients = recipeEnglish.ingredients,
+            steps = recipeBahasa.steps,
+            historyId = null
+        )
+
+        moveToResult(MLResultModel(photoUrl, recipeBahasaEntity, recipeEnglishEntity, null))
+    }
+
+    // handle error result get reciptes from API
+    private fun handleError(error: String) {
+        isLoading(false)
+        Log.e("MLResultActivity", "Recipes Error: $error")
+        showToast("Failed to get recipes: $error")
+    }
+
     private fun getSuggestions() {
         lifecycleScope.launch {
             viewModel.getRecipes(ingredients).observe(this@MLResultActivity) { result ->
                 when (result) {
-                    is Result.Loading -> {
-                        isLoading(true)
-                    }
-                    is Result.Success -> {
-                        isLoading(false)
-                        Log.d("MLResultActivity", "Recipes Response: ${result.data.recipes}")
-                    }
-                    is Result.Error -> {
-                        isLoading(false)
-                        Log.e("MLResultActivity", "Recipes Error: ${result.error}")
+                    is Result.Loading -> isLoading(true)
+                    is Result.Success -> handleSuccess(result.data)
+                    is Result.Error -> { handleError(result.error)
                     }
                 }
             }
@@ -178,12 +213,18 @@ class MLResultActivity : AppCompatActivity() {
         }
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
     private fun enableEdgeToEdge() {
         // Enable edge-to-edge mode and make system bars transparent
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, window.decorView).apply {
-            isAppearanceLightStatusBars = false  // Change to false if you want light content (white icons) on the status bar
-            isAppearanceLightNavigationBars = false  // Change to false if you want light content (white icons) on the navigation bar
+            isAppearanceLightStatusBars =
+                false  // Change to false if you want light content (white icons) on the status bar
+            isAppearanceLightNavigationBars =
+                false  // Change to false if you want light content (white icons) on the navigation bar
         }
     }
 

@@ -6,14 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.fransbudikashira.chefies.data.repository.UserRepository
 import com.fransbudikashira.chefies.di.Injection
 import com.fransbudikashira.chefies.ui.main.MainViewModel
-import com.fransbudikashira.chefies.ui.mlResult.MLResultViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInViewModel
 import com.fransbudikashira.chefies.ui.signUp.SignUpViewModel
 import com.fransbudikashira.chefies.ui.splash.SplashViewModel
 
 class AuthViewModelFactory(
     private val userRepository: UserRepository
-): ViewModelProvider.NewInstanceFactory() {
+) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -33,9 +32,7 @@ class AuthViewModelFactory(
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(userRepository) as T
             }
-            modelClass.isAssignableFrom(MLResultViewModel::class.java) -> {
-                MLResultViewModel(userRepository) as T
-            }
+
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }

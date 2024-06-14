@@ -26,7 +26,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.fransbudikashira.chefies.R
-import com.fransbudikashira.chefies.data.model.MLResultModel
+import com.fransbudikashira.chefies.data.model.MLResultIngredients
 import com.fransbudikashira.chefies.databinding.ActivityMainBinding
 import com.fransbudikashira.chefies.util.getImageUri
 import com.yalantis.ucrop.UCrop
@@ -81,7 +81,8 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         window.navigationBarColor = getColor(R.color.md_theme_primary)
 
         binding.bottomNavigation.background = null // ensure bottomNav background doesn't appear
-        binding.bottomNavigation.menu.getItem(1).isEnabled = false // & hide item menu index 1 (space for FAB)
+        binding.bottomNavigation.menu.getItem(1).isEnabled =
+            false // & hide item menu index 1 (space for FAB)
 
         // navigation bottom & controller configuration
         val navHostFragment =
@@ -107,7 +108,10 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         dialog.setCancelable(false)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.custom_dialog_get_image)
-        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.window?.setDimAmount(0.5f)
 
@@ -194,7 +198,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
     }
 
     override fun onError(error: String) {
-        runOnUiThread{
+        runOnUiThread {
             Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
         }
     }
@@ -221,14 +225,15 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
     private fun moveToMLResult(ingredients: List<String>) {
         val intent = Intent(this, MLResultActivity::class.java)
         if (currentImageUri != null) {
-            val result = MLResultModel(
-                photoUrl = currentImageUri!!,
-                ingredients = ingredients
-            )
-            intent.putExtra(MLResultActivity.EXTRA_RESULT, result)
+            val resultWithIngredients = MLResultIngredients(currentImageUri!!, ingredients)
+            intent.putExtra(MLResultActivity.EXTRA_RESULT, resultWithIngredients)
             startActivity(intent)
         } else {
             showToast("No Image Selected")
+        }
+        if (ingredients.isEmpty()){
+            // will implements custom dialog
+            showToast("No ingredients detected")
         }
     }
 
@@ -236,14 +241,15 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         // Enable edge-to-edge mode and make system bars transparent
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, window.decorView).apply {
-            isAppearanceLightStatusBars = false  // Change to false if you want light content (white icons) on the status bar
-            isAppearanceLightNavigationBars = true  // Change to false if you want light content (white icons) on the navigation bar
+            isAppearanceLightStatusBars =
+                false  // Change to false if you want light content (white icons) on the status bar
+            isAppearanceLightNavigationBars =
+                true  // Change to false if you want light content (white icons) on the navigation bar
         }
     }
 
     companion object {
         private const val TAG = "MainActivity"
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
-        private const val EXTRA_IMAGE = "EXTRA_IMAGE"
     }
 }
