@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -14,20 +14,25 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fransbudikashira.chefies.R
-import com.fransbudikashira.chefies.data.local.entity.MLResultEntity
+import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
+import com.fransbudikashira.chefies.data.model.MLResultModel
 import com.fransbudikashira.chefies.databinding.ActivityMlresultBinding
+import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.adapter.IngredientItemAdapter
 import com.fransbudikashira.chefies.ui.result.ResultActivity
 import com.fransbudikashira.chefies.util.prettierIngredientResult
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MLResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMlresultBinding
 
-    private lateinit var result: MLResultEntity
+    private lateinit var result: MLResultModel
     private lateinit var adapter: IngredientItemAdapter
     private val ingredients = mutableListOf<String>()
+
+    private val viewModel: MLResultViewModel by viewModels {
+        AuthViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,13 +64,7 @@ class MLResultActivity : AppCompatActivity() {
             }
             // Handle Get Suggestions Button
             btnGetSuggestions.setOnClickListener {
-                lifecycleScope.launch {
-                    isLoading(true)
-                    delay(2000)
-                    isLoading(false)
-
-                    moveToResult(result.copy(ingredients = ingredients))
-                }
+                getSuggestions()
             }
         }
 
@@ -95,6 +94,26 @@ class MLResultActivity : AppCompatActivity() {
 
         // Handle Button Enabled
         checkEnabledButton()
+    }
+
+    private fun getSuggestions() {
+        lifecycleScope.launch {
+            viewModel.getRecipes(ingredients).observe(this@MLResultActivity) { result ->
+                when (result) {
+                    is Result.Loading -> {
+                        isLoading(true)
+                    }
+                    is Result.Success -> {
+                        isLoading(false)
+                        Log.d("MLResultActivity", "Recipes Response: ${result.data.recipes}")
+                    }
+                    is Result.Error -> {
+                        isLoading(false)
+                        Log.e("MLResultActivity", "Recipes Error: ${result.error}")
+                    }
+                }
+            }
+        }
     }
 
     private fun updateIngredient(position: Int, item: String) {
@@ -141,7 +160,7 @@ class MLResultActivity : AppCompatActivity() {
         checkEnabledButton()
     }
 
-    private fun moveToResult(result: MLResultEntity?) {
+    private fun moveToResult(result: MLResultModel?) {
         val intent = Intent(this, ResultActivity::class.java)
         intent.putExtra(ResultActivity.EXTRA_RESULT, result)
         startActivity(intent)

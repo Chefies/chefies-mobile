@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -17,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.Glide
 import com.fransbudikashira.chefies.R
-import com.fransbudikashira.chefies.data.local.entity.MLResultEntity
+import com.fransbudikashira.chefies.data.model.MLResultEntity
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
 import com.google.android.material.button.MaterialButton
 
