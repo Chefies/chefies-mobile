@@ -2,10 +2,8 @@ package com.fransbudikashira.chefies.ui.mlResult
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -14,7 +12,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fransbudikashira.chefies.R
-import com.fransbudikashira.chefies.data.local.entity.MLResultEntity
+import com.fransbudikashira.chefies.data.model.MLResultModel
 import com.fransbudikashira.chefies.databinding.ActivityMlresultBinding
 import com.fransbudikashira.chefies.ui.adapter.IngredientItemAdapter
 import com.fransbudikashira.chefies.ui.result.ResultActivity
@@ -25,7 +23,7 @@ import kotlinx.coroutines.launch
 class MLResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMlresultBinding
 
-    private lateinit var result: MLResultEntity
+    private lateinit var result: MLResultModel
     private lateinit var adapter: IngredientItemAdapter
     private val ingredients = mutableListOf<String>()
 
@@ -141,7 +139,7 @@ class MLResultActivity : AppCompatActivity() {
         checkEnabledButton()
     }
 
-    private fun moveToResult(result: MLResultEntity?) {
+    private fun moveToResult(result: MLResultModel?) {
         val intent = Intent(this, ResultActivity::class.java)
         intent.putExtra(ResultActivity.EXTRA_RESULT, result)
         startActivity(intent)

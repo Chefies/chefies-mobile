@@ -41,12 +41,12 @@
                     android:textColorHint="@color/littleBlue"
                     android:background="@drawable/edt_underline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/saveIcon"
+                    app:layout_constraintEnd_toStartOf="@id/saveButton"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
                 <ImageButton
-                    android:id="@+id/saveIcon"
+                    android:id="@+id/saveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
