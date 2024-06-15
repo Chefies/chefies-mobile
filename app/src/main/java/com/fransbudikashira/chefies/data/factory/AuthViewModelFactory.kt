@@ -12,7 +12,7 @@ import com.fransbudikashira.chefies.ui.splash.SplashViewModel
 
 class AuthViewModelFactory(
     private val userRepository: UserRepository
-): ViewModelProvider.NewInstanceFactory() {
+) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

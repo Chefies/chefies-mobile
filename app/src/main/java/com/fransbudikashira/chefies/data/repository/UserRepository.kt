@@ -5,9 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.fransbudikashira.chefies.data.local.dataStore.TokenPreferences
+import com.fransbudikashira.chefies.data.remote.request.IngredientsRequest
 import com.fransbudikashira.chefies.data.remote.request.LoginRequest
 import com.fransbudikashira.chefies.data.remote.request.RegisterRequest
 import com.fransbudikashira.chefies.data.remote.response.LoginResponse
+import com.fransbudikashira.chefies.data.remote.response.RecipeResponse
+import com.fransbudikashira.chefies.data.remote.response.RecipesItem
 import com.fransbudikashira.chefies.data.remote.response.RegisterResponse
 import com.fransbudikashira.chefies.data.remote.retrofit.ApiService
 import com.fransbudikashira.chefies.helper.Result
@@ -15,6 +18,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class UserRepository(
     private val apiService: ApiService,

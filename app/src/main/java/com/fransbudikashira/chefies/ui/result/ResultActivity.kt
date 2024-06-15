@@ -14,36 +14,41 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.fransbudikashira.chefies.R
-import com.fransbudikashira.chefies.data.MyApplication
 import com.fransbudikashira.chefies.data.factory.RecipeViewModelFactory
 import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
 import com.fransbudikashira.chefies.data.model.MLResultModel
 import com.fransbudikashira.chefies.data.local.entity.RecipeBahasaEntity
 import com.fransbudikashira.chefies.data.local.entity.RecipeEnglishEntity
+import com.fransbudikashira.chefies.data.remote.response.RecipeResponse
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
+import com.fransbudikashira.chefies.helper.Result
+import com.fransbudikashira.chefies.util.await
+import com.fransbudikashira.chefies.util.getDefaultLanguage
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
     private val viewModel: ResultViewModel by viewModels {
-        RecipeViewModelFactory((application as MyApplication).recipeRepository)
+        RecipeViewModelFactory.getInstance(this)
     }
 
     private var historyData = HistoryEntity(title = "")
     private val recipesBahasa = mutableListOf<RecipeBahasaEntity>()
     private val recipesEnglish = mutableListOf<RecipeEnglishEntity>()
+
+    private var index = 0
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,15 +72,18 @@ class ResultActivity : AppCompatActivity() {
         }
 
         val result: MLResultModel? = intent.getParcelableExtra(EXTRA_RESULT)
-        setupView(result)
+
+        if (result != null) setupData(result)
+        setupView()
         playAnimation()
+        Log.d(TAG, "index: $index | length: ${recipesEnglish.size}")
 
         binding.apply {
             // Handle Save Action
             saveButton.setOnClickListener {
                 val title = editText.text.trim().toString()
                 if (title.isEmpty() || title.length < 3) {
-                    showSnackbar(getString(R.string.invalid_min3_characters))
+                    showSnackBar(getString(R.string.invalid_min3_characters))
                     return@setOnClickListener
                 }
                 historyData = historyData.copy(title = title)
@@ -86,12 +94,12 @@ class ResultActivity : AppCompatActivity() {
                         historyData = historyData.copy(id = historyId)
 
                         // Insert new recipes (bahasa)
-                        recipesBahasa.addAll(generateDummyRecipesBahasa(historyId))
-                        viewModel.addRecipeBahasa(recipesBahasa)
+                        val modifiedRecipeBahasa = recipesBahasa.map { it.copy(historyId = historyId) }
+                        viewModel.addRecipeBahasa(modifiedRecipeBahasa)
 
                         // Insert new recipes (english)
-                        recipesEnglish.addAll(generateDummyRecipesEnglish(historyId))
-                        viewModel.addRecipeEnglish(recipesEnglish)
+                        val modifiedRecipeEnglish = recipesEnglish.map { it.copy(historyId = historyId) }
+                        viewModel.addRecipeEnglish(modifiedRecipeEnglish)
                     }
                 } else {
                     // Update title History
@@ -105,15 +113,35 @@ class ResultActivity : AppCompatActivity() {
 
             // Handle Retry Button
             retryButton.setOnClickListener {
+                // Get Suggestions, at the end, add the recipes to temporary variable
+                if (getDefaultLanguage() == "in") {
+                    result?.recipeBahasaEntity?.let { getSuggestions(it.ingredients) }
+                } else {
+                    result?.recipeEnglishEntity?.let { getSuggestions(it.ingredients) }
+                }
 
             }
             // Handle Next Button
             nextButton.setOnClickListener {
-
+                if (index < recipesEnglish.size - 1) {
+                    index += 1
+                    displayedRecipes(index, recipesBahasa, recipesEnglish)
+                    previousButton.visibility = View.VISIBLE
+                    // If index already at the end, hide next button
+                    if (index == recipesEnglish.size - 1) nextButton.visibility = View.GONE
+                }
+                Log.d(TAG, "index: $index | length: ${recipesEnglish.size}")
             }
             // Handle Previous Button
             previousButton.setOnClickListener {
-
+                if (index > 0) {
+                    index -= 1
+                    displayedRecipes(index, recipesBahasa, recipesEnglish)
+                    nextButton.visibility = View.VISIBLE
+                    // if index already at the start, hide previous button
+                    if (index == 0) previousButton.visibility = View.GONE
+                }
+                Log.d(TAG, "index: $index | length: ${recipesEnglish.size}")
             }
 
             // Check if Title is Changed, than change icon save Button
@@ -126,69 +154,153 @@ class ResultActivity : AppCompatActivity() {
                 override fun afterTextChanged(s: Editable?) {}
             })
         }
-
-        val steps = arrayOf(
-            "Wash the rice throughly and rinse it clean",
-            "In pot, add the rice and water in a 1:2 ratio (1 cup rice; 2 cups water)",
-            "While the rice is cooking, chop the tomatoes in to small cubes",
-            "Once the rice cooked, fluff it with a fork. Stir in the chopped tomatoes and season with salt and pepper to taste.",
-            "Serve the tomato rice hot and enjoy!"
-        )
-        // Prepend numbers to each step
-        val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
-        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-            this, android.R.layout.simple_list_item_1, numberedSteps
-        )
-
-        binding.stepsValue.adapter = arrayAdapter
     }
 
-    private fun generateDummyRecipesBahasa(historyId: Long): List<RecipeBahasaEntity> {
-        return listOf(
-            RecipeBahasaEntity(
-                title = "Nasi Goreng",
-                photoUrl = "link://photo".toUri(),
-                ingredients = listOf("Nasi", "Bawang Merah", "Bawang Putih", "Cabai"),
-                steps = listOf("Makan", "Tidur", "Bersih-bersih"),
-                historyId = historyId
-            ),
-            RecipeBahasaEntity(
-                title = "Nasi Goreng",
-                photoUrl = "link://photo".toUri(),
-                ingredients = listOf("Nasi", "Bawang Merah", "Bawang Putih", "Cabai"),
-                steps = listOf("Makan", "Tidur", "Bersih-bersih"),
-                historyId = historyId
-            ),
-        )
+    private fun displayedRecipes(
+        index: Int,
+        recipesBahasa: List<RecipeBahasaEntity>,
+        recipesEnglish: List<RecipeEnglishEntity>
+    ) {
+        if (getDefaultLanguage() == "in") {
+            binding.apply {
+                // Set Title
+                title.text = recipesBahasa[index].title
+
+                // Set List Ingredients
+                ingredientsValue.text = recipesBahasa[index].ingredients.joinToString(", ")
+
+                // Set List Steps
+                recipesBahasa[index].steps.let { steps ->
+                    // Prepend numbers to each step
+                    val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
+                    val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                        this@ResultActivity, android.R.layout.simple_list_item_1, numberedSteps
+                    )
+                    stepsValue.adapter = arrayAdapter
+                }
+            }
+        } else {
+            binding.apply {
+                // Set Title
+                title.text = recipesEnglish[index].title
+
+                // Set List Ingredients
+                ingredientsValue.text = recipesEnglish[index].ingredients.joinToString(", ")
+
+                // Set List Steps
+                recipesEnglish[index].steps.let { steps ->
+                    // Prepend numbers to each step
+                    val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
+                    val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                        this@ResultActivity, android.R.layout.simple_list_item_1, numberedSteps
+                    )
+                    stepsValue.adapter = arrayAdapter
+                }
+            }
+        }
     }
 
-    private fun generateDummyRecipesEnglish(historyId: Long): List<RecipeEnglishEntity> {
-        return listOf(
-            RecipeEnglishEntity(
-                title = "Fried Rice",
-                photoUrl = "link://photo".toUri(),
-                ingredients = listOf("Rice", "Garlic", "Shallot", "Salt"),
-                steps = listOf("Eat", "Sleep", "Clean-up"),
-                historyId = historyId
-            ),
-            RecipeEnglishEntity(
-                title = "Fried Rice",
-                photoUrl = "link://photo".toUri(),
-                ingredients = listOf("Rice", "Garlic", "Shallot", "Salt"),
-                steps = listOf("Eat", "Sleep", "Clean-up"),
-                historyId = historyId
-            ),
-        )
+    private fun getSuggestions(ingredients: List<String>) {
+        lifecycleScope.launch {
+            viewModel.getRecipes(ingredients).observe(this@ResultActivity) {
+                when (it) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> handleSuccess(it.data)
+                    is Result.Error -> handleError(it.error)
+                }
+            }
+        }
     }
 
-    private fun showSnackbar(message: String) {
-        val snackbar = Snackbar.make(
+    // handle success result get recipes from API
+    private fun handleSuccess(data: RecipeResponse) {
+        showLoading(false)
+
+        val recipeBahasa = data.recipes[0]
+        val recipeEnglish = data.recipes[1]
+
+        val recipeBahasaEntity = RecipeBahasaEntity(
+            title = recipeBahasa.name,
+            ingredients = recipeBahasa.ingredients,
+            steps = recipeBahasa.steps,
+        )
+        val recipeEnglishEntity = RecipeEnglishEntity(
+            title = recipeEnglish.name,
+            ingredients = recipeEnglish.ingredients,
+            steps = recipeEnglish.steps,
+        )
+
+        // Add to temporary variable
+        recipesBahasa.add(recipeBahasaEntity)
+        recipesEnglish.add(recipeEnglishEntity)
+
+        // Add Recipe to Local, When user already saved
+        if (historyData.id != null) {
+            val modifiedRecipeBahasa = recipeBahasaEntity.copy(historyId = historyData.id)
+            viewModel.addRecipeBahasa(listOf(modifiedRecipeBahasa))
+            val modifiedRecipeEnglish = recipeEnglishEntity.copy(historyId = historyData.id)
+            viewModel.addRecipeEnglish(listOf(modifiedRecipeEnglish))
+        }
+
+        // Control displayed recipes
+        index = recipesEnglish.size - 1
+        displayedRecipes(index, recipesBahasa, recipesEnglish)
+        binding.previousButton.visibility = View.VISIBLE
+        binding.nextButton.visibility = View.GONE
+
+        Log.d(TAG, "index: $index | length: ${recipesEnglish.size}")
+    }
+
+    // handle error result get recipes from API
+    private fun handleError(error: String) {
+        showLoading(false)
+        Log.e("MLResultActivity", "Recipes Error: $error")
+        showToast("Failed to get recipes: $error")
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.apply {
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            title.visibility = if (isLoading) View.GONE else View.VISIBLE
+            ingredientsKey.visibility = if (isLoading) View.GONE else View.VISIBLE
+            ingredientsValue.visibility = if (isLoading) View.GONE else View.VISIBLE
+            stepsKey.visibility = if (isLoading) View.GONE else View.VISIBLE
+            stepsValue.visibility = if (isLoading) View.GONE else View.VISIBLE
+
+            retryButton.isEnabled = !isLoading
+            nextButton.isEnabled = !isLoading
+            previousButton.isEnabled = !isLoading
+
+            if (isLoading) {
+                retryButton.setTextColor(getColor(R.color.gray))
+                retryButton.iconTint = getColorStateList(R.color.gray)
+
+                nextButton.setTextColor(getColor(R.color.gray))
+                nextButton.iconTint = getColorStateList(R.color.gray)
+
+                previousButton.setTextColor(getColor(R.color.gray))
+                previousButton.iconTint = getColorStateList(R.color.gray)
+            } else {
+                retryButton.setTextColor(getColor(R.color.primary))
+                retryButton.iconTint = getColorStateList(R.color.primary)
+
+                nextButton.setTextColor(getColor(R.color.primary))
+                nextButton.iconTint = getColorStateList(R.color.primary)
+
+                previousButton.setTextColor(getColor(R.color.primary))
+                previousButton.iconTint = getColorStateList(R.color.primary)
+            }
+        }
+    }
+
+    private fun showSnackBar(message: String) {
+        val snackBar = Snackbar.make(
             window.decorView.rootView,
             message,
             Snackbar.LENGTH_SHORT)
-        snackbar.setBackgroundTint(getColor(R.color.red))
-        snackbar.duration = 3000
-        snackbar.show()
+        snackBar.setBackgroundTint(getColor(R.color.red))
+        snackBar.duration = 3000
+        snackBar.show()
     }
 
     private fun showToast(message: String) {
@@ -214,13 +326,60 @@ class ResultActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun setupView(result: MLResultModel?) {
-        binding.apply {
-            Glide.with(this@ResultActivity)
-                .load(result?.photoUrl)
-                .into(imageView)
-            ingredientsValue.text = result?.ingredients?.joinToString(", ")
+    private fun setupView() {
+        // Set ImageView
+        val photoUrl = historyData.photoUrl
+        Glide.with(this@ResultActivity)
+            .load(photoUrl)
+            .into(binding.imageView)
+
+        if (getDefaultLanguage() == "in") {
+            val recipesBahasa = recipesBahasa.first()
+            binding.apply {
+                // Set Title
+                title.text = recipesBahasa.title
+
+                // Set List Ingredients
+                ingredientsValue.text = recipesBahasa.ingredients.joinToString(", ")
+
+                // Set List Steps
+                recipesBahasa.steps.let { steps ->
+                    // Prepend numbers to each step
+                    val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
+                    val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                        this@ResultActivity, android.R.layout.simple_list_item_1, numberedSteps
+                    )
+                    stepsValue.adapter = arrayAdapter
+                }
+            }
+        } else {
+            val recipesEnglish = recipesEnglish.first()
+            binding.apply {
+                // Set Title
+                title.text = recipesEnglish.title
+
+                // Set List Ingredients
+                ingredientsValue.text = recipesEnglish.ingredients.joinToString(", ")
+
+                // Set List Steps
+                recipesEnglish.steps.let { steps ->
+                    // Prepend numbers to each step
+                    val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
+                    val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                        this@ResultActivity, android.R.layout.simple_list_item_1, numberedSteps
+                    )
+                    stepsValue.adapter = arrayAdapter
+                }
+            }
         }
+    }
+
+    private fun setupData(result: MLResultModel) {
+        result.historyEntity?.let {
+            historyData = historyData.copy(photoUrl = it.photoUrl, title = it.title)
+        }
+        recipesBahasa.add(result.recipeBahasaEntity)
+        recipesEnglish.add(result.recipeEnglishEntity)
     }
 
     private fun playAnimation() {

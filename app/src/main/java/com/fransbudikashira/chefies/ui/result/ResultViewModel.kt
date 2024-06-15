@@ -6,10 +6,17 @@ import androidx.lifecycle.viewModelScope
 import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
 import com.fransbudikashira.chefies.data.local.entity.RecipeBahasaEntity
 import com.fransbudikashira.chefies.data.local.entity.RecipeEnglishEntity
+import com.fransbudikashira.chefies.data.repository.MainRepository
 import com.fransbudikashira.chefies.data.repository.RecipeRepository
 import kotlinx.coroutines.launch
 
-class ResultViewModel(private val recipeRepository: RecipeRepository): ViewModel() {
+class ResultViewModel(
+    private val recipeRepository: RecipeRepository,
+    private val mainRepository: MainRepository
+): ViewModel() {
+
+    fun getRecipes(ingredients: List<String>) =
+        mainRepository.getRecipes(ingredients)
 
     fun addHistory(history: HistoryEntity, onResult: (Long) -> Unit) {
         viewModelScope.launch {
@@ -35,18 +42,6 @@ class ResultViewModel(private val recipeRepository: RecipeRepository): ViewModel
             recipeRepository.updateHistory(history)
         }
     }
-
-//    fun updateRecipeBahasa(recipes: List<RecipeBahasaEntity>) {
-//        viewModelScope.launch {
-//            recipeRepository.updateRecipeBahasa(recipes)
-//        }
-//    }
-//
-//    fun updateRecipeEnglish(recipes: List<RecipeEnglishEntity>) {
-//        viewModelScope.launch {
-//            recipeRepository.updateRecipeEnglish(recipes)
-//        }
-//    }
 
     fun getHistoryById(id: Long) = recipeRepository.getHistoryById(id)
 

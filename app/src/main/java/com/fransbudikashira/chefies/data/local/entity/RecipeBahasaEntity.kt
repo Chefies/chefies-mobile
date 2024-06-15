@@ -1,8 +1,11 @@
 package com.fransbudikashira.chefies.data.local.entity
 
 import android.net.Uri
+import android.os.Parcelable
 import androidx.room.*
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "recipe_bahasa")
 data class RecipeBahasaEntity(
 
@@ -13,9 +16,6 @@ data class RecipeBahasaEntity(
     @ColumnInfo(name = "name")
     val title: String,
 
-    @ColumnInfo(name = "photo_url")
-    val photoUrl: Uri,
-
     @ColumnInfo(name = "ingredients")
     val ingredients: List<String>,
 
@@ -23,5 +23,5 @@ data class RecipeBahasaEntity(
     val steps: List<String>,
 
     @ColumnInfo(name = "history_id")
-    val historyId: Long
-)
+    val historyId: Long? = null
+): Parcelable

@@ -1,8 +1,10 @@
 package com.fransbudikashira.chefies.data.repository
 
 import androidx.lifecycle.LiveData
+import com.fransbudikashira.chefies.data.local.dataStore.TokenPreferences
 import com.fransbudikashira.chefies.data.local.entity.*
 import com.fransbudikashira.chefies.data.local.room.*
+import com.fransbudikashira.chefies.data.remote.retrofit.ApiService
 
 class RecipeRepository(
     private val recipeDao: RecipeDao,
@@ -28,19 +30,23 @@ class RecipeRepository(
         historyDao.updateHistory(history)
     }
 
-//    suspend fun updateRecipeEnglish(recipes: List<RecipeEnglishEntity>) {
-//        recipeDao.updateRecipeEnglish(recipes)
-//    }
-//
-//    suspend fun updateRecipeBahasa(recipes: List<RecipeBahasaEntity>) {
-//        recipeDao.updateRecipeBahasa(recipes)
-//    }
-
     suspend fun addRecipeEnglish(recipes: List<RecipeEnglishEntity>) {
         recipeDao.insertRecipeEnglish(recipes)
     }
 
     suspend fun addRecipeBahasa(recipes: List<RecipeBahasaEntity>) {
         recipeDao.insertRecipeBahasa(recipes)
+    }
+
+    companion object {
+        @Volatile
+        private var instance: RecipeRepository? = null
+        fun getInstance(
+            recipeDao: RecipeDao,
+            historyDao: HistoryDao
+        ): RecipeRepository =
+            instance ?: synchronized(this) {
+                instance ?: RecipeRepository(recipeDao, historyDao)
+            }.also { instance = it }
     }
 }
