@@ -72,4 +72,21 @@
     <string name="success">Success</string>
     <string name="success_registered">You have successfully registered</string>
     <string name="success_login">You have successfully login</string>
+    <string name="apology_text">Oops.. Sorry :(</string>
+    <string name="manual_input_suggestion_txt">Cannot detect food ingredients, \nYou can enter them manually</string>
+    <string name="history_title_txt">Psssttttt… \nThis is your secret recipe</string>
+    <string name="profile_icon_txt">profile icon</string>
+    <string name="change_profile_txt">Change Profile</string>
+    <string name="empty_histoy_image_txt">empty histoy image</string>
+    <string name="type_your_new_password_txt">Type your new password</string>
+    <string name="confirm_password_txt">Confirm password</string>
+    <string name="successful_change_password_banner_txt">successful change password banner</string>
+    <string name="cp_successfully_title_txt">Change password successfully!</string>
+    <string name="cp_successfully_desc_txt">You have successfully change password. \nPlease use the new password when Sign in.</string>
+    <string name="ok_txt">OK</string>
+    <string name="your_photo_result_txt">Your Photo Result</string>
+    <string name="type_your_name_txt">Type your name</string>
+    <string name="upload_your_photo_txt">Upload your photo</string>
+    <string name="upload_txt">Upload</string>
+    <string name="apology_desc_txt">Recipe not available for this ingredients, \nreplace or add another ingredient.</string>
 </resources>
