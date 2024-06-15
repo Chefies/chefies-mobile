@@ -28,6 +28,8 @@ class SplashActivity : AppCompatActivity() {
             insets
         }
 
+        window.navigationBarColor = getColor(R.color.md_theme_primary)
+
         val factory: AuthViewModelFactory = AuthViewModelFactory.getInstance(this)
         val viewModel: SplashViewModel by viewModels { factory }
 

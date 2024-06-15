@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
-            app:title="Your Photo Result"
+            app:title="@string/your_photo_result_txt"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:titleTextAppearance="@style/TextAppearance.Toolbar.Title.Bold"
             tools:ignore="RtlSymmetry" />

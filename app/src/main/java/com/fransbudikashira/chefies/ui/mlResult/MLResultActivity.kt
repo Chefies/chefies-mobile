@@ -66,7 +66,9 @@ class MLResultActivity : AppCompatActivity() {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     inputAddIngredient()
                     true
-                } else { false }
+                } else {
+                    false
+                }
             }
             // Handle Get Suggestions Button
             btnGetSuggestions.setOnClickListener {
@@ -84,7 +86,8 @@ class MLResultActivity : AppCompatActivity() {
                 when (result) {
                     is Result.Loading -> isLoading(true)
                     is Result.Success -> handleSuccess(result.data)
-                    is Result.Error -> { handleError(result.error)
+                    is Result.Error -> {
+                        handleError(result.error)
                     }
                 }
             }
@@ -94,7 +97,7 @@ class MLResultActivity : AppCompatActivity() {
     // handle success result get recipes from API
     private fun handleSuccess(data: RecipeResponse) {
         isLoading(false)
-        showToast("Success Get Recipes")
+        showToast(getString(R.string.success_get_recipes_txt))
         val recipeBahasa = data.recipes[0]
         val recipeEnglish = data.recipes[1]
         val photoUrl = result.photoUrl
@@ -122,7 +125,7 @@ class MLResultActivity : AppCompatActivity() {
     private fun handleError(error: String) {
         isLoading(false)
         Log.e("MLResultActivity", "Recipes Error: $error")
-        showToast("Failed to get recipes: $error")
+        showToast(getString(R.string.failed_to_get_recipes_txt) + error)
     }
 
     private fun setUp() {
@@ -172,7 +175,8 @@ class MLResultActivity : AppCompatActivity() {
             binding.edtIngredientLayout.error = getString(R.string.invalid_min3_characters)
             return
         } else if (ingredients.contains(input)) {
-            binding.edtIngredientLayout.error = "This ingredient already added"
+            binding.edtIngredientLayout.error =
+                getString(R.string.this_ingredient_already_added_txt)
             return
         } else {
             binding.edtIngredientLayout.error = null

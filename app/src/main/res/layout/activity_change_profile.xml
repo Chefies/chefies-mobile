@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etLayoutNewPassword"
+                android:id="@+id/etLayoutName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,11 +72,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/labelName">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etNewPassword"
+                    android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="text"
+                    android:inputType="textPersonName"
                     android:textSize="14sp"
                     app:fontFamily="@font/poppins_medium"
                     tools:ignore="SpeakableTextPresentCheck" />
@@ -93,7 +93,7 @@
                 android:textSize="14sp"
                 app:fontFamily="@font/poppins_semibold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etLayoutNewPassword" />
+                app:layout_constraintTop_toBottomOf="@id/etLayoutName" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_profile"

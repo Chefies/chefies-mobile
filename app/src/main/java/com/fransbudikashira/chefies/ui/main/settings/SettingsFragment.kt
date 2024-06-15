@@ -5,12 +5,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.fransbudikashira.chefies.R
@@ -47,6 +47,10 @@ class SettingsFragment : Fragment() {
 
         // set ViewModel
         viewModel = obtainViewModel(requireActivity() as AppCompatActivity)
+
+        binding.languageSetting.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+        }
 
         binding.btnLogout.setOnClickListener {
             showCustomDialogBox()

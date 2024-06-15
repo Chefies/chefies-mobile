@@ -253,7 +253,7 @@ class ResultActivity : AppCompatActivity() {
     private fun handleError(error: String) {
         showLoading(false)
         Log.e("MLResultActivity", "Recipes Error: $error")
-        showToast("Failed to get recipes: $error")
+        showToast(getString(R.string.failed_to_get_recipes_txt) + error)
     }
 
     private fun showLoading(isLoading: Boolean) {
