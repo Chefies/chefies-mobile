@@ -115,7 +115,7 @@ class MLResultActivity : AppCompatActivity() {
             steps = recipeEnglish.steps,
         )
 
-        moveToResult(MLResultModel(historyEntity, recipeBahasaEntity, recipeEnglishEntity))
+        moveToResult(MLResultModel(historyEntity, listOf(recipeBahasaEntity), listOf(recipeEnglishEntity)))
     }
 
     // handle error result get recipes from API

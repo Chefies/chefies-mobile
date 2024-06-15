@@ -115,9 +115,9 @@ class ResultActivity : AppCompatActivity() {
             retryButton.setOnClickListener {
                 // Get Suggestions, at the end, add the recipes to temporary variable
                 if (getDefaultLanguage() == "in") {
-                    result?.recipeBahasaEntity?.let { getSuggestions(it.ingredients) }
+                    result?.recipeBahasaEntity?.let { getSuggestions(it.first().ingredients) }
                 } else {
-                    result?.recipeEnglishEntity?.let { getSuggestions(it.ingredients) }
+                    result?.recipeEnglishEntity?.let { getSuggestions(it.first().ingredients) }
                 }
 
             }
@@ -154,6 +154,13 @@ class ResultActivity : AppCompatActivity() {
                 override fun afterTextChanged(s: Editable?) {}
             })
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        historyData = HistoryEntity(title = "")
+        recipesBahasa.clear()
+        recipesEnglish.clear()
     }
 
     private fun displayedRecipes(
@@ -378,8 +385,8 @@ class ResultActivity : AppCompatActivity() {
         result.historyEntity?.let {
             historyData = historyData.copy(photoUrl = it.photoUrl, title = it.title)
         }
-        recipesBahasa.add(result.recipeBahasaEntity)
-        recipesEnglish.add(result.recipeEnglishEntity)
+        recipesBahasa.addAll(result.recipeBahasaEntity)
+        recipesEnglish.addAll(result.recipeEnglishEntity)
     }
 
     private fun playAnimation() {
