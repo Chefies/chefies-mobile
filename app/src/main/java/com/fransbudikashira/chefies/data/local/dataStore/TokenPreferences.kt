@@ -1,12 +1,15 @@
 package com.fransbudikashira.chefies.data.local.dataStore
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token")
@@ -43,5 +46,7 @@ class TokenPreferences private constructor(
             instance ?: synchronized(this) {
                 instance ?: TokenPreferences(dataStore)
             }.also { instance = it }
+
+        const val TAG = "TokenPreferences"
     }
 }
