@@ -16,9 +16,6 @@ data class RecipeEnglishEntity(
     @ColumnInfo(name = "name")
     val title: String,
 
-    @ColumnInfo(name = "photo_url")
-    val photoUrl: Uri,
-
     @ColumnInfo(name = "ingredients")
     val ingredients: List<String>,
 

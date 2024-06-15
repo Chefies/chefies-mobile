@@ -11,10 +11,4 @@ interface RecipeDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertRecipeBahasa(recipes: List<RecipeBahasaEntity>)
-
-    @Update
-    suspend fun updateRecipeEnglish(recipes: List<RecipeEnglishEntity>)
-
-    @Update
-    suspend fun updateRecipeBahasa(recipes: List<RecipeBahasaEntity>)
 }

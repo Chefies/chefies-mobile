@@ -34,6 +34,7 @@ import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
 import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
 import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityMainBinding
@@ -73,6 +74,8 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        Log.d(TAG, "onCreate: ${Locale.getDefault().language}")
 
         objectDetectorHelper = ObjectDetectorHelper(baseContext, MODEL_PATH, LABELS_PATH, this)
         objectDetectorHelper.setupObjectDetector()

@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.MainViewModelFactory
+import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
 import com.fransbudikashira.chefies.data.local.entity.RecipeBahasaEntity
 import com.fransbudikashira.chefies.data.local.entity.RecipeEnglishEntity
 import com.fransbudikashira.chefies.data.model.MLResultIngredients
@@ -65,9 +66,7 @@ class MLResultActivity : AppCompatActivity() {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     inputAddIngredient()
                     true
-                } else {
-                    false
-                }
+                } else { false }
             }
             // Handle Get Suggestions Button
             btnGetSuggestions.setOnClickListener {
@@ -77,6 +76,53 @@ class MLResultActivity : AppCompatActivity() {
 
         // setup
         setUp()
+    }
+
+    private fun getSuggestions() {
+        lifecycleScope.launch {
+            viewModel.getRecipes(ingredients).observe(this@MLResultActivity) { result ->
+                when (result) {
+                    is Result.Loading -> isLoading(true)
+                    is Result.Success -> handleSuccess(result.data)
+                    is Result.Error -> { handleError(result.error)
+                    }
+                }
+            }
+        }
+    }
+
+    // handle success result get recipes from API
+    private fun handleSuccess(data: RecipeResponse) {
+        isLoading(false)
+        showToast("Success Get Recipes")
+        val recipeBahasa = data.recipes[0]
+        val recipeEnglish = data.recipes[1]
+        val photoUrl = result.photoUrl
+
+        val historyEntity = HistoryEntity(
+            title = "",
+            photoUrl = photoUrl,
+        )
+        val recipeBahasaEntity = RecipeBahasaEntity(
+            title = recipeBahasa.name,
+            ingredients = recipeBahasa.ingredients,
+            steps = recipeBahasa.steps,
+        )
+        val recipeEnglishEntity = RecipeEnglishEntity(
+            id = null,
+            title = recipeEnglish.name,
+            ingredients = recipeEnglish.ingredients,
+            steps = recipeEnglish.steps,
+        )
+
+        moveToResult(MLResultModel(historyEntity, recipeBahasaEntity, recipeEnglishEntity))
+    }
+
+    // handle error result get recipes from API
+    private fun handleError(error: String) {
+        isLoading(false)
+        Log.e("MLResultActivity", "Recipes Error: $error")
+        showToast("Failed to get recipes: $error")
     }
 
     private fun setUp() {
@@ -101,54 +147,6 @@ class MLResultActivity : AppCompatActivity() {
 
         // Handle Button Enabled
         checkEnabledButton()
-    }
-
-    // handle success result when get reciptes from API
-    private fun handleSuccess(data: RecipeResponse) {
-        isLoading(false)
-        showToast("Success Get Recipes")
-        val recipeBahasa = data.recipes[0]
-        val recipeEnglish = data.recipes[1]
-        val photoUrl = result.photoUrl
-
-        val recipeBahasaEntity = RecipeBahasaEntity(
-            id = null,
-            title = recipeBahasa.name,
-            photoUrl = photoUrl,
-            ingredients = recipeBahasa.ingredients,
-            steps = recipeBahasa.steps,
-            historyId = null
-        )
-        val recipeEnglishEntity = RecipeEnglishEntity(
-            id = null,
-            title = recipeEnglish.name,
-            photoUrl = photoUrl,
-            ingredients = recipeEnglish.ingredients,
-            steps = recipeBahasa.steps,
-            historyId = null
-        )
-
-        moveToResult(MLResultModel(recipeBahasaEntity, recipeEnglishEntity))
-    }
-
-    // handle error result get reciptes from API
-    private fun handleError(error: String) {
-        isLoading(false)
-        Log.e("MLResultActivity", "Recipes Error: $error")
-        showToast("Failed to get recipes: $error")
-    }
-
-    private fun getSuggestions() {
-        lifecycleScope.launch {
-            viewModel.getRecipes(ingredients).observe(this@MLResultActivity) { result ->
-                when (result) {
-                    is Result.Loading -> isLoading(true)
-                    is Result.Success -> handleSuccess(result.data)
-                    is Result.Error -> { handleError(result.error)
-                    }
-                }
-            }
-        }
     }
 
     private fun updateIngredient(position: Int, item: String) {

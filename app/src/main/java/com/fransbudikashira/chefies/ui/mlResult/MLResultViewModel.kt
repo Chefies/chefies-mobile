@@ -7,7 +7,7 @@ import com.fransbudikashira.chefies.data.repository.MainRepository
 import com.fransbudikashira.chefies.data.repository.UserRepository
 
 class MLResultViewModel(private val mainRepository: MainRepository) : ViewModel() {
+
     fun getRecipes(ingredients: List<String>) =
         mainRepository.getRecipes(ingredients)
-
 }

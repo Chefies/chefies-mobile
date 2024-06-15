@@ -7,13 +7,18 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.fransbudikashira.chefies.BuildConfig
 import com.fransbudikashira.chefies.R
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
 private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
@@ -68,5 +73,24 @@ fun String.prettierIngredientResult(context: Context): String {
         "white_id_onion" -> context.getString(R.string.garlic)
         "white_id_onion_full" -> context.getString(R.string.garlic)
         else -> this
+    }
+}
+
+fun getDefaultLanguage(): String = Locale.getDefault().language
+
+suspend fun <T> LiveData<T>.await(): T {
+    return suspendCancellableCoroutine { cont ->
+        val observer = object : Observer<T> {
+            override fun onChanged(value: T) {
+                if (value != null) {
+                    cont.resume(value)
+                    this@await.removeObserver(this)
+                } else {
+                    cont.resumeWithException(Exception("No data available"))
+                }
+            }
+        }
+        observeForever(observer)
+        cont.invokeOnCancellation { removeObserver(observer) }
     }
 }
