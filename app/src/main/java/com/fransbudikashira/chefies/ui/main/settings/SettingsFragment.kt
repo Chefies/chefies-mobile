@@ -12,19 +12,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.fransbudikashira.chefies.ChangePasswordActivity
+import com.fransbudikashira.chefies.ChangeProfileActivity
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
+import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+
+    private val settingsViewModel: SettingsViewModel by viewModels {
+        AuthViewModelFactory.getInstance(requireContext())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +48,8 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        getUserProfile()
+
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         return root
@@ -48,12 +61,50 @@ class SettingsFragment : Fragment() {
         // set ViewModel
         viewModel = obtainViewModel(requireActivity() as AppCompatActivity)
 
+        binding.btnLogout.setOnClickListener {
+            showCustomDialogBox()
+        }
+
+        binding.changePasswordSetting.setOnClickListener {
+            moveToChangePassword()
+        }
+
+        binding.changeProfileSetting.setOnClickListener {
+            moveToChangeProfile()
+        }
+
         binding.languageSetting.setOnClickListener {
             startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
         }
 
-        binding.btnLogout.setOnClickListener {
-            showCustomDialogBox()
+    }
+
+    private fun getUserProfile() {
+        lifecycleScope.launch {
+            settingsViewModel.getProfile().observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is Result.Loading -> {}
+                    is Result.Success -> handleSuccess()
+                    is Result.Error -> {}
+                }
+            }
+        }
+    }
+
+    private fun handleSuccess() {
+        with(binding) {
+            val avatar = settingsViewModel.getAvatar()
+
+            tvUsername.text = settingsViewModel.getUsername()
+
+            if (avatar.isNotEmpty()) {
+                Glide.with(requireContext())
+                    .load(avatar)
+                    .placeholder(R.drawable.empty_image)
+                    .into(ivProfile)
+            } else {
+                ivProfile.setImageResource(R.drawable.empty_image)
+            }
         }
     }
 
@@ -80,8 +131,22 @@ class SettingsFragment : Fragment() {
         dialog.show()
     }
 
-    private fun  moveToSignIn(){
+    private fun moveToSignIn() {
         val intent = Intent(requireContext(), SignInActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+    }
+
+    private fun moveToChangePassword() {
+        val intent = Intent(requireContext(), ChangePasswordActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+    }
+
+    private fun moveToChangeProfile() {
+        val intent = Intent(requireContext(), ChangeProfileActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         startActivity(intent)

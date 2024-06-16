@@ -16,7 +16,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -35,7 +34,6 @@ import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
 import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
 import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
-import com.google.android.material.button.MaterialButton
 import java.util.Locale
 
 class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
@@ -236,10 +234,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             startActivity(intent)
         } else {
             showToast("No Image Selected")
-        }
-        if (ingredients.isEmpty()){
-            // will implements custom dialog
-            showToast("No ingredients detected")
         }
     }
 

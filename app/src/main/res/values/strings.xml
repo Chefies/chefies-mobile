@@ -70,6 +70,7 @@
     <string name="success">Success</string>
     <string name="success_registered">You have successfully registered</string>
     <string name="success_login">You have successfully login</string>
+    <string name="success_change_password">You have successfully change password</string>
     <string name="apology_text">Oops… Sorry :(</string>
     <string name="manual_input_suggestion_txt">Cannot detect food ingredients, \nYou can enter them manually</string>
     <string name="history_title_txt">Psssttttt… \nThis is your secret recipe</string>
@@ -77,7 +78,7 @@
     <string name="change_profile_txt">Change Profile</string>
     <string name="empty_histoy_image_txt">Empty histoy image</string>
     <string name="type_your_new_password_txt">Type your new password</string>
-    <string name="confirm_password_txt">Confirm password</string>
+    <string name="type_your_old_password_txt">Type your old password</string>
     <string name="successful_change_password_banner_txt">Successful change password image</string>
     <string name="cp_successfully_title_txt">Change password successfully!</string>
     <string name="cp_successfully_desc_txt">You have successfully change password. \nPlease use the new password when Sign in.</string>

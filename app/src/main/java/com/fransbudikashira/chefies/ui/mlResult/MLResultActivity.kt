@@ -66,9 +66,7 @@ class MLResultActivity : AppCompatActivity() {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     inputAddIngredient()
                     true
-                } else {
-                    false
-                }
+                } else { false }
             }
             // Handle Get Suggestions Button
             btnGetSuggestions.setOnClickListener {
@@ -86,9 +84,7 @@ class MLResultActivity : AppCompatActivity() {
                 when (result) {
                     is Result.Loading -> isLoading(true)
                     is Result.Success -> handleSuccess(result.data)
-                    is Result.Error -> {
-                        handleError(result.error)
-                    }
+                    is Result.Error -> handleError(result.error)
                 }
             }
         }
