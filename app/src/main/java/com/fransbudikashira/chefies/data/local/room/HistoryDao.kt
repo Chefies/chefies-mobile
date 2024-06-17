@@ -14,10 +14,6 @@ interface HistoryDao {
     suspend fun updateHistory(history: HistoryEntity)
 
     @Transaction
-    @Query("SELECT * FROM history WHERE id = :id")
-    fun getHistoryById(id: Long): LiveData<HistoryEntity>
-
-    @Transaction
     @Query("SELECT * FROM recipe_bahasa WHERE history_id = :id ORDER BY id DESC")
     fun getAllRecipesBahasaById(id: Long): LiveData<List<RecipeBahasaEntity>>
 

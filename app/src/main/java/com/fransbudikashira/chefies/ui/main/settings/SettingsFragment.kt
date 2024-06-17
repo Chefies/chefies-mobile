@@ -116,30 +116,13 @@ class SettingsFragment : Fragment() {
 
         btnYes.setOnClickListener {
             viewModel.deleteToken()
-            moveToSignIn()
+            moveActivityTo(requireActivity(), SignInActivity::class.java, true)
         }
 
         btnNo.setOnClickListener { dialog.dismiss() }
 
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
-    }
-
-    private fun moveToSignIn() {
-        val intent = Intent(requireContext(), SignInActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
-    }
-
-    private fun moveToChangePassword() {
-        val intent = Intent(requireContext(), ChangePasswordActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun moveToChangeProfile() {
-        val intent = Intent(requireContext(), ChangeProfileActivity::class.java)
-        startActivity(intent)
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): MainViewModel {

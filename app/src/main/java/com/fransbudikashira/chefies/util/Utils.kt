@@ -148,7 +148,7 @@ fun ImageView.loadImage(url: String?) {
 fun ImageView.loadImageProfile(url: String?){
     Glide.with(this.context)
         .load(url)
-        .placeholder(R.drawable.empty_image)
+        .placeholder(R.drawable.ic_profile_pic)
         .error(R.drawable.ic_profile_pic)
         .into(this)
 }

@@ -23,6 +23,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.fransbudikashira.chefies.R
+import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.data.factory.RecipeViewModelFactory
 import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
 import com.fransbudikashira.chefies.data.model.MLResultModel
@@ -31,16 +32,26 @@ import com.fransbudikashira.chefies.data.local.entity.RecipeEnglishEntity
 import com.fransbudikashira.chefies.data.remote.response.RecipeResponse
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
 import com.fransbudikashira.chefies.helper.Result
+import com.fransbudikashira.chefies.ui.main.MainActivity
+import com.fransbudikashira.chefies.ui.signIn.SignInActivity
+import com.fransbudikashira.chefies.ui.splash.SplashActivity
+import com.fransbudikashira.chefies.ui.splash.SplashViewModel
 import com.fransbudikashira.chefies.util.getDefaultLanguage
 import com.fransbudikashira.chefies.util.loadImage
+import com.fransbudikashira.chefies.util.moveActivityTo
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
     private val viewModel: ResultViewModel by viewModels {
         RecipeViewModelFactory.getInstance(this)
+    }
+    private val splashViewModel: SplashViewModel by viewModels {
+        AuthViewModelFactory.getInstance(this)
     }
 
     private var historyData = HistoryEntity(title = "")
@@ -113,9 +124,9 @@ class ResultActivity : AppCompatActivity() {
             retryButton.setOnClickListener {
                 // Get Suggestions, at the end, add the recipes to temporary variable
                 if (getDefaultLanguage() == "in") {
-                    result?.recipeBahasaEntity?.let { getSuggestions(it.first().ingredients) }
+                    result?.recipeBahasaEntity?.let { tokenValidationMechanism(it.first().ingredients) }
                 } else {
-                    result?.recipeEnglishEntity?.let { getSuggestions(it.first().ingredients) }
+                    result?.recipeEnglishEntity?.let { tokenValidationMechanism(it.first().ingredients) }
                 }
 
             }
@@ -159,6 +170,69 @@ class ResultActivity : AppCompatActivity() {
         historyData = HistoryEntity(title = "")
         recipesBahasa.clear()
         recipesEnglish.clear()
+    }
+
+    private fun tokenValidationMechanism(ingredients: List<String>) {
+        lifecycleScope.launch {
+            // Check Valid Token
+            if (checkValidToken()) {
+                getSuggestions(ingredients)
+                // - - -
+                Log.d(TAG, "VALID TOKEN")
+            } else {
+                val email = splashViewModel.getEmail()
+                val password = splashViewModel.getPassword()
+                // Check Email & Password Available
+                if (email.isEmpty() || password.isEmpty()) {
+                    moveActivityTo(this@ResultActivity, SignInActivity::class.java, true)
+                    // - - -
+                    Log.d(TAG, "EMAIL & PASSWORD UN-AVAILABLE")
+                } else {
+                    // Do Login
+                    doLogin(email, password, ingredients)
+                    // - - -
+                    Log.d(TAG, "EMAIL & PASSWORD AVAILABLE")
+                }
+                // - - -
+                Log.d(TAG, "INVALID TOKEN")
+            }
+            // - - -
+            Log.d(TAG, "TOKEN AVAILABLE")
+        }
+    }
+
+    private fun doLogin(email: String, password: String, ingredients: List<String>) {
+        splashViewModel.userLogin(email, password).observe(this@ResultActivity) { userLoginResult ->
+            when (userLoginResult) {
+                is Result.Loading -> {}
+                is Result.Success -> {
+                    getSuggestions(ingredients)
+                    // - - -
+                    Log.d(TAG, "LOGIN SUCCESS -> MOVE TO MAIN")
+                }
+                is Result.Error -> {
+                    moveActivityTo(this@ResultActivity, SignInActivity::class.java, true)
+                    // - - -
+                    Log.d(TAG, "LOGIN FAILED -> MOVE TO SIGN-IN")
+                }
+            }
+        }
+    }
+
+    private suspend fun checkValidToken(): Boolean {
+        return suspendCoroutine { continuation ->
+            splashViewModel.getProfile().observe(this@ResultActivity) { getProfileResult ->
+                when (getProfileResult) {
+                    is Result.Loading -> {}
+                    is Result.Success -> {
+                        continuation.resume(true)
+                    }
+                    is Result.Error -> {
+                        continuation.resume(false)
+                    }
+                }
+            }
+        }
     }
 
     private fun displayedRecipes(

@@ -43,8 +43,6 @@ class ResultViewModel(
         }
     }
 
-    fun getHistoryById(id: Long) = recipeRepository.getHistoryById(id)
-
     companion object {
         const val TAG = "ResultViewModel"
     }

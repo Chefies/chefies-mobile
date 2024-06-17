@@ -65,9 +65,6 @@ class ListRecipeAdapter : ListAdapter<HistoryEntity, ListRecipeAdapter.MyViewHol
                 return oldItem == newItem
             }
         }
-
-        const val EXTRA_USERNAME = "EXTRA_USERNAME"
-        const val EXTRA_AVATAR_URL = "EXTRA_AVATAR_URL"
     }
 
 }
