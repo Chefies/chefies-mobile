@@ -12,8 +12,24 @@ class SettingsViewModel(private val userRepository: UserRepository): ViewModel()
     private val _isEnableButton = MutableLiveData<Event<Boolean>>()
     val isEnableButton: LiveData<Event<Boolean>> = _isEnableButton
 
+    private val _username = MutableLiveData<String>()
+    val username : LiveData<String> = _username
+
+    private val _avatarUrl = MutableLiveData<String>()
+    val avatarUrl : LiveData<String> = _avatarUrl
+
     init {
         setEnabledButton(false)
+        _username.value = userRepository.getUsername()
+        _avatarUrl.value = userRepository.getAvatar()
+    }
+
+    fun setUsername (username: String) {
+        _username.value = username
+    }
+
+    fun setAvatarUrl (avatarUrl: String) {
+        _avatarUrl.value = avatarUrl
     }
 
     fun setEnabledButton(isEnabled: Boolean) {

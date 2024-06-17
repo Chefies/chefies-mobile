@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     //load Image from internet
     implementation(libs.glide)
+    annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
     //datastore
     implementation(libs.androidx.datastore.preferences)
     // - - -

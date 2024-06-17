@@ -9,10 +9,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.widget.ImageView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.fransbudikashira.chefies.BuildConfig
 import com.fransbudikashira.chefies.R
 import com.google.android.material.snackbar.Snackbar
@@ -150,4 +153,12 @@ suspend fun <T> LiveData<T>.await(): T {
         observeForever(observer)
         cont.invokeOnCancellation { removeObserver(observer) }
     }
+}
+
+fun ImageView.loadImage(url: String?){
+    Glide.with(this.context)
+        .load(url)
+        .placeholder(R.drawable.empty_image)
+        .error(R.drawable.empty_image)
+        .into(this)
 }

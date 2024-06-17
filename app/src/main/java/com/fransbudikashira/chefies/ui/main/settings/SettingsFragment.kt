@@ -24,6 +24,7 @@ import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
+import com.fransbudikashira.chefies.util.loadImage
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
@@ -58,6 +59,9 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // observe user profile
+        observeViewModel()
+
         // set ViewModel
         viewModel = obtainViewModel(requireActivity() as AppCompatActivity)
 
@@ -84,7 +88,9 @@ class SettingsFragment : Fragment() {
             settingsViewModel.getProfile().observe(viewLifecycleOwner) { result ->
                 when (result) {
                     is Result.Loading -> {}
-                    is Result.Success -> handleSuccess()
+                    is Result.Success -> {
+                        handleSuccess()
+                    }
                     is Result.Error -> {}
                 }
             }
@@ -92,20 +98,8 @@ class SettingsFragment : Fragment() {
     }
 
     private fun handleSuccess() {
-        with(binding) {
-            val avatar = settingsViewModel.getAvatar()
-
-            tvUsername.text = settingsViewModel.getUsername()
-
-            if (avatar.isNotEmpty()) {
-                Glide.with(requireContext())
-                    .load(avatar)
-                    .placeholder(R.drawable.empty_image)
-                    .into(ivProfile)
-            } else {
-                ivProfile.setImageResource(R.drawable.empty_image)
-            }
-        }
+        settingsViewModel.setUsername(settingsViewModel.getUsername())
+        settingsViewModel.setAvatarUrl(settingsViewModel.getAvatar())
     }
 
     // Dialog box warn logout
@@ -157,9 +151,25 @@ class SettingsFragment : Fragment() {
         return ViewModelProvider(activity, factory)[MainViewModel::class.java]
     }
 
+    private fun observeViewModel() {
+        // observe username
+        settingsViewModel.username.observe(requireActivity()) {
+            binding.tvUsername.text = it
+        }
+        // observe avatar
+        settingsViewModel.avatarUrl.observe(requireActivity()) {
+            with(binding){
+                if (it.isNotEmpty()) {
+                    ivProfile.loadImage(it)
+                } else {
+                    ivProfile.setImageResource(R.drawable.empty_image)
+                }
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

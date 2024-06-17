@@ -1,6 +1,7 @@
 package com.fransbudikashira.chefies
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,14 +17,22 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.ActivityChangeProfileBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
+import com.fransbudikashira.chefies.util.loadImage
 import com.fransbudikashira.chefies.util.reduceFileImage
 import com.fransbudikashira.chefies.util.uriToFile
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class ChangeProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChangeProfileBinding
@@ -72,21 +81,84 @@ class ChangeProfileActivity : AppCompatActivity() {
         }
 
         binding.btnChangeProfile.setOnClickListener {
-            currentImageUri?.let { uri ->
-                val avatarFile = uriToFile(uri, this).reduceFileImage()
-                Log.d("Image File", "showImage: ${avatarFile.path}")
-                val name = binding.etName.text.toString()
+            val name = binding.etName.text.toString()
+            updateProfile(name)
+//            lifecycleScope.launch {
+//                val avatarDb = settingsViewModel.getAvatar().first()
+//                val avatarFile: File? = if (currentImageUri != null) {
+//
+//                }
+//
+//                currentImageUri?.let { uri ->
+//                    val avatarFile = uriToFile(uri, this@ChangeProfileActivity).reduceFileImage()
+//                    Log.d("Image File", "showImage: ${avatarFile.path}")
+//                    val name = binding.etName.text.toString()
+//
+//                    settingsViewModel.updateProfile(name, avatarFile).observe(this@ChangeProfileActivity) { result ->
+//                        if (result != null) {
+//                            when (result) {
+//                                is Result.Loading -> showLoading(true)
+//                                is Result.Success -> handleSuccess(result.data.message)
+//                                is Result.Error -> handleError(result.error)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+        }
+    }
 
-                settingsViewModel.updateProfile(name, avatarFile).observe(this) { result ->
-                    if (result != null) {
-                        when (result) {
-                            is Result.Loading -> showLoading(true)
-                            is Result.Success -> handleSuccess(result.data.message)
-                            is Result.Error -> handleError(result.error)
-                        }
+    private fun updateProfile(name: String) {
+        lifecycleScope.launch {
+            val avatarUrl = settingsViewModel.getAvatar()
+            val avatarFile: File? = if (currentImageUri != null) {
+                // If the user changes avatar, use the new URI
+                uriToFile(currentImageUri!!, this@ChangeProfileActivity).reduceFileImage()
+            } else if (avatarUrl.isNotEmpty()) {
+                // If not, download the avatar from the saved avatar URL
+                downloadImageToFile(this@ChangeProfileActivity, avatarUrl)
+            } else {
+                null
+            }
+
+            if (avatarFile != null) {
+                settingsViewModel.updateProfile(name, avatarFile).observe(this@ChangeProfileActivity) { result ->
+                    when (result) {
+                        is Result.Loading -> showLoading(true)
+                        is Result.Success -> handleSuccess(result.data.message)
+                        is Result.Error -> handleError(result.error)
                     }
                 }
+            } else {
+                showToast("Avatar not found or unable to download avatar")
             }
+        }
+    }
+
+    private fun downloadImageToFile(context: Context, imageUrl: String): File? {
+        return try {
+            val url = URL(imageUrl)
+            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+            connection.doInput = true
+            connection.connect()
+
+            val inputStream: InputStream = connection.inputStream
+            val file = File(context.cacheDir, "avatar.jpg")
+            val outputStream = FileOutputStream(file)
+
+            val buffer = ByteArray(1024)
+            var len: Int
+            while (inputStream.read(buffer).also { len = it } != -1) {
+                outputStream.write(buffer, 0, len)
+            }
+
+            outputStream.close()
+            inputStream.close()
+
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
@@ -122,11 +194,15 @@ class ChangeProfileActivity : AppCompatActivity() {
             binding.ivProfile.setImageURI(it)
 
             checkImageUri = true
-            isEnabledButton(viewModel)
+            isEnabledButton()
         }
     }
 
     private fun setupView(viewModel: SettingsViewModel) {
+        //
+        lifecycleScope.launch {
+            binding.etName.setText(settingsViewModel.getUsername())
+        }
         // New name
         binding.etName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -135,14 +211,14 @@ class ChangeProfileActivity : AppCompatActivity() {
                     binding.etLayoutName.error = getString(R.string.invalid_name)
 
                     checkNewName = false
-                    isEnabledButton(viewModel)
+                    isEnabledButton()
                 } else {
                     binding.etLayoutName.error = null
                     binding.etLayoutName.isErrorEnabled = false
 
                     newName = s.toString()
                     checkNewName = true
-                    isEnabledButton(viewModel)
+                    isEnabledButton()
                 }
             }
 
@@ -151,16 +227,13 @@ class ChangeProfileActivity : AppCompatActivity() {
         // Image uri
         val avatarDb = settingsViewModel.getAvatar()
         if (avatarDb.isNotEmpty()) {
-            Glide.with(this)
-                .load(avatarDb)
-                .placeholder(R.drawable.empty_image)
-                .into(binding.ivProfile)
+            binding.ivProfile.loadImage(avatarDb)
 
             checkImageUri = true
-            isEnabledButton(viewModel)
+            isEnabledButton()
         } else {
             checkImageUri = false
-            isEnabledButton(viewModel)
+            isEnabledButton()
         }
     }
 
@@ -171,11 +244,11 @@ class ChangeProfileActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun isEnabledButton(viewModel: SettingsViewModel) {
+    private fun isEnabledButton() {
         if (checkNewName && checkImageUri)
-            viewModel.setEnabledButton(true)
+            settingsViewModel.setEnabledButton(true)
         else
-            viewModel.setEnabledButton(false)
+            settingsViewModel.setEnabledButton(false)
     }
 
     private fun showLoading(isLoading: Boolean) {
