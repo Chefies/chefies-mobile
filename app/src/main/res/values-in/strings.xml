@@ -75,7 +75,7 @@
     <string name="profile_icon_txt">Ikon profil</string>
     <string name="change_profile_txt">Ubah Profil</string>
     <string name="empty_histoy_image_txt">Gambar riwayat kosong</string>
-    <string name="type_your_new_password_txt">Ketik kata sandi baru Kamu</string>
+    <string name="type_your_new_password_txt">Ketik kata sandi baru kamu</string>
     <string name="type_your_old_password_txt">Ketik kata sandi lama kamu</string>
     <string name="successful_change_password_banner_txt">Gambar berhasil mengubah kata sandi</string>
     <string name="cp_successfully_title_txt">Berhasil mengubah kata sandi!</string>

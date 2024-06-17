@@ -25,6 +25,7 @@ import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.loadImage
+import com.fransbudikashira.chefies.util.moveActivityTo
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
@@ -59,6 +60,9 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // observe user profile
+        observeViewModel()
+
         // set ViewModel
         viewModel = obtainViewModel(requireActivity() as AppCompatActivity)
 
@@ -67,22 +71,15 @@ class SettingsFragment : Fragment() {
         }
 
         binding.changePasswordSetting.setOnClickListener {
-            moveToChangePassword()
+            moveActivityTo(requireActivity(), ChangeProfileActivity::class.java)
         }
 
         binding.changeProfileSetting.setOnClickListener {
-            moveToChangeProfile()
+            moveActivityTo(requireActivity(), ChangeProfileActivity::class.java)
         }
 
         binding.languageSetting.setOnClickListener {
             startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
-        }
-
-        settingsViewModel.username.observe(viewLifecycleOwner) {
-            binding.tvUsername.text = it
-        }
-        settingsViewModel.avatar.observe(viewLifecycleOwner) {
-            binding.ivProfile.loadImage(it)
         }
     }
 
@@ -91,7 +88,9 @@ class SettingsFragment : Fragment() {
             settingsViewModel.getProfile().observe(viewLifecycleOwner) { result ->
                 when (result) {
                     is Result.Loading -> {}
-                    is Result.Success -> handleSuccess()
+                    is Result.Success -> {
+                        handleSuccess()
+                    }
                     is Result.Error -> {}
                 }
             }
@@ -99,8 +98,8 @@ class SettingsFragment : Fragment() {
     }
 
     private fun handleSuccess() {
-        settingsViewModel.setAvatar(settingsViewModel.getAvatar())
         settingsViewModel.setUsername(settingsViewModel.getUsername())
+        settingsViewModel.setAvatarUrl(settingsViewModel.getAvatar())
     }
 
     // Dialog box warn logout
@@ -141,9 +140,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun moveToChangeProfile() {
-        val intent = Intent(requireContext(), ChangeProfileActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+        val intent = Intent(requireContext(), ChangeProfileActivity::class.java)
         startActivity(intent)
     }
 
@@ -152,9 +149,19 @@ class SettingsFragment : Fragment() {
         return ViewModelProvider(activity, factory)[MainViewModel::class.java]
     }
 
+    private fun observeViewModel() {
+        // observe username
+        settingsViewModel.username.observe(viewLifecycleOwner) {
+            binding.tvUsername.text = it
+        }
+        // observe avatar
+        settingsViewModel.avatarUrl.observe(viewLifecycleOwner) {
+            binding.ivProfile.loadImage(it)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

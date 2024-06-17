@@ -15,6 +15,7 @@ import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
+import com.fransbudikashira.chefies.util.moveActivityTo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
@@ -47,7 +48,7 @@ class SplashActivity : AppCompatActivity() {
             // Run Token Validation Mechanism
             tokenValidationMechanism()
         } else {
-            moveActivityTo(SignInActivity::class.java)
+            moveActivityTo(this@SplashActivity, SignInActivity::class.java, true)
             // - - -
             Log.d(TAG, "TOKEN UN-AVAILABLE")
         }
@@ -57,7 +58,7 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch {
             // Check Valid Token
             if (checkValidToken()) {
-                moveActivityTo(MainActivity::class.java)
+                moveActivityTo(this@SplashActivity, MainActivity::class.java, true)
                 // - - -
                 Log.d(TAG, "VALID TOKEN")
             } else {
@@ -65,7 +66,7 @@ class SplashActivity : AppCompatActivity() {
                 val password = viewModel.getPassword()
                 // Check Email & Password Available
                 if (email.isEmpty() || password.isEmpty()) {
-                    moveActivityTo(SignInActivity::class.java)
+                    moveActivityTo(this@SplashActivity, SignInActivity::class.java, true)
                     // - - -
                     Log.d(TAG, "EMAIL & PASSWORD UN-AVAILABLE")
                 } else {
@@ -87,12 +88,12 @@ class SplashActivity : AppCompatActivity() {
             when (userLoginResult) {
                 is Result.Loading -> {}
                 is Result.Success -> {
-                    moveActivityTo(MainActivity::class.java)
+                    moveActivityTo(this@SplashActivity, MainActivity::class.java, true)
                     // - - -
                     Log.d(TAG, "LOGIN SUCCESS -> MOVE TO MAIN")
                 }
                 is Result.Error -> {
-                    moveActivityTo(SignInActivity::class.java)
+                    moveActivityTo(this@SplashActivity, SignInActivity::class.java, true)
                     // - - -
                     Log.d(TAG, "LOGIN FAILED -> MOVE TO SIGN-IN")
                 }
@@ -119,12 +120,6 @@ class SplashActivity : AppCompatActivity() {
     private fun checkTokenAvailable(): Boolean {
         val token = viewModel.getToken()
         return token.isNotEmpty()
-    }
-
-    private fun <T> moveActivityTo(activity: Class<T>) {
-        val intent = Intent(this, activity)
-        startActivity(intent)
-        finish()
     }
 
     companion object {
