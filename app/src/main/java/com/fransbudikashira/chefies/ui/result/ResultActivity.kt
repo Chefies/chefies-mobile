@@ -251,7 +251,9 @@ class ResultActivity : AppCompatActivity() {
                 // Set List Steps
                 recipesBahasa[index].steps.let { steps ->
                     // Prepend numbers to each step
-                    val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
+                    val numberedSteps = steps.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), "").trim()}"
+                    }.toTypedArray()
                     val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
                         this@ResultActivity, android.R.layout.simple_list_item_1, numberedSteps
                     )

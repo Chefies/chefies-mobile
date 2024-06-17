@@ -1,11 +1,11 @@
-package com.fransbudikashira.chefies
+package com.fransbudikashira.chefies.ui.successfulCP
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.databinding.ActivitySuccessfulCpactivityBinding
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.util.moveActivityTo

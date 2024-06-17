@@ -1,8 +1,7 @@
-package com.fransbudikashira.chefies
+package com.fransbudikashira.chefies.ui.changeProfile
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -18,13 +17,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
+import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.ActivityChangeProfileBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
-import com.fransbudikashira.chefies.util.loadImage
 import com.fransbudikashira.chefies.util.loadImageProfile
 import com.fransbudikashira.chefies.util.moveActivityTo
 import com.fransbudikashira.chefies.util.reduceFileImage

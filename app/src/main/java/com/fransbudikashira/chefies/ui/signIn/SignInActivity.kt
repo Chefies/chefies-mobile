@@ -59,7 +59,7 @@ class SignInActivity : AppCompatActivity() {
                 moveTo(SignUpActivity::class.java)
             }
             btnLogin.setOnClickListener{
-                viewModel.userLogin(email, password).observe(this@SignInActivity) { result ->
+                viewModel.userLogin(email.trim(), password.trim()).observe(this@SignInActivity) { result ->
                     if (result != null) {
                         when (result) {
                             is Result.Loading -> {

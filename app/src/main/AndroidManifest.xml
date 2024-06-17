@@ -23,13 +23,13 @@
         tools:ignore="LockedOrientationActivity"
         tools:targetApi="31">
         <activity
-            android:name=".ChangeProfileActivity"
+            android:name=".ui.changeProfile.ChangeProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".SuccessfulCPActivity"
+            android:name=".ui.successfulCP.SuccessfulCPActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePasswordActivity"
+            android:name=".ui.changePassword.ChangePasswordActivity"
             android:exported="false" />
         <activity
             android:name=".ui.mlResult.MLResultActivity"

@@ -69,7 +69,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         binding.btnRegister.setOnClickListener {
-            viewModel.userRegister(name, email, password).observe(this) { result ->
+            viewModel.userRegister(name.trim(), email.trim(), password.trim()).observe(this) { result ->
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> {

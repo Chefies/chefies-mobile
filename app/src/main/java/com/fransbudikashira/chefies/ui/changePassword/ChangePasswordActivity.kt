@@ -1,7 +1,6 @@
-package com.fransbudikashira.chefies
+package com.fransbudikashira.chefies.ui.changePassword
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,10 +11,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.ActivityChangePasswordBinding
 import com.fransbudikashira.chefies.helper.Result
-import com.fransbudikashira.chefies.ui.main.MainActivity
+import com.fransbudikashira.chefies.ui.successfulCP.SuccessfulCPActivity
 import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
 import com.fransbudikashira.chefies.util.moveActivityTo
 
