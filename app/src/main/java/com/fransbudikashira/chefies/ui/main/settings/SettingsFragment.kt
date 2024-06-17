@@ -178,6 +178,7 @@ class SettingsFragment : Fragment() {
         btnYes.setOnClickListener {
             mainViewModel.deleteToken()
             moveToSignIn()
+            // moveActivityTo(requireActivity(), SignInActivity::class.java, true)
         }
 
         btnNo.setOnClickListener { dialog.dismiss() }
