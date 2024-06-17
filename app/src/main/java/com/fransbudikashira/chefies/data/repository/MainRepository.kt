@@ -24,8 +24,9 @@ class MainRepository(
                 if (response.body() != null) {
                     emit(Result.Success(response.body()!!))
                     Log.d(TAG, "Get Recipes Response: ${response.body()}")
-                } else {
-                    emit(Result.Error("Response body is null"))
+                }
+                if (response.body()!!.recipes.isEmpty()) {
+                    emit(Result.Error("Recipe not available for this ingredients"))
                 }
             } else {
                 val errorBody = response.errorBody()?.string()

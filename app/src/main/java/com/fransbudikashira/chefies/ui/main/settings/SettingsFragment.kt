@@ -5,26 +5,38 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.fransbudikashira.chefies.ChangePasswordActivity
+import com.fransbudikashira.chefies.ChangeProfileActivity
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
+import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
+import com.fransbudikashira.chefies.util.loadImage
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+
+    private val settingsViewModel: SettingsViewModel by viewModels {
+        AuthViewModelFactory.getInstance(requireContext())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +49,8 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        getUserProfile()
+
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         return root
@@ -51,6 +65,42 @@ class SettingsFragment : Fragment() {
         binding.btnLogout.setOnClickListener {
             showCustomDialogBox()
         }
+
+        binding.changePasswordSetting.setOnClickListener {
+            moveToChangePassword()
+        }
+
+        binding.changeProfileSetting.setOnClickListener {
+            moveToChangeProfile()
+        }
+
+        binding.languageSetting.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+        }
+
+        settingsViewModel.username.observe(viewLifecycleOwner) {
+            binding.tvUsername.text = it
+        }
+        settingsViewModel.avatar.observe(viewLifecycleOwner) {
+            binding.ivProfile.loadImage(it)
+        }
+    }
+
+    private fun getUserProfile() {
+        lifecycleScope.launch {
+            settingsViewModel.getProfile().observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is Result.Loading -> {}
+                    is Result.Success -> handleSuccess()
+                    is Result.Error -> {}
+                }
+            }
+        }
+    }
+
+    private fun handleSuccess() {
+        settingsViewModel.setAvatar(settingsViewModel.getAvatar())
+        settingsViewModel.setUsername(settingsViewModel.getUsername())
     }
 
     // Dialog box warn logout
@@ -76,8 +126,22 @@ class SettingsFragment : Fragment() {
         dialog.show()
     }
 
-    private fun  moveToSignIn(){
+    private fun moveToSignIn() {
         val intent = Intent(requireContext(), SignInActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+    }
+
+    private fun moveToChangePassword() {
+        val intent = Intent(requireContext(), ChangePasswordActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+    }
+
+    private fun moveToChangeProfile() {
+        val intent = Intent(requireContext(), ChangeProfileActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         startActivity(intent)

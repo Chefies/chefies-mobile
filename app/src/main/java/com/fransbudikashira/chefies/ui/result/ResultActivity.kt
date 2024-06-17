@@ -31,11 +31,9 @@ import com.fransbudikashira.chefies.data.local.entity.RecipeEnglishEntity
 import com.fransbudikashira.chefies.data.remote.response.RecipeResponse
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
 import com.fransbudikashira.chefies.helper.Result
-import com.fransbudikashira.chefies.util.await
 import com.fransbudikashira.chefies.util.getDefaultLanguage
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class ResultActivity : AppCompatActivity() {
@@ -262,7 +260,7 @@ class ResultActivity : AppCompatActivity() {
     private fun handleError(error: String) {
         showLoading(false)
         Log.e("MLResultActivity", "Recipes Error: $error")
-        showToast("Failed to get recipes: $error")
+        showToast(getString(R.string.failed_to_get_recipes_txt) + error)
     }
 
     private fun showLoading(isLoading: Boolean) {

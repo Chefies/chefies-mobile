@@ -3,6 +3,7 @@ package com.fransbudikashira.chefies.di
 import android.content.Context
 import com.fransbudikashira.chefies.data.local.dataStore.LoginPreferences
 import com.fransbudikashira.chefies.data.local.dataStore.TokenPreferences
+import com.fransbudikashira.chefies.data.local.dataStore.UserProfilePreferences
 import com.fransbudikashira.chefies.data.local.dataStore.dataStore
 import com.fransbudikashira.chefies.data.local.room.ChefiesDatabase
 import com.fransbudikashira.chefies.data.remote.retrofit.ApiConfig
@@ -14,10 +15,11 @@ object Injection {
     fun provideUserRepository(context: Context): UserRepository {
         val tokenPreferences = TokenPreferences.getInstance(context.dataStore)
         val loginPreferences = LoginPreferences.getInstance(context.dataStore)
+        val userProfilePreferences = UserProfilePreferences.getInstance(context.dataStore)
 //        val user = runBlocking { tokenPreferences.getToken().first() }
         val apiService = ApiConfig.getApiService(context)
 
-        return UserRepository.getInstance(apiService, tokenPreferences, loginPreferences)
+        return UserRepository.getInstance(apiService, tokenPreferences, loginPreferences, userProfilePreferences)
     }
 
     fun provideMainRepository(context: Context): MainRepository {

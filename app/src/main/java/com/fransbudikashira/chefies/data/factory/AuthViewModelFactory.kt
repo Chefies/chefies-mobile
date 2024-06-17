@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.fransbudikashira.chefies.data.repository.UserRepository
 import com.fransbudikashira.chefies.di.Injection
 import com.fransbudikashira.chefies.ui.main.MainViewModel
+import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInViewModel
 import com.fransbudikashira.chefies.ui.signUp.SignUpViewModel
 import com.fransbudikashira.chefies.ui.splash.SplashViewModel
@@ -31,6 +32,10 @@ class AuthViewModelFactory(
 
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
                 MainViewModel(userRepository) as T
+            }
+
+            modelClass.isAssignableFrom(SettingsViewModel::class.java) -> {
+                SettingsViewModel(userRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

@@ -29,10 +29,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:lineHeight="28dp"
-            android:fontFamily="@font/poppins_semibold"
             android:text="@string/welcome_text"
             android:textColor="@color/md_theme_primary"
             android:textSize="22sp"
+            app:fontFamily="@font/poppins_semibold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

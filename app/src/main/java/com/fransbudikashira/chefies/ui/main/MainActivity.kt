@@ -213,8 +213,9 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
                     Log.d(TAG, it.toString())
                     moveToMLResult(it.distinct())
                 } else {
-                    Log.d(TAG, "No result")
-                    showToast("No result")
+                    Log.d(TAG, "No ingredients detected")
+                    // showToast("No result") // change with dialog failed detect ingredients
+                    showFailedDialog()
                 }
             }
         }
@@ -234,10 +235,23 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         } else {
             showToast("No Image Selected")
         }
-        if (ingredients.isEmpty()){
-            // will implements custom dialog
-            showToast("No ingredients detected")
-        }
+    }
+
+    // Dialog box failed to get photo
+    private fun showFailedDialog() {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.custom_dialog_failed_detect_ingredients)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setDimAmount(0.5f)
+
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
     }
 
     private fun enableEdgeToEdge() {

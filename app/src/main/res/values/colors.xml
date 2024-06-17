@@ -155,8 +155,9 @@
     <color name="md_theme_surfaceContainerHighest_highContrast">#E4E1EC</color>
 
     <!-- COLORS FOR ITEM MENU PROFILE PAGE -->
-    <color name="logout">#BC009C</color>
-    <color name="dark_mode">#FB2A75</color>
-    <color name="language">#FF7753</color>
-    <color name="password">#FFBB49</color>
+    <color name="logout">#3629B7</color>
+    <color name="dark_mode">#BC009C</color>
+    <color name="language">#FB2A75</color>
+    <color name="password">#FF7753</color>
+    <color name="profile">#FFBB49</color>
 </resources>
