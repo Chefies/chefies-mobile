@@ -1,21 +1,19 @@
 package com.fransbudikashira.chefies.data.repository
 
 import androidx.lifecycle.LiveData
-import com.fransbudikashira.chefies.data.local.dataStore.TokenPreferences
 import com.fransbudikashira.chefies.data.local.entity.*
 import com.fransbudikashira.chefies.data.local.room.*
-import com.fransbudikashira.chefies.data.remote.retrofit.ApiService
 
 class RecipeRepository(
     private val recipeDao: RecipeDao,
     private val historyDao: HistoryDao,
 ) {
-    fun getAllHistoryAndRecipesBahasa(): LiveData<List<HistoryAndRecipesBahasa>> {
-        return historyDao.getAllHistoryAndRecipesBahasa()
+    fun getAllRecipesBahasaById(id: Long): LiveData<List<RecipeBahasaEntity>> {
+        return historyDao.getAllRecipesBahasaById(id)
     }
 
-    fun getAllHistoryAndRecipesEnglish(): LiveData<List<HistoryAndRecipesEnglish>> {
-        return historyDao.getAllHistoryAndRecipesEnglish()
+    fun getAllRecipesEnglishById(id: Long): LiveData<List<RecipeEnglishEntity>> {
+        return historyDao.getAllRecipesEnglishById(id)
     }
 
     fun getHistoryById(id: Long): LiveData<HistoryEntity> {

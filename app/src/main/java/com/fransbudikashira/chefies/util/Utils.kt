@@ -1,7 +1,6 @@
 package com.fransbudikashira.chefies.util
 
 import android.app.Activity
-import android.app.Application
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -13,9 +12,10 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.ImageView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.fransbudikashira.chefies.BuildConfig
 import com.fransbudikashira.chefies.R
@@ -26,6 +26,8 @@ import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 private const val FILENAME_FORMAT = "yyyyMMdd_HHmmss"
 private val timeStamp: String = SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(Date())
@@ -143,9 +145,28 @@ fun ImageView.loadImage(url: String?) {
         .into(this)
 }
 
+fun ImageView.loadImageProfile(url: String?){
+    Glide.with(this.context)
+        .load(url)
+        .placeholder(R.drawable.empty_image)
+        .error(R.drawable.ic_profile_pic)
+        .into(this)
+}
+
 fun <T> moveActivityTo(currentActivity: Activity, activity: Class<T>, isFinish: Boolean = false) {
     val intent = Intent(currentActivity, activity)
     currentActivity.startActivity(intent)
     if (isFinish) currentActivity.finish()
 }
 
+suspend fun <T> LiveData<T>.await(): T? {
+    return suspendCoroutine { cont ->
+        val observer = object : Observer<T> {
+            override fun onChanged(value: T) {
+                cont.resume(value)
+                this@await.removeObserver(this)
+            }
+        }
+        this.observeForever(observer)
+    }
+}

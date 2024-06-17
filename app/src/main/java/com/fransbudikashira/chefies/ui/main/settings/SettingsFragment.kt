@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
 import com.fransbudikashira.chefies.ChangePasswordActivity
 import com.fransbudikashira.chefies.ChangeProfileActivity
 import com.fransbudikashira.chefies.R
@@ -26,6 +25,7 @@ import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.loadImage
 import com.fransbudikashira.chefies.util.moveActivityTo
+import com.fransbudikashira.chefies.util.loadImageProfile
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
@@ -133,9 +133,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun moveToChangePassword() {
-        val intent = Intent(requireContext(), ChangePasswordActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+        val intent = Intent(requireContext(), ChangePasswordActivity::class.java)
         startActivity(intent)
     }
 
@@ -156,7 +154,7 @@ class SettingsFragment : Fragment() {
         }
         // observe avatar
         settingsViewModel.avatarUrl.observe(viewLifecycleOwner) {
-            binding.ivProfile.loadImage(it)
+            binding.ivProfile.loadImageProfile(it)
         }
     }
 
