@@ -76,7 +76,7 @@ class HistoryFragment : Fragment() {
                 val recipeBahasa = historyViewModel.getAllRecipeBahasaById(history.id!!).value
                 val recipeEnglish = historyViewModel.getAllRecipeEnglishById(history.id).value
 
-                val bundle: MLResultModel = MLResultModel(
+                val bundle = MLResultModel(
                     historyEntity = history,
                     recipeBahasaEntity = recipeBahasa!!,
                     recipeEnglishEntity = recipeEnglish!!
