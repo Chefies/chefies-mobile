@@ -1,7 +1,6 @@
 package com.fransbudikashira.chefies.ui.splash
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge

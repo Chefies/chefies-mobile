@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-@Suppress("DEPRECATION")
+
 class MLResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMlresultBinding
 
@@ -227,6 +227,7 @@ class MLResultActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         binding.rcIngredient.layoutManager = layoutManager
         // Get Intent Data
+        @Suppress("DEPRECATION")
         result = intent.getParcelableExtra(EXTRA_RESULT)!!
         val resultIngredients = result.listIngredient
         resultIngredients.let {

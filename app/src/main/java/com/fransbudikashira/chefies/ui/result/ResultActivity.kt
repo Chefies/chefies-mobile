@@ -32,12 +32,9 @@ import com.fransbudikashira.chefies.data.local.entity.RecipeEnglishEntity
 import com.fransbudikashira.chefies.data.remote.response.RecipeResponse
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
 import com.fransbudikashira.chefies.helper.Result
-import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
-import com.fransbudikashira.chefies.ui.splash.SplashActivity
 import com.fransbudikashira.chefies.ui.splash.SplashViewModel
 import com.fransbudikashira.chefies.util.getDefaultLanguage
-import com.fransbudikashira.chefies.util.loadImage
 import com.fransbudikashira.chefies.util.moveActivityTo
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
@@ -80,6 +77,7 @@ class ResultActivity : AppCompatActivity() {
             else finish()
         }
 
+        @Suppress("DEPRECATION")
         val result: MLResultModel? = intent.getParcelableExtra(EXTRA_RESULT)
 
         if (result != null) setupData(result)

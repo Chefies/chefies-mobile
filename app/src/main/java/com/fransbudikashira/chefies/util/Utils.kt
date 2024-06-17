@@ -137,14 +137,6 @@ fun String.prettierIngredientResult(context: Context): String {
 
 fun getDefaultLanguage(): String = Locale.getDefault().language
 
-fun ImageView.loadImage(url: String?) {
-    Glide.with(this.context)
-        .load(url)
-        .placeholder(R.drawable.empty_image)
-        .error(R.drawable.empty_image)
-        .into(this)
-}
-
 fun ImageView.loadImageProfile(url: String?){
     Glide.with(this.context)
         .load(url)

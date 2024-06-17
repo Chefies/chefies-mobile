@@ -1,7 +1,6 @@
 package com.fransbudikashira.chefies.data.remote.retrofit
 
 import android.content.Context
-import android.util.Log
 import com.fransbudikashira.chefies.data.local.dataStore.TokenPreferences
 import com.fransbudikashira.chefies.data.local.dataStore.dataStore
 import kotlinx.coroutines.flow.first

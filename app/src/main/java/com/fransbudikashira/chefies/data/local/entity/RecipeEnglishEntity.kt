@@ -1,6 +1,5 @@
 package com.fransbudikashira.chefies.data.local.entity
 
-import android.net.Uri
 import android.os.Parcelable
 import androidx.room.*
 import kotlinx.parcelize.Parcelize

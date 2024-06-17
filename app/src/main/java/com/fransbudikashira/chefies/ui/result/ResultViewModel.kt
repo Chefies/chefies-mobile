@@ -1,6 +1,5 @@
 package com.fransbudikashira.chefies.ui.result
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
