@@ -1,10 +1,10 @@
 package com.fransbudikashira.chefies
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -12,16 +12,25 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.ActivityChangePasswordBinding
 import com.fransbudikashira.chefies.helper.Result
-import com.fransbudikashira.chefies.ui.main.MainActivity
+import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
+import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.moveActivityTo
+import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class ChangePasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChangePasswordBinding
     private val settingsViewModel: SettingsViewModel by viewModels {
+        AuthViewModelFactory.getInstance(this)
+    }
+
+    private val mainViewModel: MainViewModel by viewModels {
         AuthViewModelFactory.getInstance(this)
     }
 
@@ -60,7 +69,14 @@ class ChangePasswordActivity : AppCompatActivity() {
         setupEditText(settingsViewModel)
 
         binding.btnChangePassword.setOnClickListener {
-            settingsViewModel.updatePassword(newPassword, oldPassword).observe(this) { result ->
+            tokenValidationMechanism()
+        }
+
+    }
+
+    private fun updatePassword() {
+        lifecycleScope.launch {
+            settingsViewModel.updatePassword(newPassword, oldPassword).observe(this@ChangePasswordActivity) { result ->
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> {
@@ -69,7 +85,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                         is Result.Success -> {
                             showLoading(false)
                             showToast(getString(R.string.success_change_password))
-                            moveActivityTo(this, SuccessfulCPActivity::class.java, true)
+                            moveActivityTo(this@ChangePasswordActivity, SuccessfulCPActivity::class.java, true)
                         }
                         is Result.Error -> {
                             showLoading(false)
@@ -79,7 +95,69 @@ class ChangePasswordActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    private fun tokenValidationMechanism() {
+        lifecycleScope.launch {
+            // Check Valid Token
+            if (checkValidToken()) {
+                updatePassword()
+                // - - -
+                Log.d(TAG, "VALID TOKEN")
+            } else {
+                val email = mainViewModel.getEmail()
+                val password = mainViewModel.getPassword()
+                // Check Email & Password Available
+                if (email.isEmpty() || password.isEmpty()) {
+                    moveActivityTo(this@ChangePasswordActivity, SignInActivity::class.java, true)
+                    // - - -
+                    Log.d(TAG, "EMAIL & PASSWORD UN-AVAILABLE")
+                } else {
+                    // Do Login
+                    doLogin(email, password)
+                    // - - -
+                    Log.d(TAG, "EMAIL & PASSWORD AVAILABLE")
+                }
+                // - - -
+                Log.d(TAG, "INVALID TOKEN")
+            }
+            // - - -
+            Log.d(TAG, "TOKEN AVAILABLE")
+        }
+    }
+
+    private fun doLogin(email: String, password: String) {
+        mainViewModel.userLogin(email, password).observe(this@ChangePasswordActivity) { userLoginResult ->
+            when (userLoginResult) {
+                is Result.Loading -> {}
+                is Result.Success -> {
+                    updatePassword()
+                    // - - -
+                    Log.d(TAG, "LOGIN SUCCESS -> MOVE TO MAIN")
+                }
+                is Result.Error -> {
+                    moveActivityTo(this@ChangePasswordActivity, SignInActivity::class.java, true)
+                    // - - -
+                    Log.d(TAG, "LOGIN FAILED -> MOVE TO SIGN-IN")
+                }
+            }
+        }
+    }
+
+    private suspend fun checkValidToken(): Boolean {
+        return suspendCoroutine { continuation ->
+            mainViewModel.getProfile().observe(this@ChangePasswordActivity) { getProfileResult ->
+                when (getProfileResult) {
+                    is Result.Loading -> {}
+                    is Result.Success -> {
+                        continuation.resume(true)
+                    }
+                    is Result.Error -> {
+                        continuation.resume(false)
+                    }
+                }
+            }
+        }
     }
 
 
@@ -142,5 +220,9 @@ class ChangePasswordActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        const val TAG = "ChangePasswordActivity"
     }
 }

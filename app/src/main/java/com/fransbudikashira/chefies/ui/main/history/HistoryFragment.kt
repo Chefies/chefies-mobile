@@ -50,12 +50,10 @@ class HistoryFragment : Fragment() {
 
         setUpRecyclerView()
 
-        setHistoryRecipe(
-            listOf(
-                HistoryEntity(id = 1, title = "abc"),
-                HistoryEntity(id = 2, title = "abc")
-            )
-        )
+        historyViewModel.getHistories().observe(viewLifecycleOwner){
+            setHistoryRecipe(it)
+        }
+
     }
 
     private fun setUpRecyclerView() {

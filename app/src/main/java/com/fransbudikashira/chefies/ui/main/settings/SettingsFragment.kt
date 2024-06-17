@@ -6,16 +6,14 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.fransbudikashira.chefies.ChangePasswordActivity
 import com.fransbudikashira.chefies.ChangeProfileActivity
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
@@ -23,19 +21,22 @@ import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
-import com.fransbudikashira.chefies.util.loadImage
 import com.fransbudikashira.chefies.util.moveActivityTo
 import com.fransbudikashira.chefies.util.loadImageProfile
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: MainViewModel
-
     private val settingsViewModel: SettingsViewModel by viewModels {
+        AuthViewModelFactory.getInstance(requireContext())
+    }
+
+    private val mainViewModel: MainViewModel by viewModels {
         AuthViewModelFactory.getInstance(requireContext())
     }
 
@@ -50,7 +51,7 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        getUserProfile()
+        tokenValidationMechanism()
 
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -62,9 +63,6 @@ class SettingsFragment : Fragment() {
 
         // observe user profile
         observeViewModel()
-
-        // set ViewModel
-        viewModel = obtainViewModel(requireActivity() as AppCompatActivity)
 
         binding.btnLogout.setOnClickListener {
             showCustomDialogBox()
@@ -80,6 +78,69 @@ class SettingsFragment : Fragment() {
 
         binding.languageSetting.setOnClickListener {
             startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+        }
+    }
+
+    private fun tokenValidationMechanism() {
+        lifecycleScope.launch {
+            // Check Valid Token
+            if (checkValidToken()) {
+                getUserProfile()
+                // - - -
+                Log.d(TAG, "VALID TOKEN")
+            } else {
+                val email = mainViewModel.getEmail()
+                val password = mainViewModel.getPassword()
+                // Check Email & Password Available
+                if (email.isEmpty() || password.isEmpty()) {
+                    moveActivityTo(requireActivity(), SignInActivity::class.java, true)
+                    // - - -
+                    Log.d(TAG, "EMAIL & PASSWORD UN-AVAILABLE")
+                } else {
+                    // Do Login
+                    doLogin(email, password)
+                    // - - -
+                    Log.d(TAG, "EMAIL & PASSWORD AVAILABLE")
+                }
+                // - - -
+                Log.d(TAG, "INVALID TOKEN")
+            }
+            // - - -
+            Log.d(TAG, "TOKEN AVAILABLE")
+        }
+    }
+
+    private fun doLogin(email: String, password: String) {
+        mainViewModel.userLogin(email, password).observe(viewLifecycleOwner) { userLoginResult ->
+            when (userLoginResult) {
+                is Result.Loading -> {}
+                is Result.Success -> {
+                    getUserProfile()
+                    // - - -
+                    Log.d(TAG, "LOGIN SUCCESS -> MOVE TO MAIN")
+                }
+                is Result.Error -> {
+                    moveActivityTo(requireActivity(), SignInActivity::class.java, true)
+                    // - - -
+                    Log.d(TAG, "LOGIN FAILED -> MOVE TO SIGN-IN")
+                }
+            }
+        }
+    }
+
+    private suspend fun checkValidToken(): Boolean {
+        return suspendCoroutine { continuation ->
+            mainViewModel.getProfile().observe(viewLifecycleOwner) { getProfileResult ->
+                when (getProfileResult) {
+                    is Result.Loading -> {}
+                    is Result.Success -> {
+                        continuation.resume(true)
+                    }
+                    is Result.Error -> {
+                        continuation.resume(false)
+                    }
+                }
+            }
         }
     }
 
@@ -115,7 +176,7 @@ class SettingsFragment : Fragment() {
         val btnNo: MaterialButton = dialog.findViewById(R.id.btn_no)
 
         btnYes.setOnClickListener {
-            viewModel.deleteToken()
+            mainViewModel.deleteToken()
             moveToSignIn()
         }
 
@@ -132,21 +193,6 @@ class SettingsFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun moveToChangePassword() {
-        val intent = Intent(requireContext(), ChangePasswordActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun moveToChangeProfile() {
-        val intent = Intent(requireContext(), ChangeProfileActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun obtainViewModel(activity: AppCompatActivity): MainViewModel {
-        val factory: AuthViewModelFactory = AuthViewModelFactory.getInstance(activity.application)
-        return ViewModelProvider(activity, factory)[MainViewModel::class.java]
-    }
-
     private fun observeViewModel() {
         // observe username
         settingsViewModel.username.observe(viewLifecycleOwner) {
@@ -161,5 +207,9 @@ class SettingsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val TAG = "SettingsFragment"
     }
 }
