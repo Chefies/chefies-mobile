@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         binding.bottomNavigation.background = null // ensure bottomNav background doesn't appear
         binding.bottomNavigation.menu.getItem(1).isEnabled =
             false // & hide item menu index 1 (space for FAB)
+        binding.bottomNavigation.menu.getItem(3).isVisible = false
 
         // navigation bottom & controller configuration
         val navHostFragment =

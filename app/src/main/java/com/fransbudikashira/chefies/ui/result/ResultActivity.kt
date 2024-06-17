@@ -32,6 +32,7 @@ import com.fransbudikashira.chefies.data.remote.response.RecipeResponse
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.util.getDefaultLanguage
+import com.fransbudikashira.chefies.util.loadImage
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -61,7 +62,6 @@ class ResultActivity : AppCompatActivity() {
         }
         window.statusBarColor = getColor(R.color.primary)
         window.navigationBarColor = getColor(R.color.white)
-
 
         // BackButton
         binding.toAppBar.setNavigationOnClickListener {
@@ -336,19 +336,23 @@ class ResultActivity : AppCompatActivity() {
         val photoUrl = historyData.photoUrl
         Glide.with(this@ResultActivity)
             .load(photoUrl)
+            .placeholder(R.drawable.empty_image)
+            .error(R.drawable.empty_image)
             .into(binding.imageView)
-
+        // Set Title
+        binding.editText.setText(historyData.title)
+        // Set Recipe
         if (getDefaultLanguage() == "in") {
-            val recipesBahasa = recipesBahasa.first()
+            val recipeBahasa = recipesBahasa.first()
             binding.apply {
                 // Set Title
-                title.text = recipesBahasa.title
+                title.text = recipeBahasa.title
 
                 // Set List Ingredients
-                ingredientsValue.text = recipesBahasa.ingredients.joinToString(", ")
+                ingredientsValue.text = recipeBahasa.ingredients.joinToString(", ")
 
                 // Set List Steps
-                recipesBahasa.steps.let { steps ->
+                recipeBahasa.steps.let { steps ->
                     // Prepend numbers to each step
                     val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
                     val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
@@ -356,6 +360,9 @@ class ResultActivity : AppCompatActivity() {
                     )
                     stepsValue.adapter = arrayAdapter
                 }
+            }
+            if (recipesBahasa.size > 1) {
+                binding.nextButton.visibility = View.VISIBLE
             }
         } else {
             val recipesEnglish = recipesEnglish.first()
@@ -376,12 +383,15 @@ class ResultActivity : AppCompatActivity() {
                     stepsValue.adapter = arrayAdapter
                 }
             }
+            if (recipesBahasa.size > 1) {
+                binding.nextButton.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun setupData(result: MLResultModel) {
         result.historyEntity?.let {
-            historyData = historyData.copy(photoUrl = it.photoUrl, title = it.title)
+            historyData = historyData.copy(id = it.id, photoUrl = it.photoUrl, title = it.title)
         }
         recipesBahasa.addAll(result.recipeBahasaEntity)
         recipesEnglish.addAll(result.recipeEnglishEntity)

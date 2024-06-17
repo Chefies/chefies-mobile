@@ -2,22 +2,22 @@ package com.fransbudikashira.chefies.ui.main.history
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.RecipeViewModelFactory
 import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
 import com.fransbudikashira.chefies.data.model.MLResultModel
 import com.fransbudikashira.chefies.databinding.FragmentHistoryBinding
 import com.fransbudikashira.chefies.ui.adapter.ListRecipeAdapter
 import com.fransbudikashira.chefies.ui.result.ResultActivity
-import com.fransbudikashira.chefies.util.getDefaultLanguage
+import com.fransbudikashira.chefies.util.await
+import kotlinx.coroutines.launch
 
 class HistoryFragment : Fragment() {
     private var _binding: FragmentHistoryBinding? = null
@@ -72,20 +72,21 @@ class HistoryFragment : Fragment() {
 
         adapter.setOnItemClickback(object : ListRecipeAdapter.OnItemClickCallback {
             override fun onItemClicked(history: HistoryEntity) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val recipeBahasa = historyViewModel.getAllRecipeBahasaById(history.id!!).await()
+                    val recipeEnglish = historyViewModel.getAllRecipeEnglishById(history.id).await()
 
-                val recipeBahasa = historyViewModel.getAllRecipeBahasaById(history.id!!).value
-                val recipeEnglish = historyViewModel.getAllRecipeEnglishById(history.id).value
+                    val bundle = MLResultModel(
+                        historyEntity = history,
+                        recipeBahasaEntity = recipeBahasa!!,
+                        recipeEnglishEntity = recipeEnglish!!
+                    )
 
-                val bundle = MLResultModel(
-                    historyEntity = history,
-                    recipeBahasaEntity = recipeBahasa!!,
-                    recipeEnglishEntity = recipeEnglish!!
-                )
-
-                val intent = Intent(requireActivity(), ResultActivity::class.java).apply {
-                    putExtra(ResultActivity.EXTRA_RESULT, bundle)
+                    val intent = Intent(requireActivity(), ResultActivity::class.java).apply {
+                        putExtra(ResultActivity.EXTRA_RESULT, bundle)
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
             }
         })
     }
@@ -95,4 +96,7 @@ class HistoryFragment : Fragment() {
         _binding = null
     }
 
+    companion object {
+        private const val TAG = "HistoryFragment"
+    }
 }
