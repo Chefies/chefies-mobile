@@ -38,7 +38,7 @@
             app:lineHeight="28dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcSaveRecipe"
+            android:id="@+id/rvSaveRecipe"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"

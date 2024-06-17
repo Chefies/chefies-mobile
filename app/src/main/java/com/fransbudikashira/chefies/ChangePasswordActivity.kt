@@ -17,6 +17,7 @@ import com.fransbudikashira.chefies.databinding.ActivityChangePasswordBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
+import com.fransbudikashira.chefies.util.moveActivityTo
 
 class ChangePasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChangePasswordBinding
@@ -46,7 +47,7 @@ class ChangePasswordActivity : AppCompatActivity() {
 
         // BackButton
         binding.toAppBar.setNavigationOnClickListener {
-            moveToMain()
+            finish()
         }
 
         // Handle Enabled Button
@@ -68,7 +69,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                         is Result.Success -> {
                             showLoading(false)
                             showToast(getString(R.string.success_change_password))
-                            moveToSuccesCP()
+                            moveActivityTo(this, SuccessfulCPActivity::class.java, true)
                         }
                         is Result.Error -> {
                             showLoading(false)
@@ -123,20 +124,6 @@ class ChangePasswordActivity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
-    }
-
-    private fun moveToSuccesCP() {
-        val intent = Intent(this@ChangePasswordActivity, SuccessfulCPActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
-    }
-
-    private fun moveToMain() {
-        val intent = Intent(this@ChangePasswordActivity, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
     }
 
     private fun isEnabledButton(viewModel: SettingsViewModel) {

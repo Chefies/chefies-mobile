@@ -1,7 +1,9 @@
 package com.fransbudikashira.chefies.util
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -161,4 +163,18 @@ fun ImageView.loadImage(url: String?){
         .placeholder(R.drawable.empty_image)
         .error(R.drawable.empty_image)
         .into(this)
+}
+
+fun ImageView.loadImageProfile(url: String?){
+    Glide.with(this.context)
+        .load(url)
+        .placeholder(R.drawable.empty_image)
+        .error(R.drawable.ic_profile_pic)
+        .into(this)
+}
+
+fun <T> moveActivityTo(currentActivity: Activity, activity: Class<T>, isFinish: Boolean = false) {
+    val intent = Intent(currentActivity, activity)
+    currentActivity.startActivity(intent)
+    if (isFinish) currentActivity.finish()
 }

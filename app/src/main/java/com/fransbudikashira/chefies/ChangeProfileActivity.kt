@@ -25,6 +25,8 @@ import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
 import com.fransbudikashira.chefies.util.loadImage
+import com.fransbudikashira.chefies.util.loadImageProfile
+import com.fransbudikashira.chefies.util.moveActivityTo
 import com.fransbudikashira.chefies.util.reduceFileImage
 import com.fransbudikashira.chefies.util.uriToFile
 import kotlinx.coroutines.launch
@@ -63,7 +65,6 @@ class ChangeProfileActivity : AppCompatActivity() {
 
         // BackButton
         binding.toAppBar.setNavigationOnClickListener {
-            moveToMain()
             finish()
         }
 
@@ -165,7 +166,7 @@ class ChangeProfileActivity : AppCompatActivity() {
     private fun handleSuccess(message: String) {
         showLoading(false)
         showToast(message)
-        moveToMain()
+        moveActivityTo(this, MainActivity::class.java, true)
     }
 
     private fun handleError(error: String?) {
@@ -205,7 +206,8 @@ class ChangeProfileActivity : AppCompatActivity() {
         }
         // New name
         binding.etName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().length <= 3) {
                     binding.etLayoutName.error = getString(R.string.invalid_name)
@@ -226,22 +228,14 @@ class ChangeProfileActivity : AppCompatActivity() {
         })
         // Image uri
         val avatarDb = settingsViewModel.getAvatar()
+        binding.ivProfile.loadImageProfile(avatarDb)
         if (avatarDb.isNotEmpty()) {
-            binding.ivProfile.loadImage(avatarDb)
-
             checkImageUri = true
             isEnabledButton()
         } else {
             checkImageUri = false
             isEnabledButton()
         }
-    }
-
-    private fun moveToMain() {
-        val intent = Intent(this@ChangeProfileActivity, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
     }
 
     private fun isEnabledButton() {

@@ -25,6 +25,7 @@ import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.loadImage
+import com.fransbudikashira.chefies.util.loadImageProfile
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
@@ -133,16 +134,12 @@ class SettingsFragment : Fragment() {
     }
 
     private fun moveToChangePassword() {
-        val intent = Intent(requireContext(), ChangePasswordActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+        val intent = Intent(requireContext(), ChangePasswordActivity::class.java)
         startActivity(intent)
     }
 
     private fun moveToChangeProfile() {
-        val intent = Intent(requireContext(), ChangeProfileActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+        val intent = Intent(requireContext(), ChangeProfileActivity::class.java)
         startActivity(intent)
     }
 
@@ -153,18 +150,12 @@ class SettingsFragment : Fragment() {
 
     private fun observeViewModel() {
         // observe username
-        settingsViewModel.username.observe(requireActivity()) {
+        settingsViewModel.username.observe(viewLifecycleOwner) {
             binding.tvUsername.text = it
         }
         // observe avatar
-        settingsViewModel.avatarUrl.observe(requireActivity()) {
-            with(binding){
-                if (it.isNotEmpty()) {
-                    ivProfile.loadImage(it)
-                } else {
-                    ivProfile.setImageResource(R.drawable.empty_image)
-                }
-            }
+        settingsViewModel.avatarUrl.observe(viewLifecycleOwner) {
+            binding.ivProfile.loadImageProfile(it)
         }
     }
 

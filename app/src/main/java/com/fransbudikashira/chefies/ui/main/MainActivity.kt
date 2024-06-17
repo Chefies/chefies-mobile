@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         val navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment, R.id.settingsFragment
+                R.id.homeFragment, R.id.historyFragment, R.id.settingsFragment
             )
         )
         NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)

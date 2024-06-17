@@ -18,10 +18,10 @@ interface HistoryDao {
     fun getHistoryById(id: Long): LiveData<HistoryEntity>
 
     @Transaction
-    @Query("SELECT * FROM history ORDER BY id DESC")
-    fun getAllHistoryAndRecipesBahasa(): LiveData<List<HistoryAndRecipesBahasa>>
+    @Query("SELECT * FROM recipe_bahasa ORDER BY id = :id DESC")
+    fun getAllRecipesBahasaById(id: Long): LiveData<List<RecipeBahasaEntity>>
 
     @Transaction
-    @Query("SELECT * FROM history ORDER BY id DESC")
-    fun getAllHistoryAndRecipesEnglish(): LiveData<List<HistoryAndRecipesEnglish>>
+    @Query("SELECT * FROM recipe_english ORDER BY id = :id DESC")
+    fun getAllRecipesEnglishById(id: Long): LiveData<List<RecipeEnglishEntity>>
 }
