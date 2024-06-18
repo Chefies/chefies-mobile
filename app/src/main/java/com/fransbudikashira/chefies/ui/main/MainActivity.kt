@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +33,7 @@ import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
 import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
 import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
+import com.fransbudikashira.chefies.util.showToast
 import java.util.Locale
 
 class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                showToast("Permission request granted")
+                showToast(getString(R.string.permission_request_granted))
             } else {
-                showToast("Permission request denied")
+                showToast(getString(R.string.permission_request_denied))
             }
         }
 
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         currentImageUri?.let {
             launcherIntentCamera.launch(it)
         } ?: run {
-            showToast("Failed to get image URI")
+            showToast(getString(R.string.failed_to_get_image_uri))
         }
     }
 
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
                 cropImage(it)
             }
         } else {
-            showToast("Failed to take picture")
+            showToast(getString(R.string.failed_to_take_picture))
         }
     }
 
@@ -193,17 +193,13 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
     private fun analyzeImage(uri: Uri) {
         objectDetectorHelper.detectObject(uri)
     }
 
     override fun onError(error: String) {
         runOnUiThread {
-            Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
+            showToast(error)
         }
     }
 
@@ -234,7 +230,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             intent.putExtra(MLResultActivity.EXTRA_RESULT, resultWithIngredients)
             startActivity(intent)
         } else {
-            showToast("No Image Selected")
+            showToast(getString(R.string.no_image_selected))
         }
     }
 

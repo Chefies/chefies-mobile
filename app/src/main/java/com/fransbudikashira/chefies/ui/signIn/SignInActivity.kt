@@ -3,7 +3,6 @@ package com.fransbudikashira.chefies.ui.signIn
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -26,6 +25,7 @@ import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.signUp.SignUpActivity
 import com.fransbudikashira.chefies.util.isValidEmail
+import com.fransbudikashira.chefies.util.moveTo
 import com.google.android.material.button.MaterialButton
 
 class SignInActivity : AppCompatActivity() {
@@ -56,7 +56,7 @@ class SignInActivity : AppCompatActivity() {
 
         with(binding) {
             moveToSignUp.setOnClickListener{
-                moveTo(SignUpActivity::class.java)
+                moveTo(SignUpActivity::class.java, true)
             }
             btnLogin.setOnClickListener{
                 viewModel.userLogin(email, password).observe(this@SignInActivity) { result ->
@@ -90,13 +90,6 @@ class SignInActivity : AppCompatActivity() {
         playAnimation()
     }
 
-    private fun <T> moveTo(activity: Class<T>){
-        val intent = Intent(this@SignInActivity, activity).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
-    }
-
     private fun errorDialog(message: String) {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.custom_dialog_error_auth)
@@ -128,7 +121,7 @@ class SignInActivity : AppCompatActivity() {
         btnAction.text = getString(R.string.next)
         btnAction.setOnClickListener {
             dialog.dismiss()
-            moveTo(MainActivity::class.java)
+            moveTo(MainActivity::class.java, true)
         }
 
         dialog.setCanceledOnTouchOutside(false)

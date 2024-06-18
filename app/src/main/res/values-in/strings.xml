@@ -89,4 +89,13 @@
     <string name="success_get_recipes_txt">Berhasil Mendapatkan Resep</string>
     <string name="failed_to_get_recipes_txt">Gagal mendapatkan resep:</string>
     <string name="this_ingredient_already_added_txt">Bahan ini sudah ditambahkan</string>
+    <string name="saved_text">Tersimpan</string>
+    <string name="unsuccess_get_avatar">Avatar tidak ditemukan atau tidak dapat mengunduh avatar</string>
+    <string name="permission_request_granted">Permintaan izin dikabulkan</string>
+    <string name="permission_request_denied">Permintaan izin ditolak</string>
+    <string name="failed_to_get_image_uri">Gagal mendapatkan URI gambar</string>
+    <string name="failed_to_take_picture">Gagal mengambil gambar</string>
+    <string name="no_image_selected">Tidak Ada Gambar yang Dipilih</string>
+    <string name="failed_to_regenerate_recipe">Failed to regenerate recipe</string>
+    <string name="success_logout">Berhasil keluar</string>
 </resources>

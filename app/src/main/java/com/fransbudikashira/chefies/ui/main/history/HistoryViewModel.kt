@@ -6,9 +6,11 @@ import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
 import com.fransbudikashira.chefies.data.local.entity.RecipeBahasaEntity
 import com.fransbudikashira.chefies.data.local.entity.RecipeEnglishEntity
 import com.fransbudikashira.chefies.data.repository.RecipeRepository
+import com.fransbudikashira.chefies.data.repository.UserRepository
 
 class HistoryViewModel(
-    private val recipeRepository: RecipeRepository
+    private val recipeRepository: RecipeRepository,
+    private val userRepository: UserRepository
 ): ViewModel() {
 
     fun getAllRecipeBahasaById(id: Long): LiveData<List<RecipeBahasaEntity>> = recipeRepository.getAllRecipesBahasaById(id)

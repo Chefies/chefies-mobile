@@ -12,8 +12,10 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
@@ -161,4 +163,24 @@ suspend fun <T> LiveData<T>.await(): T? {
         }
         this.observeForever(observer)
     }
+}
+
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Fragment.showToast(message: String) {
+    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.moveTo(destination: Class<out Activity>, clearTask: Boolean = false) {
+    val intent = Intent(this, destination)
+    if (clearTask) {
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    }
+    startActivity(intent)
+}
+
+fun Fragment.moveTo(destination: Class<out Activity>, clearTask: Boolean = false) {
+    requireContext().moveTo(destination, clearTask)
 }

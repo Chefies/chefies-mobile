@@ -4,7 +4,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -26,6 +25,7 @@ import com.fransbudikashira.chefies.databinding.ActivitySignUpBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.isValidEmail
+import com.fransbudikashira.chefies.util.moveTo
 import com.google.android.material.button.MaterialButton
 
 class SignUpActivity : AppCompatActivity() {
@@ -58,7 +58,7 @@ class SignUpActivity : AppCompatActivity() {
         viewModel = obtainViewModel(this@SignUpActivity)
 
         // Handle Move to SignIn Action
-        binding.moveToSignIn.setOnClickListener{ moveToSignIn() }
+        binding.moveToSignIn.setOnClickListener{ moveTo(SignInActivity::class.java, true) }
         // Handle Enabled Button
         viewModel.isEnableButton.observe(this) {
             it.getContentIfNotHandled()?.let { isEnabled ->
@@ -88,13 +88,6 @@ class SignUpActivity : AppCompatActivity() {
 
         setupEditText(viewModel)
         playAnimation()
-    }
-
-    private fun moveToSignIn() {
-        val intent = Intent(this@SignUpActivity, SignInActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
     }
 
     private fun errorDialog(message: String) {
@@ -127,7 +120,7 @@ class SignUpActivity : AppCompatActivity() {
         val btnAction: MaterialButton = dialog.findViewById(R.id.btnAction)
         btnAction.setOnClickListener {
             dialog.dismiss()
-            moveToSignIn()
+            moveTo(SignInActivity::class.java, true)
         }
 
         dialog.setCanceledOnTouchOutside(false)

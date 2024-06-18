@@ -13,7 +13,6 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -36,6 +35,7 @@ import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.ui.splash.SplashViewModel
 import com.fransbudikashira.chefies.util.getDefaultLanguage
 import com.fransbudikashira.chefies.util.moveActivityTo
+import com.fransbudikashira.chefies.util.showToast
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -115,7 +115,7 @@ class ResultActivity : AppCompatActivity() {
 
                 // Activate Button Save
                 saveButton.setImageDrawable(getDrawable(R.drawable.ic_save_success))
-                showToast("Saved")
+                showToast(getString(R.string.saved_text))
             }
 
             // Handle Retry Button
@@ -378,10 +378,6 @@ class ResultActivity : AppCompatActivity() {
         snackBar.setBackgroundTint(getColor(R.color.red))
         snackBar.duration = 3000
         snackBar.show()
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this@ResultActivity, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun backButtonDialog() {

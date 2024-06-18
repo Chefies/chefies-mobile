@@ -8,7 +8,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,7 +25,9 @@ import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.loadImageProfile
 import com.fransbudikashira.chefies.util.moveActivityTo
+import com.fransbudikashira.chefies.util.moveTo
 import com.fransbudikashira.chefies.util.reduceFileImage
+import com.fransbudikashira.chefies.util.showToast
 import com.fransbudikashira.chefies.util.uriToFile
 import kotlinx.coroutines.launch
 import java.io.File
@@ -69,7 +70,6 @@ class ChangeProfileActivity : AppCompatActivity() {
 
         // BackButton
         binding.toAppBar.setNavigationOnClickListener {
-//            moveToMain()
             finish()
         }
 
@@ -88,28 +88,6 @@ class ChangeProfileActivity : AppCompatActivity() {
 
         binding.btnChangeProfile.setOnClickListener {
             tokenValidationMechanism()
-//            lifecycleScope.launch {
-//                val avatarDb = settingsViewModel.getAvatar().first()
-//                val avatarFile: File? = if (currentImageUri != null) {
-//
-//                }
-//
-//                currentImageUri?.let { uri ->
-//                    val avatarFile = uriToFile(uri, this@ChangeProfileActivity).reduceFileImage()
-//                    Log.d("Image File", "showImage: ${avatarFile.path}")
-//                    val name = binding.etName.text.toString()
-//
-//                    settingsViewModel.updateProfile(name, avatarFile).observe(this@ChangeProfileActivity) { result ->
-//                        if (result != null) {
-//                            when (result) {
-//                                is Result.Loading -> showLoading(true)
-//                                is Result.Success -> handleSuccess(result.data.message)
-//                                is Result.Error -> handleError(result.error)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 
@@ -199,7 +177,7 @@ class ChangeProfileActivity : AppCompatActivity() {
                     }
                 }
             } else {
-                showToast("Avatar not found or unable to download avatar")
+                showToast(getString(R.string.unsuccess_get_avatar))
             }
         }
     }
@@ -234,10 +212,11 @@ class ChangeProfileActivity : AppCompatActivity() {
     private fun handleSuccess(message: String) {
         showLoading(false)
         showToast(message)
-        moveActivityTo(this, MainActivity::class.java, true)
+//        moveActivityTo(this, MainActivity::class.java, true)
+        moveTo(MainActivity::class.java, true)
     }
 
-    private fun handleError(error: String?) {
+    private fun handleError(error: String) {
         showLoading(false)
         showToast(error)
     }
@@ -318,10 +297,6 @@ class ChangeProfileActivity : AppCompatActivity() {
             progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             btnChangeProfile.text = if (isLoading) "" else getString(R.string.change_profile_txt)
         }
-    }
-
-    private fun showToast(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

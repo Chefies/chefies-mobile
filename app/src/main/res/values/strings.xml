@@ -92,4 +92,13 @@
     <string name="success_get_recipes_txt">Success Get Recipes</string>
     <string name="failed_to_get_recipes_txt">Failed to get recipes:</string>
     <string name="this_ingredient_already_added_txt">This ingredient already added</string>
+    <string name="saved_text">Saved</string>
+    <string name="unsuccess_get_avatar">Avatar not found or unable to download avatar</string>
+    <string name="permission_request_granted">Permission request granted</string>
+    <string name="permission_request_denied">Permission request denied</string>
+    <string name="failed_to_get_image_uri">Failed to get image URI</string>
+    <string name="failed_to_take_picture">Failed to take picture</string>
+    <string name="no_image_selected">No Image Selected</string>
+    <string name="failed_to_regenerate_recipe">Failed to regenerate recipe</string>
+    <string name="success_logout">Success Logout</string>
 </resources>

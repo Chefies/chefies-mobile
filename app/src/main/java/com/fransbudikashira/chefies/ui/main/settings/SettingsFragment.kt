@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.fransbudikashira.chefies.ChangePasswordActivity
 import com.fransbudikashira.chefies.ChangeProfileActivity
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
@@ -23,6 +24,8 @@ import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.moveActivityTo
 import com.fransbudikashira.chefies.util.loadImageProfile
+import com.fransbudikashira.chefies.util.moveTo
+import com.fransbudikashira.chefies.util.showToast
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
@@ -65,11 +68,11 @@ class SettingsFragment : Fragment() {
         observeViewModel()
 
         binding.btnLogout.setOnClickListener {
-            showCustomDialogBox()
+            showLogoutDialog()
         }
 
         binding.changePasswordSetting.setOnClickListener {
-            moveActivityTo(requireActivity(), ChangeProfileActivity::class.java)
+            moveActivityTo(requireActivity(), ChangePasswordActivity::class.java)
         }
 
         binding.changeProfileSetting.setOnClickListener {
@@ -164,7 +167,7 @@ class SettingsFragment : Fragment() {
     }
 
     // Dialog box warn logout
-    private fun showCustomDialogBox() {
+    private fun showLogoutDialog() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
@@ -177,7 +180,8 @@ class SettingsFragment : Fragment() {
 
         btnYes.setOnClickListener {
             mainViewModel.deleteToken()
-            moveToSignIn()
+            moveTo(SignInActivity::class.java, true)
+            showToast(getString(R.string.success_logout))
             // moveActivityTo(requireActivity(), SignInActivity::class.java, true)
         }
 
@@ -185,13 +189,6 @@ class SettingsFragment : Fragment() {
 
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
-    }
-
-    private fun moveToSignIn() {
-        val intent = Intent(requireContext(), SignInActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        startActivity(intent)
     }
 
     private fun observeViewModel() {
