@@ -9,17 +9,17 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -39,6 +39,33 @@ import java.util.Locale
 class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
+
+    // animation properties
+    private var clicked = false
+    private val rotateopen: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.rotate_open_anim
+        )
+    }
+    private val rotateclose: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.rotate_close_anim
+        )
+    }
+    private val fromBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.from_bottom_anim
+        )
+    }
+    private val toBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.to_bottom_anim
+        )
+    }
 
     private var currentImageUri: Uri? = null
 
@@ -68,7 +95,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
 
-        // enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -84,8 +110,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         window.navigationBarColor = getColor(R.color.md_theme_primary)
 
         binding.bottomNavigation.background = null // ensure bottomNav background doesn't appear
-        binding.bottomNavigation.menu.getItem(1).isEnabled =
-            false // & hide item menu index 1 (space for FAB)
+        binding.bottomNavigation.menu.getItem(1).isEnabled = false // & hide item menu index 1 (space for FAB)
         binding.bottomNavigation.menu.getItem(3).isVisible = false
 
         // navigation bottom & controller configuration
@@ -100,40 +125,12 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
         binding.bottomNavigation.setupWithNavController(navController)
 
-        // Fab action
-        binding.fabButton.setOnClickListener {
-            showCustomDialogBox()
-        }
-    }
+        // Main Fab action
+        binding.fabButton.setOnClickListener { onFabButtonClicked() }
+        binding.fabCam.setOnClickListener { startCamera() }
+        binding.fabGallery.setOnClickListener { startGallery() }
 
-    // Dialog Box get image options
-    private fun showCustomDialogBox() {
-        val dialog = Dialog(this)
-        dialog.setCancelable(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.custom_dialog_get_image)
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setDimAmount(0.5f)
-
-        val btnCamera: ConstraintLayout = dialog.findViewById(R.id.btn_open_cam)
-        val btnGalery: ConstraintLayout = dialog.findViewById(R.id.btn_open_galery)
-
-        btnCamera.setOnClickListener {
-            startCamera()
-            dialog.dismiss()
-        }
-        btnGalery.setOnClickListener {
-            startGallery()
-            dialog.dismiss()
-        }
-
-        dialog.setCanceledOnTouchOutside(true)
-        dialog.show()
-    }
+    } // ------ end of onCreate --------
 
     private fun startCamera() {
         currentImageUri = getImageUri(this)
@@ -211,7 +208,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
                     moveToMLResult(it.distinct())
                 } else {
                     Log.d(TAG, "No ingredients detected")
-                    // showToast("No result") // change with dialog failed detect ingredients
                     showFailedDialog()
                 }
             }
@@ -234,7 +230,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         }
     }
 
-    // Dialog box failed to get photo
+    // Dialog box failed to get ingredients
     private fun showFailedDialog() {
         val dialog = Dialog(this)
         dialog.setCancelable(false)
@@ -251,14 +247,56 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         dialog.show()
     }
 
-    private fun enableEdgeToEdge() {
-        // Enable edge-to-edge mode and make system bars transparent
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, window.decorView).apply {
-            isAppearanceLightStatusBars =
-                false  // Change to false if you want light content (white icons) on the status bar
-            isAppearanceLightNavigationBars =
-                true  // Change to false if you want light content (white icons) on the navigation bar
+    // connfiguration when fab is clicked
+    private fun onFabButtonClicked() {
+        setVisibility(clicked)
+        setAnimation(clicked)
+        setClickable(clicked)
+        clicked=!clicked
+    }
+
+    // set visibility of fab & label
+    private fun setVisibility(clicked: Boolean) {
+        if(!clicked){
+            binding.labelFabCam.visibility = View.VISIBLE
+            binding.labelFabGallery.visibility = View.VISIBLE
+            binding.fabCam.visibility = View.VISIBLE
+            binding.fabGallery.visibility = View.VISIBLE
+        }else{
+            binding.fabCam.visibility = View.INVISIBLE
+            binding.fabGallery.visibility = View.INVISIBLE
+            binding.labelFabCam.visibility = View.INVISIBLE
+            binding.labelFabGallery.visibility = View.INVISIBLE
+        }
+    }
+
+    // set animation
+    private fun setAnimation(clicked: Boolean) {
+        if(!clicked){
+            binding.fabButton.startAnimation(rotateopen)
+            binding.labelFabCam.startAnimation(fromBottom)
+            binding.labelFabGallery.startAnimation(fromBottom)
+            binding.fabCam.startAnimation(fromBottom)
+            binding.fabGallery.startAnimation(fromBottom)
+        }
+        else{
+            binding.fabButton.startAnimation(rotateclose)
+            binding.fabCam.startAnimation(toBottom)
+            binding.fabGallery.startAnimation(toBottom)
+            binding.labelFabCam.startAnimation(toBottom)
+            binding.labelFabGallery.startAnimation(toBottom)
+        }
+    }
+
+    // set state of Fab
+    private fun setClickable(clicked: Boolean){
+        if(!clicked){
+            binding.fabCam.isClickable=true
+            binding.fabGallery.isClickable=true
+        }
+        else{
+            binding.fabCam.isClickable=false
+            binding.fabGallery.isClickable=false
         }
     }
 

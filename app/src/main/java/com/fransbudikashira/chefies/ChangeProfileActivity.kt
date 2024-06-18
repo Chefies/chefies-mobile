@@ -40,6 +40,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class ChangeProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChangeProfileBinding
+
     private val settingsViewModel: SettingsViewModel by viewModels {
         AuthViewModelFactory.getInstance(this)
     }
