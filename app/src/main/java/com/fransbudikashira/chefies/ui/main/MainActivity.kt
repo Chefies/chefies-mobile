@@ -18,8 +18,10 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -32,6 +34,9 @@ import com.yalantis.ucrop.UCrop
 import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
 import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
 import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
+import com.fransbudikashira.chefies.ui.main.history.HistoryFragment
+import com.fransbudikashira.chefies.ui.main.home.HomeFragment
+import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
 import com.fransbudikashira.chefies.util.showToast
 import java.util.Locale
@@ -114,16 +119,34 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         binding.bottomNavigation.menu.getItem(3).isVisible = false
 
         // navigation bottom & controller configuration
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.homeFragment, R.id.historyFragment, R.id.settingsFragment
-            )
-        )
-        NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
-        binding.bottomNavigation.setupWithNavController(navController)
+//        val navHostFragment =
+//            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+//        val navController = navHostFragment.navController
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.homeFragment, R.id.historyFragment, R.id.settingsFragment
+//            )
+//        )
+//        NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
+//        binding.bottomNavigation.setupWithNavController(navController)
+        loadFragment(HomeFragment())
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.homeFragment -> {
+                    loadFragment(HomeFragment())
+                    true
+                }
+                R.id.settingsFragment -> {
+                    loadFragment(SettingsFragment())
+                    true
+                }
+                R.id.historyFragment -> {
+                    loadFragment(HistoryFragment())
+                    true
+                }
+                else -> false
+            }
+        }
 
         // Main Fab action
         binding.fabButton.setOnClickListener { onFabButtonClicked() }
@@ -131,6 +154,12 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         binding.fabGallery.setOnClickListener { startGallery() }
 
     } // ------ end of onCreate --------
+
+    private  fun loadFragment(fragment: Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.nav_host_fragment,fragment)
+        transaction.commit()
+    }
 
     private fun startCamera() {
         currentImageUri = getImageUri(this)
