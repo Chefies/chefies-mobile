@@ -45,18 +45,88 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph" />
+            android:layout_height="match_parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="100dp"
+            android:paddingBottom="15dp">
+
+            <!-- FAB Camera -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_cam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:backgroundTint="@color/primary"
+                android:contentDescription="@string/open_camera"
+                android:focusable="true"
+                android:src="@drawable/ic_camera"
+                android:visibility="invisible"
+                app:fabCustomSize="65dp"
+                app:layout_constraintBottom_toTopOf="@+id/label_fab_cam"
+                app:layout_constraintStart_toStartOf="parent"
+                app:maxImageSize="35dp"
+                app:shapeAppearanceOverlay="@style/circular"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/label_fab_cam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:text="@string/open_camera"
+                android:textColor="@android:color/black"
+                android:visibility="invisible"
+                app:fontFamily="@font/poppins"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/fab_cam"
+                app:layout_constraintStart_toStartOf="@id/fab_cam" />
+
+            <!-- FAB Upload -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:backgroundTint="@color/primary"
+                android:contentDescription="@string/open_gallery"
+                android:focusable="true"
+                android:src="@drawable/ic_gallery"
+                android:visibility="invisible"
+                app:fabCustomSize="65dp"
+                app:layout_constraintBottom_toTopOf="@+id/label_fab_gallery"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:maxImageSize="35dp"
+                app:shapeAppearanceOverlay="@style/circular"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/label_fab_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:text="@string/open_gallery"
+                android:textColor="@android:color/black"
+                android:visibility="invisible"
+                app:fontFamily="@font/poppins"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/fab_gallery"
+                app:layout_constraintStart_toStartOf="@id/fab_gallery" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
     <!-- BottomAppBar with Bottom Navigation -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

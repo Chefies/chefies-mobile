@@ -16,6 +16,10 @@ class RecipeRepository(
         return historyDao.getAllRecipesEnglishById(id)
     }
 
+    fun getHistories(): LiveData<List<HistoryEntity>> {
+        return historyDao.getHistories()
+    }
+
     suspend fun addHistory(history: HistoryEntity): Long {
         return historyDao.insertHistory(history)
     }

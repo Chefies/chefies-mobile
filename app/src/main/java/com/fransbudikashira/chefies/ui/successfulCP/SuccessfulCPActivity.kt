@@ -8,7 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.databinding.ActivitySuccessfulCpactivityBinding
 import com.fransbudikashira.chefies.ui.main.MainActivity
-import com.fransbudikashira.chefies.util.moveActivityTo
+import com.fransbudikashira.chefies.util.moveTo
 
 class SuccessfulCPActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySuccessfulCpactivityBinding
@@ -35,7 +35,8 @@ class SuccessfulCPActivity : AppCompatActivity() {
 
         // handle button
         binding.btnOk.setOnClickListener {
-            moveActivityTo(this, MainActivity::class.java, true)
+            moveTo(MainActivity::class.java, true)
+//            moveActivityTo(this, MainActivity::class.java, true)
         }
     }
 }

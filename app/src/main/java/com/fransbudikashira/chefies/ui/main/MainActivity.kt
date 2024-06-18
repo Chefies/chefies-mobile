@@ -9,18 +9,19 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Toast
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -33,12 +34,43 @@ import com.yalantis.ucrop.UCrop
 import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
 import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
 import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
+import com.fransbudikashira.chefies.ui.main.history.HistoryFragment
+import com.fransbudikashira.chefies.ui.main.home.HomeFragment
+import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
+import com.fransbudikashira.chefies.util.showToast
 import java.util.Locale
 
 class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
+
+    // animation properties
+    private var clicked = false
+    private val rotateopen: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.rotate_open_anim
+        )
+    }
+    private val rotateclose: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.rotate_close_anim
+        )
+    }
+    private val fromBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.from_bottom_anim
+        )
+    }
+    private val toBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            this,
+            R.anim.to_bottom_anim
+        )
+    }
 
     private var currentImageUri: Uri? = null
 
@@ -47,9 +79,9 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                showToast("Permission request granted")
+                showToast(getString(R.string.permission_request_granted))
             } else {
-                showToast("Permission request denied")
+                showToast(getString(R.string.permission_request_denied))
             }
         }
 
@@ -68,7 +100,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
 
-        // enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -84,55 +115,50 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         window.navigationBarColor = getColor(R.color.md_theme_primary)
 
         binding.bottomNavigation.background = null // ensure bottomNav background doesn't appear
-        binding.bottomNavigation.menu.getItem(1).isEnabled =
-            false // & hide item menu index 1 (space for FAB)
+        binding.bottomNavigation.menu.getItem(1).isEnabled = false // & hide item menu index 1 (space for FAB)
         binding.bottomNavigation.menu.getItem(3).isVisible = false
 
         // navigation bottom & controller configuration
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.homeFragment, R.id.historyFragment, R.id.settingsFragment
-            )
-        )
-        NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
-        binding.bottomNavigation.setupWithNavController(navController)
-
-        // Fab action
-        binding.fabButton.setOnClickListener {
-            showCustomDialogBox()
-        }
-    }
-
-    // Dialog Box get image options
-    private fun showCustomDialogBox() {
-        val dialog = Dialog(this)
-        dialog.setCancelable(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.custom_dialog_get_image)
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setDimAmount(0.5f)
-
-        val btnCamera: ConstraintLayout = dialog.findViewById(R.id.btn_open_cam)
-        val btnGalery: ConstraintLayout = dialog.findViewById(R.id.btn_open_galery)
-
-        btnCamera.setOnClickListener {
-            startCamera()
-            dialog.dismiss()
-        }
-        btnGalery.setOnClickListener {
-            startGallery()
-            dialog.dismiss()
+//        val navHostFragment =
+//            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+//        val navController = navHostFragment.navController
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.homeFragment, R.id.historyFragment, R.id.settingsFragment
+//            )
+//        )
+//        NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
+//        binding.bottomNavigation.setupWithNavController(navController)
+        loadFragment(HomeFragment())
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.homeFragment -> {
+                    loadFragment(HomeFragment())
+                    true
+                }
+                R.id.settingsFragment -> {
+                    loadFragment(SettingsFragment())
+                    true
+                }
+                R.id.historyFragment -> {
+                    loadFragment(HistoryFragment())
+                    true
+                }
+                else -> false
+            }
         }
 
-        dialog.setCanceledOnTouchOutside(true)
-        dialog.show()
+        // Main Fab action
+        binding.fabButton.setOnClickListener { onFabButtonClicked() }
+        binding.fabCam.setOnClickListener { startCamera() }
+        binding.fabGallery.setOnClickListener { startGallery() }
+
+    } // ------ end of onCreate --------
+
+    private  fun loadFragment(fragment: Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.nav_host_fragment,fragment)
+        transaction.commit()
     }
 
     private fun startCamera() {
@@ -140,7 +166,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         currentImageUri?.let {
             launcherIntentCamera.launch(it)
         } ?: run {
-            showToast("Failed to get image URI")
+            showToast(getString(R.string.failed_to_get_image_uri))
         }
     }
 
@@ -158,7 +184,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
                 cropImage(it)
             }
         } else {
-            showToast("Failed to take picture")
+            showToast(getString(R.string.failed_to_take_picture))
         }
     }
 
@@ -193,17 +219,13 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
     private fun analyzeImage(uri: Uri) {
         objectDetectorHelper.detectObject(uri)
     }
 
     override fun onError(error: String) {
         runOnUiThread {
-            Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
+            showToast(error)
         }
     }
 
@@ -215,7 +237,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
                     moveToMLResult(it.distinct())
                 } else {
                     Log.d(TAG, "No ingredients detected")
-                    // showToast("No result") // change with dialog failed detect ingredients
                     showFailedDialog()
                 }
             }
@@ -234,11 +255,11 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             intent.putExtra(MLResultActivity.EXTRA_RESULT, resultWithIngredients)
             startActivity(intent)
         } else {
-            showToast("No Image Selected")
+            showToast(getString(R.string.no_image_selected))
         }
     }
 
-    // Dialog box failed to get photo
+    // Dialog box failed to get ingredients
     private fun showFailedDialog() {
         val dialog = Dialog(this)
         dialog.setCancelable(false)
@@ -255,14 +276,56 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         dialog.show()
     }
 
-    private fun enableEdgeToEdge() {
-        // Enable edge-to-edge mode and make system bars transparent
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, window.decorView).apply {
-            isAppearanceLightStatusBars =
-                false  // Change to false if you want light content (white icons) on the status bar
-            isAppearanceLightNavigationBars =
-                true  // Change to false if you want light content (white icons) on the navigation bar
+    // connfiguration when fab is clicked
+    private fun onFabButtonClicked() {
+        setVisibility(clicked)
+        setAnimation(clicked)
+        setClickable(clicked)
+        clicked=!clicked
+    }
+
+    // set visibility of fab & label
+    private fun setVisibility(clicked: Boolean) {
+        if(!clicked){
+            binding.labelFabCam.visibility = View.VISIBLE
+            binding.labelFabGallery.visibility = View.VISIBLE
+            binding.fabCam.visibility = View.VISIBLE
+            binding.fabGallery.visibility = View.VISIBLE
+        }else{
+            binding.fabCam.visibility = View.INVISIBLE
+            binding.fabGallery.visibility = View.INVISIBLE
+            binding.labelFabCam.visibility = View.INVISIBLE
+            binding.labelFabGallery.visibility = View.INVISIBLE
+        }
+    }
+
+    // set animation
+    private fun setAnimation(clicked: Boolean) {
+        if(!clicked){
+            binding.fabButton.startAnimation(rotateopen)
+            binding.labelFabCam.startAnimation(fromBottom)
+            binding.labelFabGallery.startAnimation(fromBottom)
+            binding.fabCam.startAnimation(fromBottom)
+            binding.fabGallery.startAnimation(fromBottom)
+        }
+        else{
+            binding.fabButton.startAnimation(rotateclose)
+            binding.fabCam.startAnimation(toBottom)
+            binding.fabGallery.startAnimation(toBottom)
+            binding.labelFabCam.startAnimation(toBottom)
+            binding.labelFabGallery.startAnimation(toBottom)
+        }
+    }
+
+    // set state of Fab
+    private fun setClickable(clicked: Boolean){
+        if(!clicked){
+            binding.fabCam.isClickable=true
+            binding.fabGallery.isClickable=true
+        }
+        else{
+            binding.fabCam.isClickable=false
+            binding.fabGallery.isClickable=false
         }
     }
 

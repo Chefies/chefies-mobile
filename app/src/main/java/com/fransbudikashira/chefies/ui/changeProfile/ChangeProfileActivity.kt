@@ -8,7 +8,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,10 +21,14 @@ import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.ActivityChangeProfileBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainActivity
+import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
+import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.loadImageProfile
 import com.fransbudikashira.chefies.util.moveActivityTo
+import com.fransbudikashira.chefies.util.moveTo
 import com.fransbudikashira.chefies.util.reduceFileImage
+import com.fransbudikashira.chefies.util.showToast
 import com.fransbudikashira.chefies.util.uriToFile
 import kotlinx.coroutines.launch
 import java.io.File
@@ -33,14 +36,19 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class ChangeProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChangeProfileBinding
+
     private val settingsViewModel: SettingsViewModel by viewModels {
         AuthViewModelFactory.getInstance(this)
     }
+    private val mainViewModel: MainViewModel by viewModels {
+        AuthViewModelFactory.getInstance(this)
+    }
 
-    private lateinit var newName: String
     private var currentImageUri: Uri? = null
     private var checkNewName: Boolean = false
     private var checkImageUri: Boolean = false
@@ -63,7 +71,6 @@ class ChangeProfileActivity : AppCompatActivity() {
 
         // BackButton
         binding.toAppBar.setNavigationOnClickListener {
-//            moveToMain()
             finish()
         }
 
@@ -74,42 +81,83 @@ class ChangeProfileActivity : AppCompatActivity() {
             }
         }
 
-        setupView(settingsViewModel)
+        setupView()
 
         binding.btnUploadPhoto.setOnClickListener {
             startGallery()
         }
 
         binding.btnChangeProfile.setOnClickListener {
-            val name = binding.etName.text.toString()
-            updateProfile(name)
-//            lifecycleScope.launch {
-//                val avatarDb = settingsViewModel.getAvatar().first()
-//                val avatarFile: File? = if (currentImageUri != null) {
-//
-//                }
-//
-//                currentImageUri?.let { uri ->
-//                    val avatarFile = uriToFile(uri, this@ChangeProfileActivity).reduceFileImage()
-//                    Log.d("Image File", "showImage: ${avatarFile.path}")
-//                    val name = binding.etName.text.toString()
-//
-//                    settingsViewModel.updateProfile(name, avatarFile).observe(this@ChangeProfileActivity) { result ->
-//                        if (result != null) {
-//                            when (result) {
-//                                is Result.Loading -> showLoading(true)
-//                                is Result.Success -> handleSuccess(result.data.message)
-//                                is Result.Error -> handleError(result.error)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+            tokenValidationMechanism()
         }
     }
 
-    private fun updateProfile(name: String) {
+    private fun tokenValidationMechanism() {
         lifecycleScope.launch {
+            // Check Valid Token
+            if (checkValidToken()) {
+                updateProfile()
+                // - - -
+                Log.d(TAG, "VALID TOKEN")
+            } else {
+                val email = mainViewModel.getEmail()
+                val password = mainViewModel.getPassword()
+                // Check Email & Password Available
+                if (email.isEmpty() || password.isEmpty()) {
+                    moveActivityTo(this@ChangeProfileActivity, SignInActivity::class.java, true)
+                    // - - -
+                    Log.d(TAG, "EMAIL & PASSWORD UN-AVAILABLE")
+                } else {
+                    // Do Login
+                    doLogin(email, password)
+                    // - - -
+                    Log.d(TAG, "EMAIL & PASSWORD AVAILABLE")
+                }
+                // - - -
+                Log.d(TAG, "INVALID TOKEN")
+            }
+            // - - -
+            Log.d(TAG, "TOKEN AVAILABLE")
+        }
+    }
+
+    private fun doLogin(email: String, password: String) {
+        mainViewModel.userLogin(email, password).observe(this@ChangeProfileActivity) { userLoginResult ->
+            when (userLoginResult) {
+                is Result.Loading -> {}
+                is Result.Success -> {
+                    updateProfile()
+                    // - - -
+                    Log.d(TAG, "LOGIN SUCCESS -> MOVE TO MAIN")
+                }
+                is Result.Error -> {
+                    moveActivityTo(this@ChangeProfileActivity, SignInActivity::class.java, true)
+                    // - - -
+                    Log.d(TAG, "LOGIN FAILED -> MOVE TO SIGN-IN")
+                }
+            }
+        }
+    }
+
+    private suspend fun checkValidToken(): Boolean {
+        return suspendCoroutine { continuation ->
+            mainViewModel.getProfile().observe(this@ChangeProfileActivity) { getProfileResult ->
+                when (getProfileResult) {
+                    is Result.Loading -> {}
+                    is Result.Success -> {
+                        continuation.resume(true)
+                    }
+                    is Result.Error -> {
+                        continuation.resume(false)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateProfile() {
+        lifecycleScope.launch {
+            val name = binding.etName.text.toString()
             val avatarUrl = settingsViewModel.getAvatar()
             val avatarFile: File? = if (currentImageUri != null) {
                 // If the user changes avatar, use the new URI
@@ -125,12 +173,12 @@ class ChangeProfileActivity : AppCompatActivity() {
                 settingsViewModel.updateProfile(name, avatarFile).observe(this@ChangeProfileActivity) { result ->
                     when (result) {
                         is Result.Loading -> showLoading(true)
-                        is Result.Success -> handleSuccess(result.data.message)
+                        is Result.Success -> handleSuccess(getString(R.string.success_update_profile))
                         is Result.Error -> handleError(result.error)
                     }
                 }
             } else {
-                showToast("Avatar not found or unable to download avatar")
+                showToast(getString(R.string.unsuccess_get_avatar))
             }
         }
     }
@@ -165,10 +213,11 @@ class ChangeProfileActivity : AppCompatActivity() {
     private fun handleSuccess(message: String) {
         showLoading(false)
         showToast(message)
-        moveActivityTo(this, MainActivity::class.java, true)
+//        moveActivityTo(this, MainActivity::class.java, true)
+        moveTo(MainActivity::class.java, true)
     }
 
-    private fun handleError(error: String?) {
+    private fun handleError(error: String) {
         showLoading(false)
         showToast(error)
     }
@@ -182,13 +231,13 @@ class ChangeProfileActivity : AppCompatActivity() {
     ) { uri: Uri? ->
         if (uri != null) {
             currentImageUri = uri
-            showImage(settingsViewModel)
+            showImage()
         } else {
             Log.d("Photo Picker", "No media selected")
         }
     }
 
-    private fun showImage(viewModel: SettingsViewModel) {
+    private fun showImage() {
         currentImageUri?.let {
             Log.d("Image URI", "showImage: $it")
             binding.ivProfile.setImageURI(it)
@@ -198,43 +247,36 @@ class ChangeProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupView(viewModel: SettingsViewModel) {
+    private fun setupView() {
         //
         lifecycleScope.launch {
             binding.etName.setText(settingsViewModel.getUsername())
         }
         // New name
         binding.etName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().length <= 3) {
                     binding.etLayoutName.error = getString(R.string.invalid_name)
 
                     checkNewName = false
                     isEnabledButton()
+                } else if (s.toString() == settingsViewModel.getUsername()) {
+                    checkNewName = false
+                    isEnabledButton()
                 } else {
                     binding.etLayoutName.error = null
                     binding.etLayoutName.isErrorEnabled = false
 
-                    newName = s.toString()
                     checkNewName = true
                     isEnabledButton()
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
         // Image uri
         val avatarDb = settingsViewModel.getAvatar()
         binding.ivProfile.loadImageProfile(avatarDb)
-        if (avatarDb.isNotEmpty()) {
-            checkImageUri = true
-            isEnabledButton()
-        } else {
-            checkImageUri = false
-            isEnabledButton()
-        }
     }
 
     private fun isEnabledButton() {
@@ -251,7 +293,7 @@ class ChangeProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun showToast(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    companion object {
+        const val TAG = "ChangeProfileActivity"
     }
 }

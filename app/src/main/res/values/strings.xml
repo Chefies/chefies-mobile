@@ -70,9 +70,10 @@
     <string name="success">Success</string>
     <string name="success_registered">You have successfully registered</string>
     <string name="success_login">You have successfully login</string>
+    <string name="success_update_profile">You have successfully update profile</string>
     <string name="success_change_password">You have successfully change password</string>
     <string name="apology_text">Oops… Sorry :(</string>
-    <string name="manual_input_suggestion_txt">Cannot detect food ingredients, \nYou can enter them manually</string>
+    <string name="manual_input_suggestion_txt">Cannot detect food ingredients, You can enter them manually</string>
     <string name="history_title_txt">Psssttttt… \nThis is your secret recipe</string>
     <string name="profile_icon_txt">Profile icon</string>
     <string name="change_profile_txt">Change Profile</string>
@@ -87,8 +88,17 @@
     <string name="type_your_name_txt">Type your name</string>
     <string name="upload_your_photo_txt">Upload your photo</string>
     <string name="upload_txt">Upload</string>
-    <string name="apology_desc_txt">Recipe not available for this ingredients, \nreplace or add another ingredient.</string>
+    <string name="apology_desc_txt">Recipe not available for this ingredients, replace or add another ingredient.</string>
     <string name="success_get_recipes_txt">Success Get Recipes</string>
     <string name="failed_to_get_recipes_txt">Failed to get recipes:</string>
     <string name="this_ingredient_already_added_txt">This ingredient already added</string>
+    <string name="saved_text">Saved</string>
+    <string name="unsuccess_get_avatar">Avatar not found or unable to download avatar</string>
+    <string name="permission_request_granted">Permission request granted</string>
+    <string name="permission_request_denied">Permission request denied</string>
+    <string name="failed_to_get_image_uri">Failed to get image URI</string>
+    <string name="failed_to_take_picture">Failed to take picture</string>
+    <string name="no_image_selected">No Image Selected</string>
+    <string name="failed_to_regenerate_recipe">Failed to regenerate recipe</string>
+    <string name="success_logout">Success Logout</string>
 </resources>

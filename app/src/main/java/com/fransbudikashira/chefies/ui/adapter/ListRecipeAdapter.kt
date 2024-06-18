@@ -1,15 +1,12 @@
 package com.fransbudikashira.chefies.ui.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
 import com.fransbudikashira.chefies.databinding.ItemRecipeMenuBinding
-import com.fransbudikashira.chefies.ui.result.ResultActivity
 
 class ListRecipeAdapter : ListAdapter<HistoryEntity, ListRecipeAdapter.MyViewHolder>(DIFF_CALLBACK) {
 

@@ -4,13 +4,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginHorizontal="25dp"
     app:cardBackgroundColor="@color/softBlue"
     app:cardCornerRadius="15dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="40dp"
+        android:paddingHorizontal="10dp"
         android:paddingVertical="15dp">
 
         <TextView

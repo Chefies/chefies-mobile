@@ -2,7 +2,6 @@ package com.fransbudikashira.chefies.ui.main.history
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -50,12 +49,10 @@ class HistoryFragment : Fragment() {
 
         setUpRecyclerView()
 
-        setHistoryRecipe(
-            listOf(
-                HistoryEntity(id = 1, title = "abc"),
-                HistoryEntity(id = 2, title = "abc")
-            )
-        )
+        historyViewModel.getHistories().observe(viewLifecycleOwner){
+            setHistoryRecipe(it)
+        }
+
     }
 
     private fun setUpRecyclerView() {

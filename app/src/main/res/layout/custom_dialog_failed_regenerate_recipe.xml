@@ -11,8 +11,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="15dp">
+        android:paddingHorizontal="25dp"
+        android:paddingVertical="25dp">
 
         <TextView
             android:id="@+id/tv_apology_title"
@@ -29,7 +29,7 @@
             android:id="@+id/tv_apology_desc"
             style="@style/ConfirmLogoutMessage"
             android:layout_marginTop="5dp"
-            android:text="@string/apology_desc_txt"
+            android:text="@string/failed_to_regenerate_recipe"
             android:textAlignment="center"
             app:fontFamily="@font/poppins_medium"
             app:layout_constraintEnd_toEndOf="parent"

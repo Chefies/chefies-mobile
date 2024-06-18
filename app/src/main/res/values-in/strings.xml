@@ -68,9 +68,10 @@
     <string name="success">Berhasil</string>
     <string name="success_registered">Kamu telah berhasil mendaftar</string>
     <string name="success_login">Kamu telah berhasil masuk</string>
+    <string name="success_update_profile">Kamu telah berhasil merubah profile</string>
     <string name="success_change_password">Kamu telah berhasil merubah kata sandi</string>
     <string name="apology_text">Oops… Maaf :(</string>
-    <string name="manual_input_suggestion_txt">Tidak dapat mendeteksi bahan makanan, \nKamu dapat memasukkannya secara manual</string>
+    <string name="manual_input_suggestion_txt">Tidak dapat mendeteksi bahan makanan, Kamu dapat memasukkannya secara manual</string>
     <string name="history_title_txt">Psssttttt… \nIni adalah resep rahasia Kamu</string>
     <string name="profile_icon_txt">Ikon profil</string>
     <string name="change_profile_txt">Ubah Profil</string>
@@ -84,8 +85,17 @@
     <string name="type_your_name_txt">Ketik nama Kamu</string>
     <string name="upload_your_photo_txt">Unggah foto Kamu</string>
     <string name="upload_txt">Unggah</string>
-    <string name="apology_desc_txt">Resep tidak tersedia untuk bahan ini, \nganti atau tambahkan bahan lain.</string>
+    <string name="apology_desc_txt">Resep tidak tersedia untuk bahan ini, ganti atau tambahkan bahan lain.</string>
     <string name="success_get_recipes_txt">Berhasil Mendapatkan Resep</string>
     <string name="failed_to_get_recipes_txt">Gagal mendapatkan resep:</string>
     <string name="this_ingredient_already_added_txt">Bahan ini sudah ditambahkan</string>
+    <string name="saved_text">Tersimpan</string>
+    <string name="unsuccess_get_avatar">Avatar tidak ditemukan atau tidak dapat mengunduh avatar</string>
+    <string name="permission_request_granted">Permintaan izin dikabulkan</string>
+    <string name="permission_request_denied">Permintaan izin ditolak</string>
+    <string name="failed_to_get_image_uri">Gagal mendapatkan URI gambar</string>
+    <string name="failed_to_take_picture">Gagal mengambil gambar</string>
+    <string name="no_image_selected">Tidak Ada Gambar yang Dipilih</string>
+    <string name="failed_to_regenerate_recipe">Failed to regenerate recipe</string>
+    <string name="success_logout">Berhasil keluar</string>
 </resources>
