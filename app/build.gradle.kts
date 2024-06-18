@@ -35,6 +35,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        mlModelBinding = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -43,10 +44,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
-    }
-    buildFeatures {
-        viewBinding = true
-        mlModelBinding = true
     }
 }
 

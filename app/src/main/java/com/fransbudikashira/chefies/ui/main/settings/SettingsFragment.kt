@@ -20,6 +20,7 @@ import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
 import com.fransbudikashira.chefies.helper.Result
+import com.fransbudikashira.chefies.ui.changePassword.ChangePasswordActivity
 import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.moveActivityTo
@@ -69,7 +70,7 @@ class SettingsFragment : Fragment() {
         }
 
         binding.changePasswordSetting.setOnClickListener {
-            moveActivityTo(requireActivity(), ChangeProfileActivity::class.java)
+            moveActivityTo(requireActivity(), ChangePasswordActivity::class.java)
         }
 
         binding.changeProfileSetting.setOnClickListener {
