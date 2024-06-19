@@ -48,7 +48,7 @@
                 android:id="@+id/iv_profile_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_round_profile"
+                android:background="@drawable/bg_round_logout"
                 android:contentDescription="@string/profile_icon_txt"
                 android:padding="12dp"
                 android:src="@drawable/ic_profile" />
@@ -95,7 +95,7 @@
                 android:id="@+id/iv_password_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_round_language"
+                android:background="@drawable/bg_round_logout"
                 android:contentDescription="@string/password_icon_text"
                 android:padding="12dp"
                 android:src="@drawable/ic_password" />
@@ -142,7 +142,7 @@
                 android:id="@+id/iv_language_icon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_round_language"
+                android:background="@drawable/bg_round_logout"
                 android:contentDescription="@string/languange_icon_txt"
                 android:padding="12dp"
                 android:src="@drawable/ic_language" />
@@ -188,7 +188,7 @@
                 android:id="@+id/iv_dark_mode"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_round_dark_mode"
+                android:background="@drawable/bg_round_logout"
                 android:contentDescription="@string/dark_mode_icon_txt"
                 android:padding="12dp"
                 android:src="@drawable/ic_dark_mode" />
