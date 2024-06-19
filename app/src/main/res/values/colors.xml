@@ -12,6 +12,7 @@
     <color name="green">#52D5BA</color>
     <color name="lightRipple">#1FF2F1F9</color>
     <!--  THEME COLORS  -->
+    <!--    <color name="md_theme_primary">#75e45d</color>   -ini kalo mau pake warna primary seperti yg disaranin-    -->
     <color name="md_theme_primary">#0A6E00</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
     <color name="md_theme_primaryContainer">#7CEC64</color>

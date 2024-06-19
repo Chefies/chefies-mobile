@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/bg_activity"
-        android:backgroundTint="@color/md_theme_surfaceContainerLowest"
         android:paddingStart="20dp"
         android:paddingTop="30dp"
         android:paddingEnd="20dp"
@@ -41,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:src="@drawable/empty_banner"
+            android:src="@drawable/il_chef"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/welcome_text" />
