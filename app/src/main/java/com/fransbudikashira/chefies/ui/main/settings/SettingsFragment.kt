@@ -12,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.CompoundButton
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.fransbudikashira.chefies.ChangePasswordActivity
@@ -81,6 +83,10 @@ class SettingsFragment : Fragment() {
 
         binding.languageSetting.setOnClickListener {
             startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+        }
+
+        binding.switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            settingsViewModel.saveThemeSetting(isChecked)
         }
     }
 
@@ -199,6 +205,14 @@ class SettingsFragment : Fragment() {
         // observe avatar
         settingsViewModel.avatarUrl.observe(viewLifecycleOwner) {
             binding.ivProfile.loadImageProfile(it)
+        }
+        // observe theme settings
+        settingsViewModel.themeSetting.observe(viewLifecycleOwner) { isDarkModeActive ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
         }
     }
 

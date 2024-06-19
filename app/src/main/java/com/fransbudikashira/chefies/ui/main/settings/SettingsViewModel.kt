@@ -3,8 +3,10 @@ package com.fransbudikashira.chefies.ui.main.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.fransbudikashira.chefies.data.repository.UserRepository
 import com.fransbudikashira.chefies.helper.Event
+import kotlinx.coroutines.launch
 import java.io.File
 
 class SettingsViewModel(private val userRepository: UserRepository): ViewModel() {
@@ -18,10 +20,17 @@ class SettingsViewModel(private val userRepository: UserRepository): ViewModel()
     private val _avatarUrl = MutableLiveData<String>()
     val avatarUrl : LiveData<String> = _avatarUrl
 
+    private val _themeSetting = MutableLiveData<Boolean>()
+    val themeSetting : LiveData<Boolean> = _themeSetting
+
     init {
         setEnabledButton(false)
         _username.value = userRepository.getUsername()
         _avatarUrl.value = userRepository.getAvatar()
+    }
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) {
+        _themeSetting.value = isDarkModeActive
     }
 
     fun setUsername (username: String) {
@@ -43,6 +52,8 @@ class SettingsViewModel(private val userRepository: UserRepository): ViewModel()
     fun getUsername() = userRepository.getUsername()
 
     fun getAvatar() = userRepository.getAvatar()
+
+    fun getThemeSetting() = userRepository.getThemeSetting()
 
     fun updatePassword(
         newPassword: String,

@@ -2,6 +2,7 @@ package com.fransbudikashira.chefies.data.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.fransbudikashira.chefies.data.local.dataStore.LoginPreferences
 import com.fransbudikashira.chefies.data.local.dataStore.TokenPreferences
@@ -167,6 +168,12 @@ class UserRepository(
     fun getUsername(): String = runBlocking { userProfilePreferences.getUsername().first() }
 
     fun getAvatar(): String = runBlocking { userProfilePreferences.getAvatar().first() }
+
+    fun getThemeSetting() = runBlocking { userProfilePreferences.getThemeSetting().first() }
+
+    suspend fun saveThemeSetting(isDarkModeActive: Boolean) {
+        userProfilePreferences.saveThemeSetting(isDarkModeActive)
+    }
 
     companion object {
         @Volatile

@@ -48,8 +48,8 @@ class SignInActivity : AppCompatActivity() {
             insets
         }
         // Set the status bar and navigation bar colors
-        window.statusBarColor = getColor(R.color.primary)
-        window.navigationBarColor = getColor(R.color.white)
+        window.statusBarColor = getColor(R.color.md_theme_primary)
+        window.navigationBarColor = getColor(R.color.md_theme_background)
 
         // set ViewModel
         viewModel = obtainViewModel(this@SignInActivity)

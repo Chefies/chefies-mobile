@@ -98,4 +98,8 @@
     <string name="no_image_selected">Tidak Ada Gambar yang Dipilih</string>
     <string name="failed_to_regenerate_recipe">Failed to regenerate recipe</string>
     <string name="success_logout">Berhasil keluar</string>
+    <string name="move_activity_action_txt">aksi berpindah aktifitas</string>
+    <string name="languange_icon_txt">ikon bahasa</string>
+    <string name="dark_mode_icon_txt">ikon mode malam</string>
+    <string name="logout_icon">ikon keluar</string>
 </resources>

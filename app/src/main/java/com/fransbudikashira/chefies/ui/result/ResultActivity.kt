@@ -68,8 +68,8 @@ class ResultActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        window.statusBarColor = getColor(R.color.primary)
-        window.navigationBarColor = getColor(R.color.white)
+        window.statusBarColor = getColor(R.color.md_theme_primary)
+        window.navigationBarColor = getColor(R.color.md_theme_background)
 
         // BackButton
         binding.toAppBar.setNavigationOnClickListener {
@@ -358,14 +358,14 @@ class ResultActivity : AppCompatActivity() {
                 previousButton.setTextColor(getColor(R.color.gray))
                 previousButton.iconTint = getColorStateList(R.color.gray)
             } else {
-                retryButton.setTextColor(getColor(R.color.primary))
-                retryButton.iconTint = getColorStateList(R.color.primary)
+                retryButton.setTextColor(getColor(R.color.md_theme_primary))
+                retryButton.iconTint = getColorStateList(R.color.md_theme_primary)
 
-                nextButton.setTextColor(getColor(R.color.primary))
-                nextButton.iconTint = getColorStateList(R.color.primary)
+                nextButton.setTextColor(getColor(R.color.md_theme_primary))
+                nextButton.iconTint = getColorStateList(R.color.md_theme_primary)
 
-                previousButton.setTextColor(getColor(R.color.primary))
-                previousButton.iconTint = getColorStateList(R.color.primary)
+                previousButton.setTextColor(getColor(R.color.md_theme_primary))
+                previousButton.iconTint = getColorStateList(R.color.md_theme_primary)
             }
         }
     }

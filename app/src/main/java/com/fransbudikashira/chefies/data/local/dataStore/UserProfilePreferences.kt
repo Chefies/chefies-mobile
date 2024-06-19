@@ -3,6 +3,7 @@ package com.fransbudikashira.chefies.data.local.dataStore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -16,6 +17,7 @@ class UserProfilePreferences private constructor(
 ) {
     private val usernamePreferences = stringPreferencesKey("username")
     private val avatarPreferences = stringPreferencesKey("avatar")
+    private val themePreferences = booleanPreferencesKey("theme_settings")
 
     fun getUsername(): Flow<String> {
         return userProfileDataStore.data.map { preferences ->
@@ -29,6 +31,12 @@ class UserProfilePreferences private constructor(
         }
     }
 
+    fun getThemeSetting(): Flow<Boolean> {
+        return userProfileDataStore.data.map { preferences ->
+            preferences[themePreferences] ?: false
+        }
+    }
+
     suspend fun saveUsername(username: String) {
         userProfileDataStore.edit { preferences ->
             preferences[usernamePreferences] = username
@@ -38,6 +46,12 @@ class UserProfilePreferences private constructor(
     suspend fun saveAvatar(avatar: String) {
         userProfileDataStore.edit { preferences ->
             preferences[avatarPreferences] = avatar
+        }
+    }
+
+    suspend fun saveThemeSetting(isDarkModeActive: Boolean) {
+        userProfileDataStore.edit { preferences ->
+            preferences[themePreferences] = isDarkModeActive
         }
     }
 
