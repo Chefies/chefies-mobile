@@ -101,4 +101,8 @@
     <string name="no_image_selected">No Image Selected</string>
     <string name="failed_to_regenerate_recipe">Failed to regenerate recipe</string>
     <string name="success_logout">Success Logout</string>
+    <string name="move_activity_action_txt">move activity action</string>
+    <string name="languange_icon_txt">languange icon</string>
+    <string name="dark_mode_icon_txt">dark mode icon</string>
+    <string name="logout_icon">logout icon</string>
 </resources>

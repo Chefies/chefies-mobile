@@ -66,8 +66,8 @@ class MLResultActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        window.statusBarColor = getColor(R.color.primary)
-        window.navigationBarColor = getColor(R.color.white)
+        window.statusBarColor = getColor(R.color.md_theme_primary)
+        window.navigationBarColor = getColor(R.color.md_theme_background)
 
         with(binding) {
             // BackButton

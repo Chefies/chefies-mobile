@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_primary"
+    android:background="?attr/colorPrimary"
     tools:context=".ui.main.settings.SettingsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,6 @@
         android:layout_height="0dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/bg_activity"
-        android:backgroundTint="@color/md_theme_surfaceContainerLowest"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,19 +26,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
             android:includeFontPadding="false"
-            tools:text="@string/username"
-            android:textColor="@color/md_theme_primary"
+            android:textColor="?attr/colorPrimary"
             android:textSize="18sp"
             app:fontFamily="@font/poppins_semibold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/username" />
 
         <RelativeLayout
             android:id="@+id/change_profile_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_username">
@@ -54,7 +54,7 @@
                 android:src="@drawable/ic_profile" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
@@ -68,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:contentDescription="@string/move_activity_action_txt"
                 android:src="@drawable/ic_arrow_next_gray" />
         </RelativeLayout>
 
@@ -85,6 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/change_profile_setting">
@@ -94,11 +96,12 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_round_language"
+                android:contentDescription="@string/password_icon_text"
                 android:padding="12dp"
                 android:src="@drawable/ic_password" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
@@ -112,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:contentDescription="@string/move_activity_action_txt"
                 android:src="@drawable/ic_arrow_next_gray" />
         </RelativeLayout>
 
@@ -129,6 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/change_password_setting">
@@ -138,11 +143,12 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_round_language"
+                android:contentDescription="@string/languange_icon_txt"
                 android:padding="12dp"
                 android:src="@drawable/ic_language" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
@@ -156,6 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:contentDescription="@string/move_activity_action_txt"
                 android:src="@drawable/ic_arrow_next_gray" />
         </RelativeLayout>
 
@@ -182,11 +189,12 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_round_dark_mode"
+                android:contentDescription="@string/dark_mode_icon_txt"
                 android:padding="12dp"
                 android:src="@drawable/ic_dark_mode" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
@@ -196,10 +204,12 @@
                 app:fontFamily="@font/poppins_medium" />
 
             <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch_theme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:minHeight="48dp"
                 android:theme="@style/darkModeSwitch"
                 app:switchMinWidth="50dp" />
         </RelativeLayout>
@@ -218,6 +228,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dark_mode_setting">
@@ -227,11 +238,12 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_round_logout"
+                android:contentDescription="@string/logout_icon"
                 android:padding="12dp"
                 android:src="@drawable/ic_logout" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
@@ -245,6 +257,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:contentDescription="@string/move_activity_action_txt"
                 android:src="@drawable/ic_arrow_next_gray" />
         </RelativeLayout>
 
@@ -254,10 +267,10 @@
         android:id="@+id/iv_profile"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        tools:src="@drawable/ic_profile_pic"
         app:layout_constraintBottom_toTopOf="@+id/content_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/content_layout"
-        app:layout_constraintTop_toTopOf="@+id/content_layout" />
+        app:layout_constraintTop_toTopOf="@+id/content_layout"
+        tools:src="@drawable/ic_profile_pic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

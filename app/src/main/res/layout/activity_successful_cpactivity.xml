@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?android:colorBackground"
     tools:context=".ui.successfulCP.SuccessfulCPActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="@color/black"
+            app:navigationIconTint="?attr/colorOnSurface"
             tools:ignore="RtlSymmetry" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="@string/cp_successfully_title_txt"
-        android:textColor="@color/primary"
+        android:textColor="?attr/colorPrimary"
         android:textSize="16sp"
         app:fontFamily="@font/poppins_semibold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +59,7 @@
         android:fontFamily="@font/poppins_medium"
         android:text="@string/cp_successfully_desc_txt"
         android:textSize="14sp"
+        android:textColor="?attr/colorOnBackground"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

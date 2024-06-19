@@ -2,6 +2,7 @@ package com.fransbudikashira.chefies.data.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.fransbudikashira.chefies.data.local.dataStore.LoginPreferences
 import com.fransbudikashira.chefies.data.local.dataStore.TokenPreferences
@@ -17,6 +18,7 @@ import com.fransbudikashira.chefies.helper.Result
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -167,6 +169,14 @@ class UserRepository(
     fun getUsername(): String = runBlocking { userProfilePreferences.getUsername().first() }
 
     fun getAvatar(): String = runBlocking { userProfilePreferences.getAvatar().first() }
+
+    fun getThemeSetting(): LiveData<Boolean> {
+        return userProfilePreferences.getThemeSetting().asLiveData()
+    }
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) = CoroutineScope(Dispatchers.IO). launch {
+        userProfilePreferences.saveThemeSetting(isDarkModeActive)
+    }
 
     companion object {
         @Volatile

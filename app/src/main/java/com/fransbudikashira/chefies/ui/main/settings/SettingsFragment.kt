@@ -13,6 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.CompoundButton
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.fransbudikashira.chefies.ui.changeProfile.ChangeProfileActivity
@@ -21,6 +23,7 @@ import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.changePassword.ChangePasswordActivity
+import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.moveActivityTo
@@ -95,6 +98,10 @@ class SettingsFragment : Fragment() {
 
         binding.languageSetting.setOnClickListener {
             startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+        }
+
+        binding.switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            settingsViewModel.saveThemeSetting(isChecked)
         }
     }
 
@@ -213,6 +220,15 @@ class SettingsFragment : Fragment() {
         // observe avatar
         settingsViewModel.avatarUrl.observe(viewLifecycleOwner) {
             binding.ivProfile.loadImageProfile(it)
+        }
+        // observe theme settings
+        settingsViewModel.getThemeSetting().observe(viewLifecycleOwner) { isDarkModeActive ->
+            binding.switchTheme.isChecked = isDarkModeActive
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
         }
     }
 

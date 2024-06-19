@@ -3,8 +3,10 @@ package com.fransbudikashira.chefies.ui.main.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.fransbudikashira.chefies.data.repository.UserRepository
 import com.fransbudikashira.chefies.helper.Event
+import kotlinx.coroutines.launch
 import java.io.File
 
 class SettingsViewModel(private val userRepository: UserRepository): ViewModel() {
@@ -23,6 +25,12 @@ class SettingsViewModel(private val userRepository: UserRepository): ViewModel()
         _username.value = userRepository.getUsername()
         _avatarUrl.value = userRepository.getAvatar()
     }
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) {
+        userRepository.saveThemeSetting(isDarkModeActive)
+    }
+
+    fun getThemeSetting() = userRepository.getThemeSetting()
 
     fun setUsername (username: String) {
         _username.value = username

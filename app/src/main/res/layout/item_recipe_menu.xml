@@ -7,10 +7,10 @@
     android:layout_gravity="center"
     android:layout_marginHorizontal="5dp"
     android:layout_marginBottom="10dp"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
     app:cardCornerRadius="15dp"
     app:cardElevation="5dp"
-    app:strokeColor="@color/white">
+    app:strokeColor="?attr/colorSurfaceContainerLow">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             android:paddingEnd="10dp"
             android:singleLine="false"
             android:textAlignment="textStart"
-            android:textColor="@color/gray"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="16sp"
             app:fontFamily="@font/poppins_semibold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -35,8 +35,5 @@
             app:layout_constraintTop_toTopOf="parent"
             app:lineHeight="30dp"
             tools:text="How to create sandwhiches with salted egg" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>

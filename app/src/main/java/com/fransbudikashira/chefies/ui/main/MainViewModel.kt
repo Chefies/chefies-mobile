@@ -11,6 +11,17 @@ class MainViewModel(
     private val recipeRepository: RecipeRepository
 ): ViewModel() {
 
+    private val _isSettingFragment = MutableLiveData<Boolean>()
+    val isSettingFragment : LiveData<Boolean> = _isSettingFragment
+
+    init {
+        _isSettingFragment.value = false
+    }
+
+    fun setSettingFragment(isSettingFragment: Boolean) {
+        _isSettingFragment.value = isSettingFragment
+    }
+
     fun deleteToken() = userRepository.deleteToken()
 
     fun getProfile() = userRepository.getProfile()

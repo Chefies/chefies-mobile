@@ -25,8 +25,8 @@ class SuccessfulCPActivity : AppCompatActivity() {
         }
 
         // Set the status bar and navigation bar colors
-        window.statusBarColor = getColor(R.color.white)
-        window.navigationBarColor = getColor(R.color.white)
+        window.statusBarColor = getColor(R.color.md_theme_background)
+        window.navigationBarColor = getColor(R.color.md_theme_background)
 
         // BackButton
         binding.toAppBar.setNavigationOnClickListener {

@@ -3,6 +3,7 @@ package com.fransbudikashira.chefies.ui.main
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -145,7 +146,12 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         lifecycleScope.launch {
             val defaultFragment: Fragment = if (isHistoriesEmpty()) HomeFragment() else HistoryFragment()
 
-            loadFragment(defaultFragment)
+            viewModel.isSettingFragment.observe(this@MainActivity) { isSettingFragment ->
+                Log.d(TAG, "isSettingFragment: $isSettingFragment")
+                val defaultSetFragment = if (isSettingFragment) SettingsFragment() else defaultFragment
+                loadFragment(defaultSetFragment)
+            }
+
             binding.bottomNavigation.setOnItemSelectedListener {
                 when(it.itemId) {
                     R.id.homeFragment -> {
