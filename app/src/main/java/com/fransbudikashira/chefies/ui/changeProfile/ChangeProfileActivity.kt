@@ -1,7 +1,9 @@
 package com.fransbudikashira.chefies.ui.changeProfile
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -22,6 +24,7 @@ import com.fransbudikashira.chefies.databinding.ActivityChangeProfileBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.main.MainViewModel
+import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment
 import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.loadImageProfile
@@ -213,8 +216,11 @@ class ChangeProfileActivity : AppCompatActivity() {
     private fun handleSuccess(message: String) {
         showLoading(false)
         showToast(message)
-//        moveActivityTo(this, MainActivity::class.java, true)
-        moveTo(MainActivity::class.java, true)
+
+        val intent = Intent()
+        intent.putExtra(EXTRA_PROFILE_CHANGED, true)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     private fun handleError(error: String) {
@@ -295,5 +301,6 @@ class ChangeProfileActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "ChangeProfileActivity"
+        const val EXTRA_PROFILE_CHANGED = "EXTRA_PROFILE_CHANGED"
     }
 }

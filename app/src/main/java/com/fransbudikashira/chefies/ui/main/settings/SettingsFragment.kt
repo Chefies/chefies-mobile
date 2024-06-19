@@ -1,5 +1,6 @@
 package com.fransbudikashira.chefies.ui.main.settings
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -50,6 +51,17 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_CHANGE_PROFILE && resultCode == Activity.RESULT_OK) {
+            val profileChanged = data?.getBooleanExtra(ChangeProfileActivity.EXTRA_PROFILE_CHANGED, false) ?: false
+            if (profileChanged) {
+                getUserProfile()
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,7 +88,9 @@ class SettingsFragment : Fragment() {
         }
 
         binding.changeProfileSetting.setOnClickListener {
-            moveActivityTo(requireActivity(), ChangeProfileActivity::class.java)
+            val intent = Intent(requireContext(), ChangeProfileActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_CHANGE_PROFILE)
+            // moveActivityTo(requireActivity(), ChangeProfileActivity::class.java)
         }
 
         binding.languageSetting.setOnClickListener {
@@ -209,5 +223,6 @@ class SettingsFragment : Fragment() {
 
     companion object {
         const val TAG = "SettingsFragment"
+        const val REQUEST_CODE_CHANGE_PROFILE = 1001
     }
 }

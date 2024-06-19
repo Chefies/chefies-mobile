@@ -1,6 +1,7 @@
 package com.fransbudikashira.chefies.ui.main
 
 import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,17 +17,21 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.fransbudikashira.chefies.R
+import com.fransbudikashira.chefies.data.factory.RecipeViewModelFactory
+import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
 import com.fransbudikashira.chefies.data.model.MLResultIngredients
 import com.fransbudikashira.chefies.databinding.ActivityMainBinding
 import com.fransbudikashira.chefies.util.getImageUri
@@ -38,12 +43,18 @@ import com.fransbudikashira.chefies.ui.main.history.HistoryFragment
 import com.fransbudikashira.chefies.ui.main.home.HomeFragment
 import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
+import com.fransbudikashira.chefies.util.await
 import com.fransbudikashira.chefies.util.showToast
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var objectDetectorHelper: ObjectDetectorHelper
+
+    private val viewModel: MainViewModel by viewModels {
+        RecipeViewModelFactory.getInstance(this)
+    }
 
     // animation properties
     private var clicked = false
@@ -129,22 +140,28 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
 //        )
 //        NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
 //        binding.bottomNavigation.setupWithNavController(navController)
-        loadFragment(HomeFragment())
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when(it.itemId) {
-                R.id.homeFragment -> {
-                    loadFragment(HomeFragment())
-                    true
+
+
+        lifecycleScope.launch {
+            val defaultFragment: Fragment = if (isHistoriesEmpty()) HomeFragment() else HistoryFragment()
+
+            loadFragment(defaultFragment)
+            binding.bottomNavigation.setOnItemSelectedListener {
+                when(it.itemId) {
+                    R.id.homeFragment -> {
+                        loadFragment(defaultFragment)
+                        true
+                    }
+                    R.id.settingsFragment -> {
+                        loadFragment(SettingsFragment())
+                        true
+                    }
+                    R.id.historyFragment -> {
+                        loadFragment(HistoryFragment())
+                        true
+                    }
+                    else -> false
                 }
-                R.id.settingsFragment -> {
-                    loadFragment(SettingsFragment())
-                    true
-                }
-                R.id.historyFragment -> {
-                    loadFragment(HistoryFragment())
-                    true
-                }
-                else -> false
             }
         }
 
@@ -155,9 +172,30 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
 
     } // ------ end of onCreate --------
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d(TAG, "onActivityResult")
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            currentImageUri = UCrop.getOutput(data!!)
+            currentImageUri?.let {
+                analyzeImage(it)
+            }
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            val errorMessage = UCrop.getError(data!!)?.message.toString()
+            showToast(errorMessage)
+            Log.e(TAG, errorMessage)
+        }
+    }
+
+    private suspend fun isHistoriesEmpty(): Boolean {
+        val listHistory = viewModel.getHistory().await()
+        return listHistory.isNullOrEmpty()
+    }
+
     private  fun loadFragment(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.nav_host_fragment,fragment)
+        transaction.replace(R.id.nav_host_fragment, fragment)
         transaction.commit()
     }
 
@@ -201,22 +239,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
     private fun cropImage(uri: Uri) {
         UCrop.of(uri, Uri.fromFile(cacheDir.resolve("${System.currentTimeMillis()}.jpg")))
             .start(this)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d(TAG, "onActivityResult")
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            currentImageUri = UCrop.getOutput(data!!)
-            currentImageUri?.let {
-                analyzeImage(it)
-            }
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            val errorMessage = UCrop.getError(data!!)?.message.toString()
-            showToast(errorMessage)
-            Log.e(TAG, errorMessage)
-        }
     }
 
     private fun analyzeImage(uri: Uri) {

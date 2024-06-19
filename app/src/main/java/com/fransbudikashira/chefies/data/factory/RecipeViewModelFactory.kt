@@ -7,13 +7,14 @@ import com.fransbudikashira.chefies.data.repository.MainRepository
 import com.fransbudikashira.chefies.data.repository.RecipeRepository
 import com.fransbudikashira.chefies.data.repository.UserRepository
 import com.fransbudikashira.chefies.di.Injection
+import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.main.history.HistoryViewModel
 import com.fransbudikashira.chefies.ui.result.ResultViewModel
 
 class RecipeViewModelFactory(
     private val recipeRepository: RecipeRepository,
     private val mainViewRepository: MainRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ): ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
@@ -22,8 +23,13 @@ class RecipeViewModelFactory(
             modelClass.isAssignableFrom(ResultViewModel::class.java) -> {
                 ResultViewModel(recipeRepository, mainViewRepository) as T
             }
+
             modelClass.isAssignableFrom(HistoryViewModel::class.java) -> {
                 HistoryViewModel(recipeRepository, userRepository) as T
+            }
+
+            modelClass.isAssignableFrom(MainViewModel::class.java) -> {
+                MainViewModel(userRepository, recipeRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

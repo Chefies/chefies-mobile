@@ -31,10 +31,12 @@ import com.fransbudikashira.chefies.data.local.entity.RecipeEnglishEntity
 import com.fransbudikashira.chefies.data.remote.response.RecipeResponse
 import com.fransbudikashira.chefies.databinding.ActivityResultBinding
 import com.fransbudikashira.chefies.helper.Result
+import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.ui.splash.SplashViewModel
 import com.fransbudikashira.chefies.util.getDefaultLanguage
 import com.fransbudikashira.chefies.util.moveActivityTo
+import com.fransbudikashira.chefies.util.moveTo
 import com.fransbudikashira.chefies.util.showToast
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
@@ -74,7 +76,7 @@ class ResultActivity : AppCompatActivity() {
         // BackButton
         binding.toAppBar.setNavigationOnClickListener {
             if (historyData.id == null) backButtonDialog()
-            else finish()
+            else this.moveTo(MainActivity::class.java, true)
         }
 
         @Suppress("DEPRECATION")
