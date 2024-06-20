@@ -35,7 +35,6 @@ import com.fransbudikashira.chefies.ui.result.ResultActivity
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.moveActivityTo
 import com.fransbudikashira.chefies.util.prettierIngredientResult
-import com.fransbudikashira.chefies.util.showToast
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

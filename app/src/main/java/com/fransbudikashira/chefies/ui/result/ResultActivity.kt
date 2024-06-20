@@ -283,7 +283,7 @@ class ResultActivity : AppCompatActivity() {
                 }
 
                 // Set List Facts
-                recipesBahasa[index].facts.let {
+                recipesEnglish[index].facts.let {
                     // Prepend numbers to each step
                     val numberedFacts = it.mapIndexed { index, step ->
                         "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
