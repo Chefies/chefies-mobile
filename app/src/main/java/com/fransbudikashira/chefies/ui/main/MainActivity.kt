@@ -1,9 +1,7 @@
 package com.fransbudikashira.chefies.ui.main
 
 import android.Manifest
-import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -16,23 +14,18 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.RecipeViewModelFactory
-import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
 import com.fransbudikashira.chefies.data.model.MLResultIngredients
 import com.fransbudikashira.chefies.databinding.ActivityMainBinding
 import com.fransbudikashira.chefies.util.getImageUri
@@ -173,8 +166,14 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
 
         // Main Fab action
         binding.fabButton.setOnClickListener { onFabButtonClicked() }
-        binding.fabCam.setOnClickListener { startCamera() }
-        binding.fabGallery.setOnClickListener { startGallery() }
+        binding.fabCam.setOnClickListener {
+            startCamera()
+            onFabButtonClicked()
+        }
+        binding.fabGallery.setOnClickListener {
+            startGallery()
+            onFabButtonClicked()
+        }
 
     } // ------ end of onCreate --------
 

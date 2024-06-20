@@ -93,9 +93,6 @@
                 android:clickable="false"
                 android:elevation="0dp"
                 app:cardCornerRadius="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:alpha="1">
 
                 <ImageView
@@ -106,16 +103,6 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/telur" />
             </androidx.cardview.widget.CardView>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/retryButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
             <TextView
                 android:id="@+id/title"
@@ -128,10 +115,6 @@
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="20sp"
                 app:fontFamily="@font/poppins_semibold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView"
                 tools:alpha="1"
                 tools:text="Tomato Rice" />
 
@@ -147,10 +130,6 @@
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="16sp"
                 app:fontFamily="@font/poppins_semibold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
                 tools:alpha="1" />
 
             <TextView
@@ -164,10 +143,6 @@
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="16sp"
                 app:fontFamily="@font/poppins_regular"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientsKey"
                 tools:alpha="1"
                 tools:text="Tomato, Rice" />
 
@@ -183,10 +158,6 @@
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="16sp"
                 app:fontFamily="@font/poppins_semibold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientsValue"
                 tools:alpha="1" />
 
             <TextView
@@ -200,10 +171,6 @@
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="16sp"
                 app:fontFamily="@font/poppins_regular"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stepsKey"
                 tools:alpha="1"
                 tools:text="Steps Value" />
 
@@ -219,10 +186,6 @@
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="16sp"
                 app:fontFamily="@font/poppins_semibold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stepsValue"
                 tools:alpha="1" />
 
             <TextView
@@ -236,20 +199,20 @@
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="16sp"
                 app:fontFamily="@font/poppins_regular"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/factsKey"
                 tools:alpha="1"
                 tools:text="Facts Value" />
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:layout_marginTop="180dp"
+                android:layout_gravity="center"/>
+
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="80dp"
-                app:layout_constraintBottom_toBottomOf="@+id/retryButton"
-                app:layout_constraintEnd_toStartOf="@+id/retryButton"
-                app:layout_constraintStart_toEndOf="@+id/previousButton"
-                app:layout_constraintTop_toTopOf="@+id/retryButton" />
+                android:layout_height="80dp" />
         </LinearLayout>
     </ScrollView>
 

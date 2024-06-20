@@ -255,6 +255,15 @@ class ResultActivity : AppCompatActivity() {
                     }
                     stepsValue.text = numberedSteps.joinToString("\n")
                 }
+
+                // Set List Facts
+                recipesBahasa[index].facts.let {
+                    // Prepend numbers to each step
+                    val numberedFacts = it.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    binding.factsValue.text = numberedFacts.joinToString("\n")
+                }
             }
         } else {
             binding.apply {
@@ -271,6 +280,15 @@ class ResultActivity : AppCompatActivity() {
                         "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
                     }
                     stepsValue.text = numberedSteps.joinToString("\n")
+                }
+
+                // Set List Facts
+                recipesBahasa[index].facts.let {
+                    // Prepend numbers to each step
+                    val numberedFacts = it.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    binding.factsValue.text = numberedFacts.joinToString("\n")
                 }
             }
         }
@@ -299,11 +317,13 @@ class ResultActivity : AppCompatActivity() {
             title = recipeBahasa.name,
             ingredients = recipeBahasa.ingredients,
             steps = recipeBahasa.steps,
+            facts = recipeBahasa.facts
         )
         val recipeEnglishEntity = RecipeEnglishEntity(
             title = recipeEnglish.name,
             ingredients = recipeEnglish.ingredients,
             steps = recipeEnglish.steps,
+            facts = recipeEnglish.facts
         )
 
         // Add to temporary variable
@@ -342,6 +362,8 @@ class ResultActivity : AppCompatActivity() {
             ingredientsValue.visibility = if (isLoading) View.GONE else View.VISIBLE
             stepsKey.visibility = if (isLoading) View.GONE else View.VISIBLE
             stepsValue.visibility = if (isLoading) View.GONE else View.VISIBLE
+            factsKey.visibility = if (isLoading) View.GONE else View.VISIBLE
+            factsValue.visibility = if (isLoading) View.GONE else View.VISIBLE
 
             retryButton.isEnabled = !isLoading
             nextButton.isEnabled = !isLoading
@@ -408,20 +430,6 @@ class ResultActivity : AppCompatActivity() {
             .into(binding.imageView)
         // Set Title
         binding.editText.setText(historyData.title)
-        // Set Facts
-        listOf(
-            "Tumis ayam is a good source of protein.",
-            "The vegetables in tumis ayam provide vitamins and minerals.",
-            "Tumis ayam is a relatively low-fat dish.",
-            "Tumis ayam is a good source of energy.",
-            "Tumis ayam is a versatile dish that can be made with a variety of different ingredients."
-        ).let {
-            // Prepend numbers to each step
-            val numberedFacts = it.mapIndexed { index, step ->
-                "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
-            }
-            binding.factsValue.text = numberedFacts.joinToString("\n")
-        }
 
         // Set Recipe
         if (getDefaultLanguage() == "in") {
@@ -440,6 +448,15 @@ class ResultActivity : AppCompatActivity() {
                         "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
                     }
                     stepsValue.text = numberedSteps.joinToString("\n")
+                }
+
+                // Set List Facts
+                recipeBahasa.facts.let {
+                    // Prepend numbers to each step
+                    val numberedFacts = it.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    binding.factsValue.text = numberedFacts.joinToString("\n")
                 }
             }
             if (recipesBahasa.size > 1) {
@@ -461,6 +478,15 @@ class ResultActivity : AppCompatActivity() {
                         "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
                     }
                     stepsValue.text = numberedSteps.joinToString("\n")
+                }
+
+                // Set List Facts
+                recipesEnglish.facts.let {
+                    // Prepend numbers to each step
+                    val numberedFacts = it.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    binding.factsValue.text = numberedFacts.joinToString("\n")
                 }
             }
             if (recipesBahasa.size > 1) {

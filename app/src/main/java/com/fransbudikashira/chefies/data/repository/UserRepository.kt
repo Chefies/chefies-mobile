@@ -170,9 +170,7 @@ class UserRepository(
 
     fun getAvatar(): String = runBlocking { userProfilePreferences.getAvatar().first() }
 
-    fun getThemeSetting(): LiveData<Boolean> {
-        return userProfilePreferences.getThemeSetting().asLiveData()
-    }
+    fun getThemeSetting(): LiveData<Boolean> = userProfilePreferences.getThemeSetting().asLiveData()
 
     fun saveThemeSetting(isDarkModeActive: Boolean) = CoroutineScope(Dispatchers.IO). launch {
         userProfilePreferences.saveThemeSetting(isDarkModeActive)
