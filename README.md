@@ -12,9 +12,6 @@ An application that is integrated with **machine learning** to help users get re
 ## 🎨 Prototype
 [Prototype - Figma](https://www.figma.com/design/NNFJNwEGcXdVKdgLMWDids/Chefies?node-id=0-1)
 
-## 📱 APK
-Will be published soon!
-
 ## 🛠️ Tools
 - Code Editor: **Android Studio**
 - Testing API: **Postman**
