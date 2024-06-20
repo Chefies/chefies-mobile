@@ -18,6 +18,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -32,9 +33,11 @@ import com.yalantis.ucrop.UCrop
 import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
 import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
 import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
+import com.fransbudikashira.chefies.ui.changeProfile.ChangeProfileActivity
 import com.fransbudikashira.chefies.ui.main.history.HistoryFragment
 import com.fransbudikashira.chefies.ui.main.home.HomeFragment
 import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment
+import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment.Companion.REQUEST_CODE_CHANGE_PROFILE
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
 import com.fransbudikashira.chefies.util.await
 import com.fransbudikashira.chefies.util.moveActivityTo
@@ -261,11 +264,12 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             results?.let {
                 if (it.isNotEmpty()) {
                     Log.d(TAG, it.toString())
-                    moveToMLResult(it.distinct())
+                    moveToMLResult(it.distinct(), true)
                 } else {
                     Log.d(TAG, "No ingredients detected")
-                    showFailedDialog()
-                    moveActivityTo(this@MainActivity, MLResultActivity::class.java, true)
+                    moveToMLResult(null, false)
+//                    val intent = Intent(this@MainActivity, MLResultActivity::class.java)
+//                    startActivityForResult(intent, REQUEST_CODE_SHOW_FAILED_DIALOG)
                 }
             }
         }
@@ -276,32 +280,16 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         objectDetectorHelper.clear()
     }
 
-    private fun moveToMLResult(ingredients: List<String>) {
+    private fun moveToMLResult(ingredients: List<String>?, isDetected: Boolean) {
         val intent = Intent(this, MLResultActivity::class.java)
         if (currentImageUri != null) {
             val resultWithIngredients = MLResultIngredients(currentImageUri!!, ingredients)
             intent.putExtra(MLResultActivity.EXTRA_RESULT, resultWithIngredients)
+            intent.putExtra(MLResultActivity.EXTRA_DETECTED, isDetected)
             startActivity(intent)
         } else {
             showToast(getString(R.string.no_image_selected))
         }
-    }
-
-    // Dialog box failed to get ingredients
-    private fun showFailedDialog() {
-        val dialog = Dialog(this)
-        dialog.setCancelable(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.custom_dialog_failed_detect_ingredients)
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setDimAmount(0.5f)
-
-        dialog.setCanceledOnTouchOutside(true)
-        dialog.show()
     }
 
     // connfiguration when fab is clicked
@@ -360,5 +348,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
     companion object {
         private const val TAG = "MainActivity"
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+        private const val REQUEST_CODE_SHOW_FAILED_DIALOG = 1002
     }
 }
