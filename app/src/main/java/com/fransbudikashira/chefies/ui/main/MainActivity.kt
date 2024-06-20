@@ -34,7 +34,6 @@ import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
 import com.fransbudikashira.chefies.util.await
 import com.fransbudikashira.chefies.util.showToast
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener {
     private lateinit var binding: ActivityMainBinding
@@ -105,8 +104,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
             insets
         }
 
-        Log.d(TAG, "onCreate: ${Locale.getDefault().language}")
-
         objectDetectorHelper = ObjectDetectorHelper(baseContext, MODEL_PATH, LABELS_PATH, this)
         objectDetectorHelper.setupObjectDetector()
 
@@ -114,26 +111,32 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         window.navigationBarColor = getColor(R.color.md_theme_primary)
 
         binding.bottomNavigation.background = null // ensure bottomNav background doesn't appear
-        binding.bottomNavigation.menu.getItem(1).isEnabled = false // & hide item menu index 1 (space for FAB)
+        binding.bottomNavigation.menu.getItem(1).isEnabled =
+            false // & hide item menu index 1 (space for FAB)
         binding.bottomNavigation.menu.getItem(3).isVisible = false
 
         lifecycleScope.launch {
-            val defaultFragment: Fragment = if (isHistoriesEmpty()) HomeFragment() else HistoryFragment()
+            val defaultFragment: Fragment =
+                if (isHistoriesEmpty()) HomeFragment() else HistoryFragment()
 
+            loadFragment(defaultFragment)
             binding.bottomNavigation.setOnItemSelectedListener {
-                when(it.itemId) {
+                when (it.itemId) {
                     R.id.homeFragment -> {
                         loadFragment(defaultFragment)
                         true
                     }
+
                     R.id.settingsFragment -> {
                         loadFragment(SettingsFragment())
                         true
                     }
+
                     R.id.historyFragment -> {
                         loadFragment(HistoryFragment())
                         true
                     }
+
                     else -> false
                 }
             }
@@ -173,7 +176,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         return listHistory.isNullOrEmpty()
     }
 
-    private  fun loadFragment(fragment: Fragment){
+    private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.nav_host_fragment, fragment)
         transaction.commit()
@@ -267,17 +270,17 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         setVisibility(clicked)
         setAnimation(clicked)
         setClickable(clicked)
-        clicked=!clicked
+        clicked = !clicked
     }
 
     // set visibility of fab & label
     private fun setVisibility(clicked: Boolean) {
-        if(!clicked){
+        if (!clicked) {
             binding.labelFabCam.visibility = View.VISIBLE
             binding.labelFabGallery.visibility = View.VISIBLE
             binding.fabCam.visibility = View.VISIBLE
             binding.fabGallery.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.fabCam.visibility = View.INVISIBLE
             binding.fabGallery.visibility = View.INVISIBLE
             binding.labelFabCam.visibility = View.INVISIBLE
@@ -287,14 +290,13 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
 
     // set animation
     private fun setAnimation(clicked: Boolean) {
-        if(!clicked){
+        if (!clicked) {
             binding.fabButton.startAnimation(rotateopen)
             binding.labelFabCam.startAnimation(fromBottom)
             binding.labelFabGallery.startAnimation(fromBottom)
             binding.fabCam.startAnimation(fromBottom)
             binding.fabGallery.startAnimation(fromBottom)
-        }
-        else{
+        } else {
             binding.fabButton.startAnimation(rotateclose)
             binding.fabCam.startAnimation(toBottom)
             binding.fabGallery.startAnimation(toBottom)
@@ -304,14 +306,13 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
     }
 
     // set state of Fab
-    private fun setClickable(clicked: Boolean){
-        if(!clicked){
-            binding.fabCam.isClickable=true
-            binding.fabGallery.isClickable=true
-        }
-        else{
-            binding.fabCam.isClickable=false
-            binding.fabGallery.isClickable=false
+    private fun setClickable(clicked: Boolean) {
+        if (!clicked) {
+            binding.fabCam.isClickable = true
+            binding.fabGallery.isClickable = true
+        } else {
+            binding.fabCam.isClickable = false
+            binding.fabGallery.isClickable = false
         }
     }
 

@@ -2,7 +2,6 @@ package com.fransbudikashira.chefies.ui.changeProfile
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -32,10 +31,6 @@ import com.fransbudikashira.chefies.util.showToast
 import com.fransbudikashira.chefies.util.uriToFile
 import kotlinx.coroutines.launch
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -158,55 +153,15 @@ class ChangeProfileActivity : AppCompatActivity() {
     private fun updateProfile() {
         lifecycleScope.launch {
             val name = binding.etName.text.toString()
-            val avatarUrl = settingsViewModel.getAvatar()
-            val avatarFile: File? = if (currentImageUri != null) {
-                // If the user changes avatar, use the new URI
-                uriToFile(currentImageUri!!, this@ChangeProfileActivity).reduceFileImage()
-            } else if (avatarUrl.isNotEmpty()) {
-                // If not, download the avatar from the saved avatar URL
-                downloadImageToFile(this@ChangeProfileActivity, avatarUrl)
-            } else {
-                null
-            }
+            val avatarFile: File = uriToFile(currentImageUri!!, this@ChangeProfileActivity).reduceFileImage()
 
-            if (avatarFile != null) {
-                settingsViewModel.updateProfile(name, avatarFile).observe(this@ChangeProfileActivity) { result ->
-                    when (result) {
-                        is Result.Loading -> showLoading(true)
-                        is Result.Success -> handleSuccess(getString(R.string.success_update_profile))
-                        is Result.Error -> handleError(result.error)
-                    }
+            settingsViewModel.updateProfile(name, avatarFile).observe(this@ChangeProfileActivity) { result ->
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> handleSuccess(getString(R.string.success_update_profile))
+                    is Result.Error -> handleError(result.error)
                 }
-            } else {
-                showToast(getString(R.string.unsuccess_get_avatar))
             }
-        }
-    }
-
-    private fun downloadImageToFile(context: Context, imageUrl: String): File? {
-        return try {
-            val url = URL(imageUrl)
-            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-            connection.doInput = true
-            connection.connect()
-
-            val inputStream: InputStream = connection.inputStream
-            val file = File(context.cacheDir, "avatar.jpg")
-            val outputStream = FileOutputStream(file)
-
-            val buffer = ByteArray(1024)
-            var len: Int
-            while (inputStream.read(buffer).also { len = it } != -1) {
-                outputStream.write(buffer, 0, len)
-            }
-
-            outputStream.close()
-            inputStream.close()
-
-            file
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
         }
     }
 

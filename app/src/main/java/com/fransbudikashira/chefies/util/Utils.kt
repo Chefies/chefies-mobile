@@ -52,8 +52,6 @@ fun getImageUri(context: Context): Uri {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             contentValues
         )
-        // content://media/external/images/media/1000000062
-        // storage/emulated/0/Pictures/MyCamera/20230825_155303.jpg
     }
     return uri ?: getImageUriForPreQ(context)
 }
@@ -67,7 +65,6 @@ private fun getImageUriForPreQ(context: Context): Uri {
         "${BuildConfig.APPLICATION_ID}.fileprovider",
         imageFile
     )
-    //content://com.dicoding.picodiploma.mycamera.fileprovider/my_images/MyCamera/20230825_133659.jpg
 }
 
 fun createCustomTempFile(context: Context): File {
@@ -167,10 +164,6 @@ suspend fun <T> LiveData<T>.await(): T? {
 
 fun Context.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
-fun Fragment.showToast(message: String) {
-    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 }
 
 fun Context.moveTo(destination: Class<out Activity>, clearTask: Boolean = false) {

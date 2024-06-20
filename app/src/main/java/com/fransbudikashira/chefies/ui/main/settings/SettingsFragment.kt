@@ -28,12 +28,12 @@ import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.moveActivityTo
 import com.fransbudikashira.chefies.util.loadImageProfile
 import com.fransbudikashira.chefies.util.moveTo
-import com.fransbudikashira.chefies.util.showToast
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+@Suppress("DEPRECATION")
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
@@ -200,7 +200,6 @@ class SettingsFragment : Fragment() {
         btnYes.setOnClickListener {
             mainViewModel.deleteToken()
             moveTo(SignInActivity::class.java, true)
-            showToast(getString(R.string.success_logout))
         }
 
         btnNo.setOnClickListener { dialog.dismiss() }
