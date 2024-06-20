@@ -22,14 +22,11 @@ import com.fransbudikashira.chefies.R
 import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.ActivityChangeProfileBinding
 import com.fransbudikashira.chefies.helper.Result
-import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.main.MainViewModel
-import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment
 import com.fransbudikashira.chefies.ui.main.settings.SettingsViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.loadImageProfile
 import com.fransbudikashira.chefies.util.moveActivityTo
-import com.fransbudikashira.chefies.util.moveTo
 import com.fransbudikashira.chefies.util.reduceFileImage
 import com.fransbudikashira.chefies.util.showToast
 import com.fransbudikashira.chefies.util.uriToFile

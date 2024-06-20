@@ -19,25 +19,3 @@ data class HistoryEntity(
     @ColumnInfo(name = "photo_url")
     val photoUrl: Uri? = null
 ): Parcelable
-
-data class HistoryAndRecipesBahasa(
-    @Embedded
-    val history: HistoryEntity,
-
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "history_id"
-    )
-    val recipes: List<RecipeBahasaEntity>
-)
-
-data class HistoryAndRecipesEnglish(
-    @Embedded
-    val history: HistoryEntity,
-
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "history_id"
-    )
-    val recipes: List<RecipeEnglishEntity>
-)

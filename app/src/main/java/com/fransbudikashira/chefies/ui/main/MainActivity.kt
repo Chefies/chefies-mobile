@@ -1,24 +1,18 @@
 package com.fransbudikashira.chefies.ui.main
 
 import android.Manifest
-import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,14 +27,11 @@ import com.yalantis.ucrop.UCrop
 import com.fransbudikashira.chefies.helper.Constants.LABELS_PATH
 import com.fransbudikashira.chefies.helper.Constants.MODEL_PATH
 import com.fransbudikashira.chefies.helper.ObjectDetectorHelper
-import com.fransbudikashira.chefies.ui.changeProfile.ChangeProfileActivity
 import com.fransbudikashira.chefies.ui.main.history.HistoryFragment
 import com.fransbudikashira.chefies.ui.main.home.HomeFragment
 import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment
-import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment.Companion.REQUEST_CODE_CHANGE_PROFILE
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
 import com.fransbudikashira.chefies.util.await
-import com.fransbudikashira.chefies.util.moveActivityTo
 import com.fransbudikashira.chefies.util.showToast
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -126,27 +117,8 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
         binding.bottomNavigation.menu.getItem(1).isEnabled = false // & hide item menu index 1 (space for FAB)
         binding.bottomNavigation.menu.getItem(3).isVisible = false
 
-        // navigation bottom & controller configuration
-//        val navHostFragment =
-//            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-//        val navController = navHostFragment.navController
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.homeFragment, R.id.historyFragment, R.id.settingsFragment
-//            )
-//        )
-//        NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
-//        binding.bottomNavigation.setupWithNavController(navController)
-
-
         lifecycleScope.launch {
             val defaultFragment: Fragment = if (isHistoriesEmpty()) HomeFragment() else HistoryFragment()
-
-            viewModel.isSettingFragment.observe(this@MainActivity) { isSettingFragment ->
-                Log.d(TAG, "isSettingFragment: $isSettingFragment")
-                val defaultSetFragment = if (isSettingFragment) SettingsFragment() else defaultFragment
-                loadFragment(defaultSetFragment)
-            }
 
             binding.bottomNavigation.setOnItemSelectedListener {
                 when(it.itemId) {
@@ -268,8 +240,6 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
                 } else {
                     Log.d(TAG, "No ingredients detected")
                     moveToMLResult(null, false)
-//                    val intent = Intent(this@MainActivity, MLResultActivity::class.java)
-//                    startActivityForResult(intent, REQUEST_CODE_SHOW_FAILED_DIALOG)
                 }
             }
         }
@@ -348,6 +318,5 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
     companion object {
         private const val TAG = "MainActivity"
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
-        private const val REQUEST_CODE_SHOW_FAILED_DIALOG = 1002
     }
 }
