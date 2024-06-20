@@ -351,7 +351,8 @@ class ResultActivity : AppCompatActivity() {
     private fun handleError(error: String) {
         showLoading(false)
         Log.e("MLResultActivity", "Recipes Error: $error")
-        showToast(getString(R.string.failed_to_get_recipes_txt) + error)
+//        showToast(getString(R.string.failed_to_get_recipes_txt) + error)
+        showFailedRegenerateRecipeDialog()
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -415,6 +416,17 @@ class ResultActivity : AppCompatActivity() {
             finish()
         }
         btnNo.setOnClickListener { dialog.dismiss() }
+
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+    }
+
+    private fun showFailedRegenerateRecipeDialog() {
+        val dialog = Dialog(this@ResultActivity)
+        dialog.setContentView(R.layout.custom_dialog_failed_regenerate_recipe)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setDimAmount(0.5f)
 
         dialog.setCanceledOnTouchOutside(true)
         dialog.show()
