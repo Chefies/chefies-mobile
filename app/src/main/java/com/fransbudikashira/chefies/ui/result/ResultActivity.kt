@@ -12,7 +12,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -252,12 +251,18 @@ class ResultActivity : AppCompatActivity() {
                 recipesBahasa[index].steps.let { steps ->
                     // Prepend numbers to each step
                     val numberedSteps = steps.mapIndexed { index, step ->
-                        "${index + 1}. ${step.replace("\\s+".toRegex(), "").trim()}"
-                    }.toTypedArray()
-                    val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                        this@ResultActivity, android.R.layout.simple_list_item_1, numberedSteps
-                    )
-                    stepsValue.adapter = arrayAdapter
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    stepsValue.text = numberedSteps.joinToString("\n")
+                }
+
+                // Set List Facts
+                recipesBahasa[index].facts.let {
+                    // Prepend numbers to each step
+                    val numberedFacts = it.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    binding.factsValue.text = numberedFacts.joinToString("\n")
                 }
             }
         } else {
@@ -271,11 +276,19 @@ class ResultActivity : AppCompatActivity() {
                 // Set List Steps
                 recipesEnglish[index].steps.let { steps ->
                     // Prepend numbers to each step
-                    val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
-                    val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                        this@ResultActivity, android.R.layout.simple_list_item_1, numberedSteps
-                    )
-                    stepsValue.adapter = arrayAdapter
+                    val numberedSteps = steps.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    stepsValue.text = numberedSteps.joinToString("\n")
+                }
+
+                // Set List Facts
+                recipesBahasa[index].facts.let {
+                    // Prepend numbers to each step
+                    val numberedFacts = it.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    binding.factsValue.text = numberedFacts.joinToString("\n")
                 }
             }
         }
@@ -350,6 +363,8 @@ class ResultActivity : AppCompatActivity() {
             ingredientsValue.visibility = if (isLoading) View.GONE else View.VISIBLE
             stepsKey.visibility = if (isLoading) View.GONE else View.VISIBLE
             stepsValue.visibility = if (isLoading) View.GONE else View.VISIBLE
+            factsKey.visibility = if (isLoading) View.GONE else View.VISIBLE
+            factsValue.visibility = if (isLoading) View.GONE else View.VISIBLE
 
             retryButton.isEnabled = !isLoading
             nextButton.isEnabled = !isLoading
@@ -427,6 +442,7 @@ class ResultActivity : AppCompatActivity() {
             .into(binding.imageView)
         // Set Title
         binding.editText.setText(historyData.title)
+
         // Set Recipe
         if (getDefaultLanguage() == "in") {
             val recipeBahasa = recipesBahasa.first()
@@ -440,11 +456,19 @@ class ResultActivity : AppCompatActivity() {
                 // Set List Steps
                 recipeBahasa.steps.let { steps ->
                     // Prepend numbers to each step
-                    val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
-                    val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                        this@ResultActivity, android.R.layout.simple_list_item_1, numberedSteps
-                    )
-                    stepsValue.adapter = arrayAdapter
+                    val numberedSteps = steps.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    stepsValue.text = numberedSteps.joinToString("\n")
+                }
+
+                // Set List Facts
+                recipeBahasa.facts.let {
+                    // Prepend numbers to each step
+                    val numberedFacts = it.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    binding.factsValue.text = numberedFacts.joinToString("\n")
                 }
             }
             if (recipesBahasa.size > 1) {
@@ -462,11 +486,19 @@ class ResultActivity : AppCompatActivity() {
                 // Set List Steps
                 recipesEnglish.steps.let { steps ->
                     // Prepend numbers to each step
-                    val numberedSteps = steps.mapIndexed { index, step -> "${index + 1}. $step" }.toTypedArray()
-                    val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                        this@ResultActivity, android.R.layout.simple_list_item_1, numberedSteps
-                    )
-                    stepsValue.adapter = arrayAdapter
+                    val numberedSteps = steps.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    stepsValue.text = numberedSteps.joinToString("\n")
+                }
+
+                // Set List Facts
+                recipesEnglish.facts.let {
+                    // Prepend numbers to each step
+                    val numberedFacts = it.mapIndexed { index, step ->
+                        "${index + 1}. ${step.replace("\\s+".toRegex(), " ").trim()}"
+                    }
+                    binding.factsValue.text = numberedFacts.joinToString("\n")
                 }
             }
             if (recipesBahasa.size > 1) {
@@ -493,6 +525,8 @@ class ResultActivity : AppCompatActivity() {
         val ingredientsValue = ObjectAnimator.ofFloat(binding.ingredientsValue, View.ALPHA, 1f).setDuration(200)
         val stepsKey = ObjectAnimator.ofFloat(binding.stepsKey, View.ALPHA, 1f).setDuration(200)
         val stepsValue = ObjectAnimator.ofFloat(binding.stepsValue, View.ALPHA, 1f).setDuration(200)
+        val factsKey = ObjectAnimator.ofFloat(binding.factsKey, View.ALPHA, 1f).setDuration(200)
+        val factsValue = ObjectAnimator.ofFloat(binding.factsValue, View.ALPHA, 1f).setDuration(200)
 
         val previousButton = ObjectAnimator.ofFloat(binding.previousButton, View.ALPHA, 1f).apply {
             duration = 500
@@ -520,7 +554,7 @@ class ResultActivity : AppCompatActivity() {
         }
 
         AnimatorSet().apply {
-            playSequentially(bottomAction, title, ingredientsKey, ingredientsValue, stepsKey, stepsValue)
+            playSequentially(bottomAction, title, ingredientsKey, ingredientsValue, stepsKey, stepsValue, factsKey, factsValue)
             start()
         }
     }

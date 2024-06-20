@@ -226,10 +226,8 @@ class SettingsFragment : Fragment() {
             binding.switchTheme.isChecked = isDarkModeActive
             if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                binding.switchTheme.isChecked = true
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                binding.switchTheme.isChecked = false
             }
         }
     }
