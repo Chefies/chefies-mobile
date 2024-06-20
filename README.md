@@ -60,4 +60,4 @@ An application that is integrated with **machine learning** to help users get re
     - Java Version : 18
   - ## Instalation
     - [Chefies App](https://github.com/Chefies/chefies-mobile/releases/tag/v1.0)
-    - [Model Machine Learning](https://github.com/Chefies/chefies-machine-learning/releases/tag/v1.0)
+    - Because of free GitHub LFS limitation, we cannot store the actual file of TFLite model in this repository. If you got any error when cloning from this repository, paste the model from [Model Machine Learning](https://github.com/Chefies/chefies-machine-learning/releases/tag/v1.0) to 'app/src/main/ml' as 'ingredient_classification.tflite'
