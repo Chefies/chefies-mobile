@@ -43,7 +43,8 @@ import kotlin.coroutines.suspendCoroutine
 class MLResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMlresultBinding
 
-    private lateinit var result: MLResultIngredients
+    private var result: MLResultIngredients? = null
+    private var isDetected: Boolean = false
     private lateinit var adapter: IngredientItemAdapter
     private val ingredients = mutableListOf<String>()
 
@@ -175,7 +176,7 @@ class MLResultActivity : AppCompatActivity() {
         isLoading(false)
         val recipeBahasa = data.recipes[0]
         val recipeEnglish = data.recipes[1]
-        val photoUrl = result.photoUrl
+        val photoUrl = result?.photoUrl
 
         val historyEntity = HistoryEntity(
             title = "",
@@ -228,13 +229,20 @@ class MLResultActivity : AppCompatActivity() {
         binding.rcIngredient.layoutManager = layoutManager
         // Get Intent Data
         @Suppress("DEPRECATION")
-        result = intent.getParcelableExtra(EXTRA_RESULT)!!
-        val resultIngredients = result.listIngredient
-        resultIngredients.let {
-            for (ingredient in it) {
-                ingredients.add(ingredient.prettierIngredientResult(this))
+        result = intent.getParcelableExtra(EXTRA_RESULT)
+        isDetected = intent.getBooleanExtra(EXTRA_DETECTED, false)
+
+        if (isDetected) {
+            val resultIngredients = result?.listIngredient!!
+            resultIngredients.let {
+                for (ingredient in it) {
+                    ingredients.add(ingredient.prettierIngredientResult(this))
+                }
             }
+        } else {
+            showFailedDetectIngredientsDialog()
         }
+
         // Set Content Item
         adapter = IngredientItemAdapter(
             updateCallback = { position, item -> updateIngredient(position, item) },
@@ -292,6 +300,23 @@ class MLResultActivity : AppCompatActivity() {
         checkEnabledButton()
     }
 
+    // Dialog box failed to detect ingredients
+    private fun showFailedDetectIngredientsDialog() {
+        val dialog = Dialog(this)
+        dialog.setCancelable(false)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.custom_dialog_failed_detect_ingredients)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setDimAmount(0.5f)
+
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.show()
+    }
+
     private fun moveToResult(result: MLResultModel?) {
         val intent = Intent(this, ResultActivity::class.java)
         intent.putExtra(ResultActivity.EXTRA_RESULT, result)
@@ -323,6 +348,7 @@ class MLResultActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_RESULT = "EXTRA_RESULT"
+        const val EXTRA_DETECTED = "EXTRA_DETECTED"
         const val TAG = "MLResultActivity"
     }
 
