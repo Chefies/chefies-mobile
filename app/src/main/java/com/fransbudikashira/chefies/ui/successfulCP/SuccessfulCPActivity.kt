@@ -36,7 +36,6 @@ class SuccessfulCPActivity : AppCompatActivity() {
         // handle button
         binding.btnOk.setOnClickListener {
             moveTo(MainActivity::class.java, true)
-//            moveActivityTo(this, MainActivity::class.java, true)
         }
     }
 }

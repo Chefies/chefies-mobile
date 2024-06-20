@@ -13,7 +13,6 @@ import com.google.gson.Gson
 
 class MainRepository(
     private val apiService: ApiService,
-    private val tokenPreferences: TokenPreferences
 ) {
 
     fun getRecipes(ingredients: List<String>): LiveData<Result<RecipeResponse>> = liveData {
@@ -45,10 +44,9 @@ class MainRepository(
         private var instance: MainRepository? = null
         fun getInstance(
             apiService: ApiService,
-            tokenPreferences: TokenPreferences
         ): MainRepository =
             instance ?: synchronized(this) {
-                instance ?: MainRepository(apiService, tokenPreferences)
+                instance ?: MainRepository(apiService)
             }.also { instance = it }
 
         private const val TAG = "MainRepository"
