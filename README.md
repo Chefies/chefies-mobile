@@ -52,3 +52,15 @@ Will be published soon!
 - Coroutines Flow
 - ViewBinding
 - Jetpack Compose with Material3
+
+## Getting Started Application
+- ## Preparation
+  - ## Tools Sofware
+    This is build with Android Studio Jelly Fish, you can use any other version but if any crash or error you can use the latest version of android studio.
+    - [Android Studio](https://developer.android.com/studio)
+    - [Postmant](https://www.postman.com/) to test API from Cloud Computing
+  - ## Requirements
+    - Java Version : 18
+  - ## Instalation
+    - [Chefies App](https://github.com/Chefies/chefies-mobile/releases/tag/v1.0)
+    - [Model Machine Learning](https://github.com/Chefies/chefies-machine-learning/releases/tag/v1.0)
