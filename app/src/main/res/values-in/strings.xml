@@ -102,4 +102,6 @@
     <string name="languange_icon_txt">ikon bahasa</string>
     <string name="dark_mode_icon_txt">ikon mode malam</string>
     <string name="logout_icon">ikon keluar</string>
+    <string name="new_password_txt">kata sandi baru</string>
+    <string name="old_password_txt">kata sandi lama</string>
 </resources>

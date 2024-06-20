@@ -304,11 +304,13 @@ class ResultActivity : AppCompatActivity() {
             title = recipeBahasa.name,
             ingredients = recipeBahasa.ingredients,
             steps = recipeBahasa.steps,
+            facts = recipeBahasa.facts
         )
         val recipeEnglishEntity = RecipeEnglishEntity(
             title = recipeEnglish.name,
             ingredients = recipeEnglish.ingredients,
             steps = recipeEnglish.steps,
+            facts = recipeEnglish.facts
         )
 
         // Add to temporary variable

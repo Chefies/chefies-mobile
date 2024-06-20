@@ -22,5 +22,8 @@ data class RecipeEnglishEntity(
     val steps: List<String>,
 
     @ColumnInfo(name = "history_id")
-    val historyId: Long? = null
+    val historyId: Long? = null,
+
+    @ColumnInfo(name = "facts")
+    val facts: List<String>
 ): Parcelable

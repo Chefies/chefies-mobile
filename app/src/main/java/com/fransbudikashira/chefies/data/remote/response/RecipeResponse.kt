@@ -26,5 +26,8 @@ data class RecipesItem(
 	val lang: String,
 
 	@field:SerializedName("steps")
-	val steps: List<String>
+	val steps: List<String>,
+
+	@field:SerializedName("facts")
+	val facts: List<String>
 ): Parcelable

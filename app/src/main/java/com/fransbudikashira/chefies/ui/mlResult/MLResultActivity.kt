@@ -174,7 +174,6 @@ class MLResultActivity : AppCompatActivity() {
     // handle success result get recipes from API
     private fun handleSuccess(data: RecipeResponse) {
         isLoading(false)
-        showToast(getString(R.string.success_get_recipes_txt))
         val recipeBahasa = data.recipes[0]
         val recipeEnglish = data.recipes[1]
         val photoUrl = result.photoUrl
@@ -187,12 +186,14 @@ class MLResultActivity : AppCompatActivity() {
             title = recipeBahasa.name,
             ingredients = recipeBahasa.ingredients,
             steps = recipeBahasa.steps,
+            facts = recipeBahasa.facts
         )
         val recipeEnglishEntity = RecipeEnglishEntity(
             id = null,
             title = recipeEnglish.name,
             ingredients = recipeEnglish.ingredients,
             steps = recipeEnglish.steps,
+            facts = recipeEnglish.facts
         )
 
         moveToResult(MLResultModel(historyEntity, listOf(recipeBahasaEntity), listOf(recipeEnglishEntity)))
