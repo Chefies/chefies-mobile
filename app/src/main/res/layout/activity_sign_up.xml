@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
+    android:background="?attr/colorPrimary"
+    android:orientation="vertical"
     tools:context=".ui.signUp.SignUpActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
+        style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toAppBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="36dp"
@@ -30,15 +29,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_activity"
         android:fillViewport="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,185 +44,197 @@
                 android:id="@+id/introTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_up_intro_title"
                 android:layout_marginTop="24dp"
-                android:textColor="@color/primary"
-                android:textSize="24sp"
-                android:includeFontPadding="false"
                 android:alpha="0"
-                tools:alpha="1"
+                android:includeFontPadding="false"
+                android:text="@string/sign_up_intro_title"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="24sp"
                 app:fontFamily="@font/poppins_semibold"
+                app:layout_constraintBottom_toTopOf="@+id/introSubTitle"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/introSubTitle"/>
+                tools:alpha="1" />
 
             <TextView
                 android:id="@+id/introSubTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_up_intro_sub_title"
-                android:textColor="@color/black"
-                android:textSize="14sp"
                 android:layout_marginTop="4dp"
-                android:includeFontPadding="false"
                 android:alpha="0"
-                tools:alpha="1"
+                android:includeFontPadding="false"
+                android:text="@string/sign_up_intro_sub_title"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="14sp"
                 app:fontFamily="@font/poppins_regular"
+                app:layout_constraintBottom_toTopOf="@+id/illustration"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/introTitle"
-                app:layout_constraintBottom_toTopOf="@+id/illustration"/>
+                tools:alpha="1" />
 
             <ImageView
                 android:id="@+id/illustration"
                 android:layout_width="wrap_content"
                 android:layout_height="160dp"
                 android:layout_marginTop="32dp"
+                android:alpha="0"
                 android:contentDescription="@string/illustration"
                 android:src="@drawable/il_sign_up"
-                android:alpha="0"
-                tools:alpha="1"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/edtNameLayout"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/introSubTitle"
-                app:layout_constraintBottom_toTopOf="@+id/edtNameLayout"/>
+                tools:alpha="1" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:id="@+id/edtNameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:hint="@string/name"
                 android:alpha="0"
-                tools:alpha="1"
-                app:boxStrokeWidth="1.5dp"
-                app:endIconMode="clear_text"
+                android:hint="@string/name"
                 app:boxCornerRadiusBottomEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
                 app:boxCornerRadiusTopEnd="15dp"
                 app:boxCornerRadiusTopStart="15dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:boxStrokeWidth="1.5dp"
+                app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/illustration">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/illustration"
+                tools:alpha="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"/>
+                    android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:id="@+id/edtEmailLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="@string/email"
                 android:alpha="0"
-                tools:alpha="1"
-                app:boxStrokeWidth="1.5dp"
-                app:endIconMode="clear_text"
+                android:hint="@string/email"
                 app:boxCornerRadiusBottomEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
                 app:boxCornerRadiusTopEnd="15dp"
                 app:boxCornerRadiusTopStart="15dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:boxStrokeWidth="1.5dp"
+                app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtNameLayout">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtNameLayout"
+                tools:alpha="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:id="@+id/edtPasswordLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="@string/password"
                 android:alpha="0"
-                tools:alpha="1"
-                app:boxStrokeWidth="1.5dp"
-                app:endIconMode="password_toggle"
+                android:hint="@string/password"
                 app:boxCornerRadiusBottomEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
                 app:boxCornerRadiusTopEnd="15dp"
                 app:boxCornerRadiusTopStart="15dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:boxStrokeWidth="1.5dp"
+                app:endIconMode="password_toggle"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtEmailLayout">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtEmailLayout"
+                tools:alpha="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button"
+                android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="24dp"
+                android:alpha="0"
+                android:enabled="false"
                 android:text="@string/sign_up"
                 android:textSize="16sp"
-                android:enabled="false"
-                android:alpha="0"
-                tools:alpha="1"
                 app:cornerRadius="15dp"
                 app:fontFamily="@font/poppins_medium"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtPasswordLayout"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtPasswordLayout"
+                tools:alpha="1" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:indeterminateTint="@color/white"
+                android:progressTint="@color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/btnRegister"
+                app:layout_constraintEnd_toEndOf="@+id/btnRegister"
+                app:layout_constraintStart_toStartOf="@+id/btnRegister"
+                app:layout_constraintTop_toTopOf="@+id/btnRegister" />
 
             <TextView
                 android:id="@+id/bottomText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/have_an_account"
-                android:textColor="@color/black"
-                android:textSize="14sp"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="50dp"
-                android:includeFontPadding="false"
                 android:alpha="0"
-                tools:alpha="1"
-                app:layout_constraintHorizontal_chainStyle="packed"
+                android:includeFontPadding="false"
+                android:text="@string/have_an_account"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="14sp"
                 app:fontFamily="@font/poppins_regular"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/moveToSignIn"
-                app:layout_constraintTop_toBottomOf="@+id/button"/>
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnRegister"
+                tools:alpha="1" />
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:id="@+id/moveToSignIn"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_in"
-                android:textColor="@color/primary"
-                android:textSize="14sp"
-                android:textAllCaps="false"
-                android:letterSpacing="0"
-                android:gravity="start|center_vertical"
                 android:alpha="0"
-                tools:alpha="1"
-                app:fontFamily="@font/poppins_semibold"
                 android:backgroundTint="@android:color/transparent"
+                android:gravity="start|center_vertical"
+                android:letterSpacing="0"
+                android:text="@string/sign_in"
+                android:textAllCaps="false"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="14sp"
+                app:fontFamily="@font/poppins_semibold"
                 app:layout_constraintBottom_toBottomOf="@+id/bottomText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/bottomText"
-                app:layout_constraintTop_toTopOf="@+id/bottomText" />
+                app:layout_constraintTop_toTopOf="@+id/bottomText"
+                tools:alpha="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -6,21 +6,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/primary"
+    android:background="?attr/colorPrimary"
     tools:context=".ui.mlResult.MLResultActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
+        style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toAppBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
-            app:title="Your Photo Result"
+            app:title="@string/your_photo_result_txt"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:titleTextAppearance="@style/TextAppearance.Toolbar.Title.Bold"
             tools:ignore="RtlSymmetry" />
@@ -37,6 +38,7 @@
             android:id="@+id/label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnBackground"
             android:text="@string/please_add_or_update_your_ingredients"
             android:layout_marginTop="24dp"
             android:textSize="13sp"
@@ -131,8 +133,8 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:visibility="gone"
-            android:indeterminateTint="@color/white"
-            android:progressTint="@color/white"
+            android:indeterminateTint="?attr/colorOnPrimary"
+            android:progressTint="?attr/colorOnPrimary"
             app:layout_constraintStart_toStartOf="@+id/btnGetSuggestions"
             app:layout_constraintEnd_toEndOf="@+id/btnGetSuggestions"
             app:layout_constraintBottom_toBottomOf="@+id/btnGetSuggestions"

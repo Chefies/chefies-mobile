@@ -9,12 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.fransbudikashira.chefies.R
-import com.fransbudikashira.chefies.data.local.entity.MLResultEntity
 import com.fransbudikashira.chefies.ui.main.MainActivity
-import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
-import com.fransbudikashira.chefies.ui.result.ResultActivity
-import com.fransbudikashira.chefies.ui.signIn.SignInActivity
-import com.fransbudikashira.chefies.ui.signUp.SignUpActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -3,26 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:layout_marginHorizontal="40dp"
     android:elevation="10dp"
-    android:layout_gravity="center"
+    app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
     app:cardCornerRadius="15dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
-        android:paddingEnd="10dp"
         android:paddingTop="20dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:includeFontPadding="false"
             android:text="@string/are_you_sure_want_to_leave"
             android:textSize="14sp"
-            android:includeFontPadding="false"
             app:fontFamily="@font/poppins_semibold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,44 +32,44 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:includeFontPadding="false"
             android:text="@string/this_result_will_not_be_saved"
             android:textSize="13sp"
-            android:includeFontPadding="false"
-            android:layout_marginTop="3dp"
             app:fontFamily="@font/poppins_regular"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
-        
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="8dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/message">
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.TextButton.Dialog"
                 android:id="@+id/btn_no"
+                style="@style/Widget.Material3.Button.TextButton.Dialog"
                 android:layout_width="46dp"
                 android:layout_height="36dp"
+                android:includeFontPadding="false"
                 android:padding="0dp"
                 android:text="@string/no_text"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnBackground"
                 android:textSize="13sp"
-                android:includeFontPadding="false"
                 app:fontFamily="@font/poppins_medium" />
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.Material3.Button.TextButton.Dialog"
                 android:id="@+id/btn_yes"
+                style="@style/Widget.Material3.Button.TextButton.Dialog"
                 android:layout_width="46dp"
                 android:layout_height="36dp"
+                android:includeFontPadding="false"
                 android:padding="0dp"
                 android:text="@string/yes_text"
                 android:textSize="13sp"
-                android:includeFontPadding="false"
-                app:fontFamily="@font/poppins_semibold"/>
+                app:fontFamily="@font/poppins_semibold" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,15 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_primary"
+    android:background="?attr/colorPrimary"
     tools:context=".ui.main.MainActivity">
 
     <!--  App Bar with Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
+        style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintBottom_toTopOf="@id/container_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,13 +21,13 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            app:title="@string/app_name"
-            app:titleTextColor="@color/md_theme_onPrimary"
-            app:titleMarginStart="50dp"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_primary"
-            android:elevation="4dp" />
+            android:elevation="4dp"
+            app:title="@string/app_name"
+            app:titleMarginStart="50dp"
+            app:titleTextAppearance="@style/TextAppearance.Toolbar.Title.Bold" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Fragment Container -->
@@ -44,33 +44,92 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph" />
+            android:layout_height="match_parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="100dp"
+            android:paddingBottom="15dp">
+
+            <!-- FAB Camera -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_cam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:contentDescription="@string/open_camera"
+                android:focusable="true"
+                android:src="@drawable/ic_camera"
+                android:visibility="invisible"
+                app:fabCustomSize="65dp"
+                app:layout_constraintBottom_toTopOf="@+id/label_fab_cam"
+                app:layout_constraintStart_toStartOf="parent"
+                app:maxImageSize="35dp"
+                app:shapeAppearanceOverlay="@style/circular" />
+
+            <TextView
+                android:id="@+id/label_fab_cam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:text="@string/open_camera"
+                android:textColor="?attr/colorOnBackground"
+                android:visibility="invisible"
+                app:fontFamily="@font/poppins"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/fab_cam"
+                app:layout_constraintStart_toStartOf="@id/fab_cam" />
+
+            <!-- FAB Upload -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:contentDescription="@string/open_gallery"
+                android:focusable="true"
+                android:src="@drawable/ic_gallery"
+                android:visibility="invisible"
+                app:fabCustomSize="65dp"
+                app:layout_constraintBottom_toTopOf="@+id/label_fab_gallery"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:maxImageSize="35dp"
+                app:shapeAppearanceOverlay="@style/circular" />
+
+            <TextView
+                android:id="@+id/label_fab_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:text="@string/open_gallery"
+                android:textColor="?attr/colorOnBackground"
+                android:visibility="invisible"
+                app:fontFamily="@font/poppins"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/fab_gallery"
+                app:layout_constraintStart_toStartOf="@id/fab_gallery" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
     <!-- BottomAppBar with Bottom Navigation -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <!-- for make shadow, it works, but the shadow doesn't follow the curve -->
-        <!--        <View-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="4dp"-->
-        <!--            android:background="@drawable/shadow"-->
-        <!--            app:layout_anchor="@id/bottom_navigation"-->
-        <!--            app:layout_anchorGravity="top"/>-->
-
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
-            style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:layout_gravity="bottom"
@@ -84,7 +143,7 @@
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation"
-                style="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface"
+                style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:labelVisibilityMode="selected"
@@ -93,7 +152,6 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_button"
-            style="@style/Widget.Material3.FloatingActionButton.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/action_to_show_option_take_image_text"
