@@ -3,7 +3,6 @@ package com.fransbudikashira.chefies.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import com.fransbudikashira.chefies.data.local.dataStore.TokenPreferences
 import com.fransbudikashira.chefies.data.remote.request.IngredientsRequest
 import com.fransbudikashira.chefies.data.remote.response.RecipeResponse
 import com.fransbudikashira.chefies.data.remote.response.RegisterResponse
@@ -12,7 +11,7 @@ import com.fransbudikashira.chefies.helper.Result
 import com.google.gson.Gson
 
 class MainRepository(
-    private val apiService: ApiService,
+    private val apiService: ApiService
 ) {
 
     fun getRecipes(ingredients: List<String>): LiveData<Result<RecipeResponse>> = liveData {
@@ -43,7 +42,7 @@ class MainRepository(
         @Volatile
         private var instance: MainRepository? = null
         fun getInstance(
-            apiService: ApiService,
+            apiService: ApiService
         ): MainRepository =
             instance ?: synchronized(this) {
                 instance ?: MainRepository(apiService)

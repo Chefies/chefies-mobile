@@ -65,7 +65,6 @@ class MLResultActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         window.statusBarColor = getColor(R.color.md_theme_primary)
         window.navigationBarColor = getColor(R.color.md_theme_background)
 
@@ -228,7 +227,6 @@ class MLResultActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         binding.rcIngredient.layoutManager = layoutManager
         // Get Intent Data
-
         @Suppress("DEPRECATION")
         result = intent.getParcelableExtra(EXTRA_RESULT)
         isDetected = intent.getBooleanExtra(EXTRA_DETECTED, false)
