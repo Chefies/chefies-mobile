@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -38,6 +37,7 @@ import com.fransbudikashira.chefies.ui.main.home.HomeFragment
 import com.fransbudikashira.chefies.ui.main.settings.SettingsFragment
 import com.fransbudikashira.chefies.ui.mlResult.MLResultActivity
 import com.fransbudikashira.chefies.util.await
+import com.fransbudikashira.chefies.util.moveActivityTo
 import com.fransbudikashira.chefies.util.showToast
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -265,6 +265,7 @@ class MainActivity : AppCompatActivity(), ObjectDetectorHelper.DetectorListener 
                 } else {
                     Log.d(TAG, "No ingredients detected")
                     showFailedDialog()
+                    moveActivityTo(this@MainActivity, MLResultActivity::class.java, true)
                 }
             }
         }

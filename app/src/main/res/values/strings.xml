@@ -99,7 +99,7 @@
     <string name="failed_to_get_image_uri">Failed to get image URI</string>
     <string name="failed_to_take_picture">Failed to take picture</string>
     <string name="no_image_selected">No Image Selected</string>
-    <string name="failed_to_regenerate_recipe">Failed to regenerate recipe</string>
+    <string name="failed_to_regenerate_recipe">There is an error, please try again!</string>
     <string name="success_logout">Success Logout</string>
     <string name="move_activity_action_txt">move activity action</string>
     <string name="languange_icon_txt">languange icon</string>

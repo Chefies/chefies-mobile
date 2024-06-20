@@ -96,7 +96,7 @@
     <string name="failed_to_get_image_uri">Gagal mendapatkan URI gambar</string>
     <string name="failed_to_take_picture">Gagal mengambil gambar</string>
     <string name="no_image_selected">Tidak Ada Gambar yang Dipilih</string>
-    <string name="failed_to_regenerate_recipe">Failed to regenerate recipe</string>
+    <string name="failed_to_regenerate_recipe">Terjadi kesalahan, mohon coba ulang kembali!</string>
     <string name="success_logout">Berhasil keluar</string>
     <string name="move_activity_action_txt">aksi berpindah aktifitas</string>
     <string name="languange_icon_txt">ikon bahasa</string>
