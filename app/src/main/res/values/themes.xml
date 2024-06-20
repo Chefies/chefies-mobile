@@ -7,7 +7,6 @@
         <item name="android:windowIsTranslucent">true</item>
         <!-- MATERIAL3 THEME COLOR ITEMS -->
         <item name="colorPrimary">@color/md_theme_primary</item>
-        <item name="colorPrimaryVariant">@color/primaryVariant</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
         <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
@@ -81,25 +80,22 @@
         <item name="android:colorForeground">@color/gray</item>
     </style>
 
-<!-- Style for custom dialog box -->
+    <!-- Style for custom dialog box -->
     <!-- Style for the title TextView -->
     <style name="ConfirmLogoutTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:drawablePadding">10dp</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/primary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- Style for the message TextView -->
     <style name="ConfirmLogoutMessage">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="android:textColor">@color/primaryVariant</item>
+        <item name="android:textColor">?attr/colorPrimaryVariant</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -117,7 +113,7 @@
 
     <!-- Style for the No button -->
     <style name="NoButton" parent="CustomMaterialButton">
-        <item name="android:textColor">@color/primaryVariant</item>
+        <item name="android:textColor">?attr/colorPrimaryVariant</item>
     </style>
 
     <!-- Style for the Yes button -->

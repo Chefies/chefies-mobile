@@ -13,7 +13,6 @@ import com.google.gson.Gson
 
 class MainRepository(
     private val apiService: ApiService,
-    private val tokenPreferences: TokenPreferences
 ) {
 
     fun getRecipes(ingredients: List<String>): LiveData<Result<RecipeResponse>> = liveData {
@@ -24,8 +23,9 @@ class MainRepository(
                 if (response.body() != null) {
                     emit(Result.Success(response.body()!!))
                     Log.d(TAG, "Get Recipes Response: ${response.body()}")
-                } else {
-                    emit(Result.Error("Response body is null"))
+                }
+                if (response.body()!!.recipes.isEmpty()) {
+                    emit(Result.Error("Recipe not available for this ingredients"))
                 }
             } else {
                 val errorBody = response.errorBody()?.string()
@@ -44,10 +44,9 @@ class MainRepository(
         private var instance: MainRepository? = null
         fun getInstance(
             apiService: ApiService,
-            tokenPreferences: TokenPreferences
         ): MainRepository =
             instance ?: synchronized(this) {
-                instance ?: MainRepository(apiService, tokenPreferences)
+                instance ?: MainRepository(apiService)
             }.also { instance = it }
 
         private const val TAG = "MainRepository"

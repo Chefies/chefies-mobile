@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
+    android:background="?attr/colorPrimary"
+    android:orientation="vertical"
     tools:context=".ui.result.ResultActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
+        style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toAppBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:navigationIcon="@drawable/ic_arrow_back">
@@ -30,267 +33,287 @@
                     android:id="@+id/editText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/fill_the_title"
                     android:layout_marginEnd="8dp"
+                    android:background="@drawable/edt_underline"
+                    android:gravity="start"
+                    android:hint="@string/fill_the_title"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:padding="4dp"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textColorHint="?attr/colorOnPrimary"
                     android:textSize="16sp"
-                    android:textColor="@color/softBlue"
-                    android:gravity="start"
-                    android:textColorHint="@color/littleBlue"
-                    android:background="@drawable/edt_underline"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/saveButton"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageButton
                     android:id="@+id/saveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/ic_save"
-                    android:contentDescription="@string/save"
                     android:layout_marginEnd="20dp"
-                    android:padding="12dp"
+                    android:background="@null"
+                    android:contentDescription="@string/save"
                     android:foreground="@drawable/ripple_effect"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_save"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/bg_activity">
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:scrollbarSize="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginHorizontal="24dp"
-            android:clickable="false"
-            android:elevation="0dp"
-            android:alpha="0"
-            tools:alpha="1"
-            app:cardCornerRadius="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="0dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_activity"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imageView"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:contentDescription="@string/result_image"
-                android:scaleType="centerCrop"
-                android:src="@drawable/telur" />
-        </androidx.cardview.widget.CardView>
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="24dp"
+                android:alpha="0"
+                android:clickable="false"
+                android:elevation="0dp"
+                app:cardCornerRadius="15dp"
+                tools:alpha="1">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
-            app:layout_constraintBottom_toTopOf="@+id/retryButton"/>
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:contentDescription="@string/result_image"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/telur" />
+            </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Tomato Rice"
-            android:layout_marginTop="12dp"
-            android:layout_marginHorizontal="24dp"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:includeFontPadding="false"
-            android:alpha="0"
-            tools:alpha="1"
-            app:fontFamily="@font/poppins_semibold"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"/>
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="12dp"
+                android:alpha="0"
+                android:includeFontPadding="false"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="20sp"
+                app:fontFamily="@font/poppins_semibold"
+                tools:alpha="1"
+                tools:text="Tomato Rice" />
 
-        <TextView
-            android:id="@+id/ingredientsKey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginHorizontal="24dp"
-            android:text="@string/ingredients"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:includeFontPadding="false"
-            android:alpha="0"
-            tools:alpha="1"
-            app:fontFamily="@font/poppins_semibold"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"/>
+            <TextView
+                android:id="@+id/ingredientsKey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0"
+                android:includeFontPadding="false"
+                android:text="@string/ingredients"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="16sp"
+                app:fontFamily="@font/poppins_semibold"
+                tools:alpha="1" />
 
-        <TextView
-            android:id="@+id/ingredientsValue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginHorizontal="24dp"
-            tools:text="Tomato, Rice"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:includeFontPadding="false"
-            android:alpha="0"
-            tools:alpha="1"
-            app:fontFamily="@font/poppins_regular"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ingredientsKey"/>
+            <TextView
+                android:id="@+id/ingredientsValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="2dp"
+                android:alpha="0"
+                android:includeFontPadding="false"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="16sp"
+                app:fontFamily="@font/poppins_regular"
+                tools:alpha="1"
+                tools:text="Tomato, Rice" />
 
-        <TextView
-            android:id="@+id/stepsKey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginHorizontal="24dp"
-            android:text="@string/steps"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:includeFontPadding="false"
-            android:alpha="0"
-            tools:alpha="1"
-            app:fontFamily="@font/poppins_semibold"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ingredientsValue"/>
+            <TextView
+                android:id="@+id/stepsKey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0"
+                android:includeFontPadding="false"
+                android:text="@string/steps"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="16sp"
+                app:fontFamily="@font/poppins_semibold"
+                tools:alpha="1" />
 
-        <ListView
-            android:id="@+id/stepsValue"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginHorizontal="24dp"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:clickable="false"
-            android:listSelector="@android:color/transparent"
-            android:layout_marginBottom="50dp"
-            android:alpha="0"
-            tools:alpha="1"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stepsKey"
-            app:layout_constraintBottom_toBottomOf="@+id/retryButton"/>
+            <TextView
+                android:id="@+id/stepsValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="2dp"
+                android:alpha="0"
+                android:lineSpacingMultiplier="1.15"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="16sp"
+                app:fontFamily="@font/poppins_regular"
+                tools:alpha="1"
+                tools:text="Steps Value" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-            android:id="@+id/previousButton"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:layout_marginEnd="1dp"
-            android:text="@string/back"
-            android:textColor="@color/primary"
-            android:includeFontPadding="false"
-            android:textSize="14sp"
-            android:elevation="10dp"
-            android:background="@drawable/bg_rounded_start"
-            android:padding="0dp"
-            android:alpha="0"
-            tools:alpha="1"
-            android:visibility="gone"
-            app:icon="@drawable/ic_arrow_back"
-            app:iconTint="@color/primary"
-            app:iconSize="16dp"
-            app:iconGravity="textStart"
-            app:fontFamily="@font/poppins_regular"
-            app:layout_constraintTop_toTopOf="@+id/retryButton"
-            app:layout_constraintBottom_toBottomOf="@+id/retryButton"
-            app:layout_constraintEnd_toStartOf="@+id/retryButton" />
+            <TextView
+                android:id="@+id/factsKey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0"
+                android:includeFontPadding="false"
+                android:text="@string/facts"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="16sp"
+                app:fontFamily="@font/poppins_semibold"
+                tools:alpha="1" />
 
-        <!-- Vertical line between previousButton and retryButton -->
-        <View
-            android:id="@+id/verticalLineLeftOfRetry"
-            android:layout_width="2dp"
-            android:layout_height="0dp"
-            android:background="@color/softGray"
-            android:alpha="0"
-            tools:alpha="1"
-            app:layout_constraintBottom_toBottomOf="@+id/retryButton"
-            app:layout_constraintTop_toTopOf="@+id/retryButton"
-            app:layout_constraintStart_toEndOf="@+id/previousButton"
-            app:layout_constraintEnd_toStartOf="@+id/retryButton" />
+            <TextView
+                android:id="@+id/factsValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="2dp"
+                android:alpha="0"
+                android:lineSpacingMultiplier="1.15"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="16sp"
+                app:fontFamily="@font/poppins_regular"
+                tools:alpha="1"
+                tools:text="Facts Value" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-            android:id="@+id/retryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:layout_marginBottom="12dp"
-            android:text="@string/retry"
-            android:textColor="@color/primary"
-            android:includeFontPadding="false"
-            android:textSize="14sp"
-            android:elevation="10dp"
-            android:background="@drawable/bg_rectangle_center"
-            android:alpha="0"
-            tools:alpha="1"
-            app:icon="@drawable/ic_retry"
-            app:iconTint="@color/primary"
-            app:iconSize="16dp"
-            app:fontFamily="@font/poppins_medium"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="180dp"
+                android:layout_gravity="center"/>
 
-        <!-- Vertical line between retryButton and nextButton -->
-        <View
-            android:id="@+id/verticalLineRightOfRetry"
-            android:layout_width="2dp"
-            android:layout_height="56dp"
-            android:background="@color/softGray"
-            android:alpha="0"
-            tools:alpha="1"
-            app:layout_constraintBottom_toBottomOf="@+id/retryButton"
-            app:layout_constraintTop_toTopOf="@+id/retryButton"
-            app:layout_constraintStart_toEndOf="@+id/retryButton"
-            app:layout_constraintEnd_toStartOf="@+id/nextButton" />
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="80dp" />
+        </LinearLayout>
+    </ScrollView>
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:layout_marginStart="1dp"
-            android:text="@string/next"
-            android:background="@drawable/bg_rounded_end"
-            android:textColor="@color/primary"
-            android:includeFontPadding="false"
-            android:textSize="14sp"
-            android:elevation="10dp"
-            android:padding="0dp"
-            android:alpha="0"
-            tools:alpha="1"
-            android:visibility="gone"
-            app:icon="@drawable/ic_arrow_next"
-            app:iconTint="@color/primary"
-            app:iconSize="16dp"
-            app:iconGravity="textEnd"
-            app:fontFamily="@font/poppins_regular"
-            app:layout_constraintTop_toTopOf="@+id/retryButton"
-            app:layout_constraintBottom_toBottomOf="@+id/retryButton"
-            app:layout_constraintStart_toEndOf="@+id/retryButton" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/previousButton"
+        style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginEnd="2dp"
+        android:alpha="0"
+        android:background="@drawable/bg_rounded_start"
+        android:elevation="10dp"
+        android:includeFontPadding="false"
+        android:padding="0dp"
+        android:text="@string/back"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:fontFamily="@font/poppins_regular"
+        app:icon="@drawable/ic_arrow_back"
+        app:iconGravity="textStart"
+        app:iconSize="16dp"
+        app:iconTint="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/retryButton"
+        app:layout_constraintEnd_toStartOf="@+id/retryButton"
+        app:layout_constraintTop_toTopOf="@+id/retryButton"
+        tools:alpha="1"
+        tools:visibility="visible" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+    <!-- Vertical line4 between previousButton and retryButton -->
+    <View
+        android:id="@+id/verticalLineLeftOfRetry"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:alpha="0"
+        android:background="@color/softGray"
+        app:layout_constraintBottom_toBottomOf="@+id/retryButton"
+        app:layout_constraintEnd_toStartOf="@+id/retryButton"
+        app:layout_constraintStart_toEndOf="@+id/previousButton"
+        app:layout_constraintTop_toTopOf="@+id/retryButton"
+        tools:alpha="1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/retryButton"
+        style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginBottom="4dp"
+        android:alpha="0"
+        android:background="@drawable/bg_rectangle_center"
+        android:elevation="10dp"
+        android:includeFontPadding="false"
+        android:text="@string/retry"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="14sp"
+        app:fontFamily="@font/poppins_medium"
+        app:icon="@drawable/ic_retry"
+        app:iconSize="16dp"
+        app:iconTint="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:alpha="1" />
+
+    <!-- Vertical line between retryButton and nextButton -->
+    <View
+        android:id="@+id/verticalLineRightOfRetry"
+        android:layout_width="2dp"
+        android:layout_height="56dp"
+        android:alpha="0"
+        android:background="@color/softGray"
+        app:layout_constraintBottom_toBottomOf="@+id/retryButton"
+        app:layout_constraintEnd_toStartOf="@+id/nextButton"
+        app:layout_constraintStart_toEndOf="@+id/retryButton"
+        app:layout_constraintTop_toTopOf="@+id/retryButton"
+        tools:alpha="1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/nextButton"
+        style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginStart="2dp"
+        android:alpha="0"
+        android:background="@drawable/bg_rounded_end"
+        android:elevation="10dp"
+        android:includeFontPadding="false"
+        android:padding="0dp"
+        android:text="@string/next"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:fontFamily="@font/poppins_regular"
+        app:icon="@drawable/ic_arrow_next"
+        app:iconGravity="textEnd"
+        app:iconSize="16dp"
+        app:iconTint="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/retryButton"
+        app:layout_constraintStart_toEndOf="@+id/retryButton"
+        app:layout_constraintTop_toTopOf="@+id/retryButton"
+        tools:alpha="1"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

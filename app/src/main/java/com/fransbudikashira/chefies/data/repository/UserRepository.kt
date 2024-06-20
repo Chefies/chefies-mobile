@@ -6,7 +6,9 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.fransbudikashira.chefies.data.local.dataStore.LoginPreferences
 import com.fransbudikashira.chefies.data.local.dataStore.TokenPreferences
+import com.fransbudikashira.chefies.data.local.dataStore.UserProfilePreferences
 import com.fransbudikashira.chefies.data.remote.request.LoginRequest
+import com.fransbudikashira.chefies.data.remote.request.PasswordUpdateRequest
 import com.fransbudikashira.chefies.data.remote.request.RegisterRequest
 import com.fransbudikashira.chefies.data.remote.response.GetProfileResponse
 import com.fransbudikashira.chefies.data.remote.response.LoginResponse
@@ -19,11 +21,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 class UserRepository(
     private val apiService: ApiService,
     private val tokenPreferences: TokenPreferences,
-    private val loginPreferences: LoginPreferences
+    private val loginPreferences: LoginPreferences,
+    private val userProfilePreferences: UserProfilePreferences
 ) {
 
     fun userRegister(
@@ -80,6 +88,8 @@ class UserRepository(
             val response = apiService.getProfile()
             if (response.isSuccessful) {
                 response.body()?.let { data ->
+                    userProfilePreferences.saveUsername(data.name)
+                    userProfilePreferences.saveAvatar(data.avatar)
                     emit(Result.Success(data))
                 }
             } else {
@@ -94,6 +104,57 @@ class UserRepository(
         }
     }
 
+    fun updateProfile(name: String, avatarFile: File): LiveData<Result<RegisterResponse>> =
+        liveData {
+            emit(Result.Loading)
+            val nameRequestBody = name.toRequestBody("text/plain".toMediaType())
+            val avatarRequestBody = avatarFile.asRequestBody("image/*".toMediaType())
+            val avatarPart = MultipartBody.Part.createFormData(
+                "avatar",
+                avatarFile.name,
+                avatarRequestBody
+            )
+            try {
+                val response = apiService.updateProfile(nameRequestBody, avatarPart)
+                if (response.isSuccessful) {
+//                    userProfilePreferences.saveUsername(name)
+//                    userProfilePreferences.saveAvatar(avatarFile.toString())
+                    emit(Result.Success(response.body()!!))
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+                    Log.d(TAG, "updateProfile: ${errorResponse.detail}")
+                    emit(Result.Error(errorResponse.detail))
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, "updateProfile: ${e.message}")
+                emit(Result.Error(e.message.toString()))
+            }
+        }
+
+    fun updatePassword(
+        newPassword: String,
+        oldPassword: String
+    ): LiveData<Result<RegisterResponse>> = liveData {
+        emit(Result.Loading)
+        try {
+            val response =
+                apiService.updatePassword(PasswordUpdateRequest(newPassword, oldPassword))
+            if (response.isSuccessful) {
+                loginPreferences.savePassword(newPassword)
+                emit(Result.Success(response.body()!!))
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+                Log.d(TAG, "updatePassword: ${errorResponse.detail}")
+                emit(Result.Error(errorResponse.detail))
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "updatePassword: ${e.message}")
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     fun getToken(): String = runBlocking { tokenPreferences.getToken().first() }
 
     fun deleteToken() = CoroutineScope(Dispatchers.IO).launch {
@@ -104,16 +165,32 @@ class UserRepository(
 
     fun getPassword(): String = runBlocking { loginPreferences.getPassword().first() }
 
+    fun getUsername(): String = runBlocking { userProfilePreferences.getUsername().first() }
+
+    fun getAvatar(): String = runBlocking { userProfilePreferences.getAvatar().first() }
+
+    fun getThemeSetting(): LiveData<Boolean> = userProfilePreferences.getThemeSetting().asLiveData()
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) = CoroutineScope(Dispatchers.IO). launch {
+        userProfilePreferences.saveThemeSetting(isDarkModeActive)
+    }
+
     companion object {
         @Volatile
         private var instance: UserRepository? = null
         fun getInstance(
             apiService: ApiService,
             tokenPreferences: TokenPreferences,
-            loginPreferences: LoginPreferences
+            loginPreferences: LoginPreferences,
+            userProfilePreferences: UserProfilePreferences
         ): UserRepository =
             instance ?: synchronized(this) {
-                instance ?: UserRepository(apiService, tokenPreferences, loginPreferences)
+                instance ?: UserRepository(
+                    apiService,
+                    tokenPreferences,
+                    loginPreferences,
+                    userProfilePreferences
+                )
             }.also { instance = it }
 
         private const val TAG = "UserRepository"

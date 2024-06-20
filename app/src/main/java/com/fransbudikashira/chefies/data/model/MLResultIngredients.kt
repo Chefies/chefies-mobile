@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class MLResultIngredients(
     val photoUrl: Uri,
-    val listIngredient: List<String>
+    val listIngredient: List<String>?
 ) : Parcelable

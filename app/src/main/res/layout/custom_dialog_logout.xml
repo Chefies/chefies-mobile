@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardBackgroundColor="@color/softBlue"
+    app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
     app:cardCornerRadius="15dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,6 +18,7 @@
             style="@style/ConfirmLogoutTitle"
             android:text="@string/confirm_logout_title"
             app:drawableBottomCompat="@drawable/ic_exit"
+            app:fontFamily="@font/poppins_semibold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +28,7 @@
             style="@style/ConfirmLogoutMessage"
             android:layout_marginTop="5dp"
             android:text="@string/confirm_logout_message"
+            app:fontFamily="@font/poppins_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_confirm_title" />
@@ -35,19 +37,21 @@
             android:id="@+id/btn_no"
             style="@style/NoButton"
             android:text="@string/no_text"
-            app:backgroundTint="@color/softBlue"
+            android:textColor="?attr/colorPrimary"
+            app:backgroundTint="?attr/colorSurfaceContainerLow"
             app:cornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_confirm_message"
             app:layout_constraintTop_toBottomOf="@id/tv_confirm_message"
-            app:strokeColor="@color/primaryVariant"
+            app:strokeColor="?attr/colorPrimary"
             app:strokeWidth="3dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_yes"
             style="@style/YesButton"
             android:text="@string/yes_text"
-            app:backgroundTint="@color/primaryVariant"
+            android:textColor="?attr/colorOnPrimary"
+            app:backgroundTint="?attr/colorPrimary"
             app:cornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_confirm_message"

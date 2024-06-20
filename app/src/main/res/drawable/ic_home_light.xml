@@ -7,16 +7,16 @@
       android:pathData="M1,10L12,1L23,10"
       android:strokeWidth="1"
       android:fillColor="#00000000"
-      android:strokeColor="#898989"/>
+      android:strokeColor="?attr/colorPrimaryContainer"/>
   <path
       android:pathData="M10,22V16H14V22"
       android:strokeWidth="1"
       android:fillColor="#00000000"
-      android:strokeColor="#898989"/>
+      android:strokeColor="?attr/colorPrimaryContainer"/>
   <path
       android:pathData="M4,12V22H20V12"
       android:strokeWidth="1"
       android:fillColor="#00000000"
-      android:strokeColor="#898989"
+      android:strokeColor="?attr/colorPrimaryContainer"
       android:strokeLineCap="square"/>
 </vector>

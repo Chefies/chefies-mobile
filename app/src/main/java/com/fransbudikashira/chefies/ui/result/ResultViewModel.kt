@@ -1,6 +1,5 @@
 package com.fransbudikashira.chefies.ui.result
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fransbudikashira.chefies.data.local.entity.HistoryEntity
@@ -42,8 +41,6 @@ class ResultViewModel(
             recipeRepository.updateHistory(history)
         }
     }
-
-    fun getHistoryById(id: Long) = recipeRepository.getHistoryById(id)
 
     companion object {
         const val TAG = "ResultViewModel"

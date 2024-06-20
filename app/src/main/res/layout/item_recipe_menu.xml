@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardBackgroundColor="@color/white"
+    android:layout_marginHorizontal="5dp"
+    android:layout_marginBottom="10dp"
+    app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
     app:cardCornerRadius="15dp"
-    app:cardElevation="2dp">
+    app:cardElevation="5dp"
+    app:strokeColor="?attr/colorSurfaceContainerLow">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
 
         <com.google.android.material.textview.MaterialTextView
-            style="@style/MaterialAlertDialog.Material3.Title.Text"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvTitleRecipe"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
             android:maxLines="2"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:singleLine="false"
-            android:text="@string/example_text"
-            android:textSize="36sp"
+            android:textAlignment="textStart"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="16sp"
+            app:fontFamily="@font/poppins_semibold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:lineHeight="44dp" />
-
-
+            app:lineHeight="30dp"
+            tools:text="How to create sandwhiches with salted egg" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>
