@@ -166,10 +166,6 @@ fun Context.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-fun Fragment.showToast(message: String) {
-    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-}
-
 fun Context.moveTo(destination: Class<out Activity>, clearTask: Boolean = false) {
     val intent = Intent(this, destination)
     if (clearTask) {

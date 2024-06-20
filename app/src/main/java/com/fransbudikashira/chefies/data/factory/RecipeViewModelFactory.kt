@@ -25,7 +25,7 @@ class RecipeViewModelFactory(
             }
 
             modelClass.isAssignableFrom(HistoryViewModel::class.java) -> {
-                HistoryViewModel(recipeRepository, userRepository) as T
+                HistoryViewModel(recipeRepository) as T
             }
 
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {

@@ -23,18 +23,17 @@ import com.fransbudikashira.chefies.data.factory.AuthViewModelFactory
 import com.fransbudikashira.chefies.databinding.FragmentSettingsBinding
 import com.fransbudikashira.chefies.helper.Result
 import com.fransbudikashira.chefies.ui.changePassword.ChangePasswordActivity
-import com.fransbudikashira.chefies.ui.main.MainActivity
 import com.fransbudikashira.chefies.ui.main.MainViewModel
 import com.fransbudikashira.chefies.ui.signIn.SignInActivity
 import com.fransbudikashira.chefies.util.moveActivityTo
 import com.fransbudikashira.chefies.util.loadImageProfile
 import com.fransbudikashira.chefies.util.moveTo
-import com.fransbudikashira.chefies.util.showToast
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+@Suppress("DEPRECATION")
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
@@ -93,7 +92,6 @@ class SettingsFragment : Fragment() {
         binding.changeProfileSetting.setOnClickListener {
             val intent = Intent(requireContext(), ChangeProfileActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE_CHANGE_PROFILE)
-            // moveActivityTo(requireActivity(), ChangeProfileActivity::class.java)
         }
 
         binding.languageSetting.setOnClickListener {
@@ -202,8 +200,6 @@ class SettingsFragment : Fragment() {
         btnYes.setOnClickListener {
             mainViewModel.deleteToken()
             moveTo(SignInActivity::class.java, true)
-            showToast(getString(R.string.success_logout))
-            // moveActivityTo(requireActivity(), SignInActivity::class.java, true)
         }
 
         btnNo.setOnClickListener { dialog.dismiss() }
